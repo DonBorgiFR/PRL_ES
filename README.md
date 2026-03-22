@@ -22,6 +22,7 @@ Cada norma incluye sus capítulos, artículos con **badges técnicos/divulgativo
 *   **Buscador Inteligente:** Búsqueda rápida en toda la base normativa por palabras clave, artículos o etiquetas.
 *   **Referencias Cruzadas:** Mapa interactivo con **12 conexiones estratégicas** entre normas (ej. cómo el Art. 24 LPRL se desarrolla en el RD 171/2004).
 *   **Fichas de Capacitación:** 10 módulos formativos divididos en tres niveles (Básico, Intermedio, Avanzado) listos para orientación del personal.
+*   **Consultor IA Local (Ollama):** Chat integrado en la ruta `/consultor-ia` con contexto normativo interno (RAG ligero sobre artículos y fichas).
 *   **Diseño Premium:** Interfaz oscura, minimalista y de alta legibilidad optimizada para profesionales.
 *   **Vínculos BOE:** Acceso inmediato a la fuente oficial de cada artículo.
 
@@ -73,6 +74,36 @@ Se pueden utilizar prompts estructurados (ver `llm_integration.md`) para que un 
 *   Genere checklists de auditoría personalizados.
 *   Cree escenarios de riesgo basados en artículos específicos.
 *   Redacte resúmenes ejecutivos para mandos.
+
+### Consultor IA Integrado (implementado)
+
+El proyecto ya incorpora una interfaz de consulta IA local en `/consultor-ia`.
+
+Funcionamiento:
+
+1. El usuario formula una pregunta técnica.
+2. El sistema busca coincidencias en artículos y fichas (`searchAll`) y construye un contexto compacto (`buildNormativeContext`).
+3. Se envía la conversación a Ollama vía endpoint proxificado `/api/ollama/chat`.
+4. El asistente devuelve respuesta operativa y, cuando hay contexto, añade trazabilidad de coincidencias.
+
+Requisitos para usarlo en local:
+
+```bash
+ollama serve
+ollama pull llama3.1:8b
+```
+
+Luego iniciar la app:
+
+```bash
+npm run dev
+```
+
+Notas técnicas:
+
+*   Proxy Vite configurado en `vite.config.ts` (`/api/ollama` -> `http://127.0.0.1:11434/api`).
+*   Modelo editable en la UI del consultor para usar `qwen2.5`, `llama3.2`, etc.
+*   En producción estática sin backend propio, este proxy no existe; para ese escenario hay que exponer un backend/reverse proxy.
 
 ---
 

@@ -61,4 +61,32 @@ export function searchAll(query: string, filtros?: { leyId?: string; nivel?: str
   return { articulos: articulosResult, fichas: fichasFiltradas };
 }
 
+export function buildNormativeContext(query: string, maxArticles = 6, maxFichas = 3) {
+  const results = searchAll(query);
+  const articleLines = results.articulos.slice(0, maxArticles).map((res) => {
+    const text = res.articulo.texto.length > 420
+      ? `${res.articulo.texto.slice(0, 420)}...`
+      : res.articulo.texto;
+    return `- [${res.ley.codigo} · Art. ${res.articulo.numero}] ${res.articulo.titulo}: ${text}`;
+  });
+
+  const fichaLines = results.fichas.slice(0, maxFichas).map((f) => {
+    const objetivo = f.objetivo.length > 220
+      ? `${f.objetivo.slice(0, 220)}...`
+      : f.objetivo;
+    return `- [${f.titulo} · ${f.nivel}] ${objetivo}`;
+  });
+
+  return {
+    contextText: [
+      articleLines.length ? 'ARTICULOS RELEVANTES:' : '',
+      ...articleLines,
+      fichaLines.length ? 'FICHAS RELACIONADAS:' : '',
+      ...fichaLines,
+    ].filter(Boolean).join('\n'),
+    articleMatches: results.articulos.length,
+    fichaMatches: results.fichas.length,
+  };
+}
+
 export { leyes as default, referencias, fichas, lprl, rsp, cae, construccion };

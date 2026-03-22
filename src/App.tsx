@@ -6,8 +6,14 @@ import {
   referencias,
   fichas,
   getLeyById,
-  searchAll
+  searchAll,
+  buildNormativeContext
 } from './data';
+
+type ChatMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
 
 // ============================================================
 // COMPONENTS
@@ -75,6 +81,11 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <Link href="/auditoria">
           <a className={`nav-item ${location === '/auditoria' ? 'active' : ''}`} id="link-nav-auditoria" onClick={closeOnMobile}>
             <span className="nav-icon">✅</span> Auditoría Interactiva
+          </a>
+        </Link>
+        <Link href="/consultor-ia">
+          <a className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
+            <span className="nav-icon">🤖</span> Consultor IA Local
           </a>
         </Link>
       </nav>
@@ -398,6 +409,145 @@ const FichasPage = () => {
   );
 };
 
+const ConsultorIAPage = () => {
+  const [model, setModel] = useState('llama3.1:8b');
+  const [question, setQuestion] = useState('');
+  const [useContext, setUseContext] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      role: 'assistant',
+      content: 'Listo para ayudarte con normativa PRL. Formula una consulta y te responderé con enfoque técnico-práctico y citando artículos cuando sea posible.',
+    },
+  ]);
+
+  const handleAsk = async () => {
+    const q = question.trim();
+    if (!q || loading) return;
+
+    setError(null);
+    setLoading(true);
+    setMessages((prev) => [...prev, { role: 'user', content: q }]);
+    setQuestion('');
+
+    const context = useContext ? buildNormativeContext(q) : { contextText: '', articleMatches: 0, fichaMatches: 0 };
+
+    const systemPrompt = [
+      'Eres un consultor experto en PRL España para técnicos de prevención y control de gestión.',
+      'Responde en español claro, con enfoque aplicable y operativo.',
+      'Si hay contexto normativo, cítalo en formato [Ley/Art.] y evita inventar artículos.',
+      'Si no tienes base suficiente, dilo explícitamente y sugiere cómo validar.',
+      context.contextText ? `CONTEXTO NORMATIVO DEL REPOSITORIO:\n${context.contextText}` : '',
+    ].filter(Boolean).join('\n\n');
+
+    const history = messages.slice(-6).map((m) => ({ role: m.role, content: m.content }));
+
+    try {
+      const response = await fetch('/api/ollama/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          stream: false,
+          options: {
+            temperature: 0.2,
+            num_predict: 700,
+          },
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...history,
+            { role: 'user', content: q },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Ollama devolvió ${response.status}. Verifica que esté activo.`);
+      }
+
+      const data = await response.json();
+      const answer = data?.message?.content?.trim();
+      if (!answer) {
+        throw new Error('Ollama no devolvió contenido en la respuesta.');
+      }
+
+      const footer = useContext
+        ? `\n\nFuentes internas detectadas: ${context.articleMatches} artículos y ${context.fichaMatches} fichas relacionadas.`
+        : '';
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: `${answer}${footer}` }]);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Error inesperado al consultar Ollama.';
+      setError(message);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'No pude conectar con Ollama local. Revisa que esté ejecutándose y que el modelo exista.',
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fade-in">
+      <header className="page-header">
+        <h2>Consultor IA Local</h2>
+        <p>Asistente PRL conectado a Ollama en local con contexto normativo del repositorio para respuestas accionables.</p>
+      </header>
+
+      <div className="ai-panel">
+        <div className="ai-controls">
+          <label>
+            Modelo Ollama
+            <input
+              className="ai-input"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder="llama3.1:8b"
+            />
+          </label>
+          <label className="ai-checkbox-wrap">
+            <input
+              type="checkbox"
+              checked={useContext}
+              onChange={(e) => setUseContext(e.target.checked)}
+            />
+            Usar contexto normativo interno (RAG)
+          </label>
+        </div>
+
+        <div className="ai-chat">
+          {messages.map((m, idx) => (
+            <div key={idx} className={`ai-msg ai-msg-${m.role}`}>
+              <span className="ai-msg-role">{m.role === 'assistant' ? 'Consultor IA' : 'Tú'}</span>
+              <p>{m.content}</p>
+            </div>
+          ))}
+          {loading && <div className="ai-msg ai-msg-assistant"><span className="ai-msg-role">Consultor IA</span><p>Pensando respuesta...</p></div>}
+        </div>
+
+        <div className="ai-composer">
+          <textarea
+            className="ai-input ai-textarea"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ejemplo: ¿Qué obligaciones tengo para coordinación de actividades en obra con dos subcontratas?"
+          />
+          <button className="audit-action-btn" onClick={handleAsk} disabled={loading || !question.trim()}>
+            {loading ? 'Consultando...' : 'Consultar normativa'}
+          </button>
+        </div>
+
+        {error && <div className="ai-error">{error}</div>}
+      </div>
+    </div>
+  );
+};
+
 // ============================================================
 // AUDITORÍA INTERACTIVA
 // ============================================================
@@ -685,6 +835,7 @@ const App = () => {
           <Route path="/referencias" component={ReferenciasPage} />
           <Route path="/fichas" component={FichasPage} />
           <Route path="/auditoria" component={AuditoriaPage} />
+          <Route path="/consultor-ia" component={ConsultorIAPage} />
           <Route>
             <div className="empty-state">Página no encontrada</div>
           </Route>
