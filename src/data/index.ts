@@ -2,11 +2,12 @@ import { lprl } from './lprl';
 import { rsp } from './rsp';
 import { cae } from './cae';
 import { construccion } from './construccion';
+import { rd486 } from './rd486';
 import { referencias } from './referencias';
 import { fichas } from './fichas';
 import type { Ley } from './types';
 
-export const leyes: Ley[] = [lprl, rsp, cae, construccion];
+export const leyes: Ley[] = [lprl, rsp, cae, construccion, rd486];
 
 export function getLeyById(id: string): Ley | undefined {
   return leyes.find((l) => l.id === id);
@@ -89,4 +90,4 @@ export function buildNormativeContext(query: string, maxArticles = 6, maxFichas 
   };
 }
 
-export { leyes as default, referencias, fichas, lprl, rsp, cae, construccion };
+export { leyes as default, referencias, fichas, lprl, rsp, cae, construccion, rd486 };

@@ -6,12 +6,13 @@ PRL España es una herramienta avanzada de consulta y análisis de la normativa 
 
 ## 🏛️ Normativa Cubierta
 
-La aplicación incluye el volcado estructurado de las cuatro normas pilar de la PRL en España:
+La aplicación incluye el volcado estructurado de las cinco normas pilar de la PRL en España:
 
 *   ⚖️ **Ley 31/1995 (LPRL)** — Marco jurídico fundamental.
 *   🏢 **RD 39/1997 (RSP)** — Reglamento de los Servicios de Prevención.
 *   🤝 **RD 171/2004 (CAE)** — Coordinación de Actividades Empresariales.
 *   🏗️ **RD 1627/1997 (Construcción)** — Seguridad en obras de construcción.
+*   🏭 **RD 486/1997** — Condiciones mínimas de seguridad y salud en los lugares de trabajo.
 
 Cada norma incluye sus capítulos, artículos con **badges técnicos/divulgativos** y enlaces directos al BOE.
 
@@ -20,11 +21,41 @@ Cada norma incluye sus capítulos, artículos con **badges técnicos/divulgativo
 ## 🚀 Funcionalidades Principales
 
 *   **Buscador Inteligente:** Búsqueda rápida en toda la base normativa por palabras clave, artículos o etiquetas.
-*   **Referencias Cruzadas:** Mapa interactivo con **12 conexiones estratégicas** entre normas (ej. cómo el Art. 24 LPRL se desarrolla en el RD 171/2004).
+*   **Referencias Cruzadas:** Mapa interactivo con **17 conexiones estratégicas** entre normas (ej. cómo el Art. 24 LPRL se desarrolla en el RD 171/2004, o cómo el RD 486 Anexo IV aplica la evaluación del Art. 16 LPRL).
 *   **Fichas de Capacitación:** 10 módulos formativos divididos en tres niveles (Básico, Intermedio, Avanzado) listos para orientación del personal.
 *   **Consultor IA Local (Ollama):** Chat integrado en la ruta `/consultor-ia` con contexto normativo interno (RAG ligero sobre artículos y fichas).
 *   **Diseño Premium:** Interfaz oscura, minimalista y de alta legibilidad optimizada para profesionales.
 *   **Vínculos BOE:** Acceso inmediato a la fuente oficial de cada artículo.
+
+---
+
+## 📚 Repositorio Documental PRL (Industria, MVP Operativo)
+
+Paquete documental orientado a ejecución en entorno industrial, con trazabilidad legal, plantillas de campo y operativa semanal.
+
+Ruta base: `docs/prl-industria/`
+
+### Módulos completados
+
+| Módulo | Estado | Revisiones pendientes |
+|---|---|---|
+| 6 flujos operativos (FLW-01 → FLW-06) | ✅ Completo | Ampliar con checklist sector-específico |
+| Matriz de obligaciones legales | ✅ Completo | Añadir sectores adicionales (construcción, servicios) |
+| Plantillas de campo (TPL-01 → TPL-05) | ✅ Completo | Validar con equipo PRL real en piloto |
+| Plan de implementación 30 días | ✅ Completo | Ajustar fases según tamaño de empresa |
+| Tablero de seguimiento semanal | ✅ Completo | Automatizar con herramienta (Notion/Sheets) |
+| Operativa semanal tipo | ✅ Completo | Adaptar a turnos o trabajos nocturnos |
+| Estrategia repo espejo | ✅ Completo | Configurar repo real + CI sync |
+| RD 486/1997 en base normativa | ✅ Completo | Ampliar artículos y añadir FLW-06 dedicado |
+
+### Acceso rápido
+
+*   `docs/prl-industria/MATRIZ_OBLIGACIONES.md`
+*   `docs/prl-industria/PLAN-IMPLEMENTACION-30DIAS.md`
+*   `docs/prl-industria/TABLERO-SEGUIMIENTO.md`
+*   `docs/prl-industria/operativo/LO-QUE-VIENE.md`
+*   `docs/prl-industria/flows/`
+*   `docs/prl-industria/templates/`
 
 ---
 
