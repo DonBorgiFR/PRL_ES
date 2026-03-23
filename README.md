@@ -2,6 +2,8 @@
 
 PRL España es una herramienta avanzada de consulta y análisis de la normativa fundamental en **Prevención de Riesgos Laborales** (SST). Diseñada para técnicos de prevención, departamentos de formación y mandos intermedios, permite navegar de forma fluida a través del marco legal español, identificando conexiones entre leyes y accediendo a contenido formativo estructurado.
 
+> **Roadmap completo y estado de cada módulo:** [`ROADMAP.md`](ROADMAP.md)
+
 ---
 
 ## 🏛️ Normativa Cubierta
