@@ -25,7 +25,7 @@ Cada norma incluye sus capítulos, artículos con **badges técnicos/divulgativo
 *   **Buscador Inteligente:** Búsqueda rápida en toda la base normativa por palabras clave, artículos o etiquetas.
 *   **Referencias Cruzadas:** Mapa interactivo con **17 conexiones estratégicas** entre normas (ej. cómo el Art. 24 LPRL se desarrolla en el RD 171/2004, o cómo el RD 486 Anexo IV aplica la evaluación del Art. 16 LPRL).
 *   **Fichas de Capacitación:** 10 módulos formativos divididos en tres niveles (Básico, Intermedio, Avanzado) listos para orientación del personal.
-*   **Consultor IA Local (Ollama):** Chat integrado en la ruta `/consultor-ia` con contexto normativo interno (RAG ligero sobre artículos y fichas).
+*   **Consultor IA (Vista Previa):** Asistente inteligente en `/consultor-ia` que responde usando la base normativa interna. La activación con modelo IA real es disponible como servicio de post-implementación personalizada.
 *   **Diseño Premium:** Interfaz oscura, minimalista y de alta legibilidad optimizada para profesionales.
 *   **Vínculos BOE:** Acceso inmediato a la fuente oficial de cada artículo.
 
@@ -92,6 +92,33 @@ Ruta base: `docs/prl-industria/`
     npm run build
     ```
 
+5.  Iniciar backend productivo (sirve `dist/` y proxy IA):
+
+    ```bash
+    npm start
+    ```
+
+6.  Verificar salud del backend:
+
+    ```bash
+    curl http://127.0.0.1:4173/api/health
+    ```
+
+## 🔐 Variables de Entorno (Producción IA)
+
+Usar `.env.example` como plantilla.
+Para despliegue productivo usar `.env.production.example` como base segura.
+
+Variables clave:
+
+*   `PORT`, `HOST`: binding del backend.
+*   `CORS_ORIGIN`: origen permitido para frontend (admite lista separada por comas; en producción evitar `*`).
+*   `OLLAMA_BASE_URL`: proveedor primario.
+*   `OLLAMA_API_PREFIX`: prefijo API aguas arriba (por defecto `/api`).
+*   `OLLAMA_FALLBACK_URL`: fallback opcional.
+*   `OLLAMA_PROXY_TOKEN`: token Bearer para proteger `/api/ollama`.
+*   `OLLAMA_UPSTREAM_TOKEN`: token hacia proveedor externo (si aplica).
+
 ---
 
 ## 💡 Integración con Ecosistema IA
@@ -100,77 +127,89 @@ Ruta base: `docs/prl-industria/`
 
 Este repositorio está diseñado para ser sincronizado con **NotebookLM** como base de conocimiento. El archivo `src/data/` contiene los datos estructurados que pueden ser importados como fuentes para análisis profundo y generación de respuestas basadas únicamente en este contexto normativo.
 
-### Ollama / Llama Local
+### Activación Personalizada con IA Real (Ollama Local o Externo)
 
-Se pueden utilizar prompts estructurados (ver `llm_integration.md`) para que un modelo local analice el JSON de normativa y:
+Si deseas una integración completa con un modelo de lenguaje, esta corresponde a la fase de **post-implementación personalizada**. El backend ya dispone del andamiaje (`server.js`) para conectar a:
 
-*   Genere checklists de auditoría personalizados.
-*   Cree escenarios de riesgo basados en artículos específicos.
-*   Redacte resúmenes ejecutivos para mandos.
+*   **Ollama local** en tu intranet (Red privada, máxima privacidad).
+*   **Proveedor externo** con API (Groq, OpenAI, OpenRouter).
+*   **Fallback automático** entre primario y respaldo.
 
-### Consultor IA Integrado (implementado)
+Ver documentación en `.agent/workflows/build_deploy.md` y `llm_integration.md` para la integración técnica completa.
 
-El proyecto ya incorpora una interfaz de consulta IA local en `/consultor-ia`.
+Casuística de uso:
 
-Funcionamiento:
+*   Generar checklists de auditoría personalizados basados en artículos específicos.
+*   Crear escenarios de riesgo con recomendaciones tácticas.
+*   Redactar resúmenes ejecutivos y reportes normalizados para directivos.
+
+### Consultor IA (Vista Previa)
+
+El proyecto incorpora una interfaz de consulta en `/consultor-ia` que opera en **modo vista previa**.
+
+Funcionamiento actual (sin requerir IA real):
 
 1. El usuario formula una pregunta técnica.
 2. El sistema busca coincidencias en artículos y fichas (`searchAll`) y construye un contexto compacto (`buildNormativeContext`).
-3. Se envía la conversación a Ollama vía endpoint proxificado `/api/ollama/chat`.
-4. El asistente devuelve respuesta operativa y, cuando hay contexto, añade trazabilidad de coincidencias.
+3. El consultor devuelve una respuesta estructurada extrayendo directamente de la base normativa interna, indicando claramente que se trata de una vista previa.
+4. Si un proveedor IA real está disponible, la interfaz se adapta automáticamente (sin comprometer la publicación si no lo está).
 
-Requisitos para usarlo en local:
+**Activación Opcional con IA Real:**
 
-```bash
-ollama serve
-ollama pull llama3.1:8b
-```
+Si deseas conectar un modelo de lenguaje real (Ollama local o proveedor externo), consulta la sección **Activación personalizada** abajo. Esto requiere configuración específica y es ofrecido como servicio de customización.
 
-Luego iniciar la app:
+Inicio rápido modo vista previa:
 
 ```bash
 npm run dev
+# Acceder a http://127.0.0.1:5173/consultor-ia
 ```
 
 Notas técnicas:
 
-*   Proxy Vite configurado en `vite.config.ts` (`/api/ollama` -> `http://127.0.0.1:11434/api`).
-*   Modelo editable en la UI del consultor para usar `qwen2.5`, `llama3.2`, etc.
-*   En producción estática sin backend propio, este proxy no existe; para ese escenario hay que exponer un backend/reverse proxy.
+*   En desarrollo, el proxy Vite (`vite.config.ts`) puede reenviar tráfico IA si está disponible.
+*   En producción, el proyecto incorpora `server.js` (Express) para servir `dist/` y reenviar `/api/ollama/*` de forma opcional.
+*   El consultor funciona 100% sin dependencias de backend IA — diseño completamente resiliente.
 
 ---
 
 ## 🗺️ Roadmap de Explotación
 
 *   [x] **Auditoría Interactiva:** Checklist sectorial basado en la normativa seleccionada.
-*   [x] **Consultor IA Local (Ollama):** Asistente en `/consultor-ia` con contexto normativo interno.
-*   [ ] **Generación de Vídeo:** Conversión de fichas de capacitación en scripts para vídeo con IA.
-*   [ ] **Exportación PDF:** Generación de manuales formativos personalizados.
-*   [ ] **Ampliación Normativa:** Inclusión de RD 486/1997 (Lugares de Trabajo) y NTPs del INSST.
+*   [x] **Consultor IA (Vista Previa):** Asistente en `/consultor-ia` con contexto normativo interno (sin depender de proveedor IA).
+*   [ ] **Activación IA Personalizada:** Módulo opcional de post-implementación con Ollama local o proveedor externo.
+*   [ ] **Exportación PDF:** Descargar fichas, artículos y resultados de auditoría en PDF.
+*   [ ] **Ampliación Normativa:** Inclusión de RD 614/2001 (Riesgo Eléctrico) y RD 1215/1997 (Equipos de Trabajo).
 
 ---
 
-## 📌 Cierre de la Iteración (2026-03-23)
+## 📌 Cierre de la Iteración (2026-03-24)
 
 Estado al cierre:
 
-*   UI renovada con branding profesional y navegación mobile corregida (sidebar no bloquea contenido).
-*   Integración Ollama implementada y documentada (chat local + contexto normativo interno).
-*   Sección de perfil profesional integrada en Home con presencia sutil.
+*   UI renovada de la página principal (Home) dándole un acabado Premium (Glassmorphism, tarjetas de capacidades y métricas visuales atractivas).
+*   Exportación a PDF implementada para Fichas de Capacitación y Artículos individuales, incluyendo en los resultados de búsqueda.
+*   Consultor IA operativo en modo vista previa (sin dependencias de backend IA para publicación).
+*   Backend productivo listo para activaciones IA personalizadas (`server.js` + proxy con healthcheck).
 *   Repositorio sincronizado en GitHub con commits incrementales por funcionalidad.
 
 ---
 
 ## 🔜 Próxima Iteración (Checklist)
 
-1. Refinamiento visual final:
-    * reducir todavía más la huella de perfil si se requiere modo "firma silenciosa".
-    * ajustar microtipografía y espaciado para lectura de normativa extensa.
-2. Operativa del Consultor IA:
-    * selector rápido de prompts (auditoría, formación, resumen ejecutivo).
-    * botón "copiar respuesta" y exportación a texto/PDF.
-3. Producto PRL:
-    * módulo de exportación PDF de checklist y fichas.
-    * incorporación de nueva normativa (RD 486/1997) con referencias cruzadas.
-4. Despliegue:
-    * definir backend/reverse proxy para Ollama en entorno productivo (el proxy Vite es solo dev).
+1. **Bloque 2 — Fase 2 PDF:**
+    * Botón descargar para resultados de auditoría interactiva (Checklists).
+
+2. **Bloque 3 — UX Consultor IA Vision Previa:**
+    * Prompts rápidos por caso de uso (evaluación riesgos, coordinación actividades, etc.).
+    * Botón copiar respuesta e historial corto (localStorage).
+    * Indicadores visuales claros de "modo vista previa" vs "IA activa".
+
+3. **Bloque 5 — Ampliación Normativa:**
+    * Incorporación de nueva normativa RD 773/1997 (EPIs).
+    * Extensión de RD 486/1997.
+
+4. **Documentación de Activación Personalizada:**
+    * Guía paso a paso en `docs/ACTIVACION-IA-PERSONALIZADA.md`.
+    * Variantes locales (Ollama intranet), nube (Groq/OpenAI) y descripción de costes.
+    * Ejemplos de archivo `.env.production` completado.

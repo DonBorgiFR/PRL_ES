@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Route, Switch, useLocation, Link } from 'wouter';
 import brandLogo from '../logo.jpeg';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import {
   leyes,
   referencias,
@@ -9,6 +11,37 @@ import {
   searchAll,
   buildNormativeContext
 } from './data';
+
+const downloadToPDF = async (elementId: string, filename: string) => {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  
+  const originalBorder = element.style.border;
+  const originalBoxShadow = element.style.boxShadow;
+  const originalTransform = element.style.transform;
+  
+  element.style.border = '1px solid rgba(255,255,255,0.1)';
+  element.style.boxShadow = 'none';
+  element.style.transform = 'none';
+
+  try {
+    const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#080c14', logging: false });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: canvas.width > canvas.height ? 'l' : 'p',
+      unit: 'px',
+      format: [canvas.width, canvas.height]
+    });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save(`${filename}.pdf`);
+  } catch (err) {
+    console.error('Error exporting PDF', err);
+  } finally {
+    element.style.border = originalBorder;
+    element.style.boxShadow = originalBoxShadow;
+    element.style.transform = originalTransform;
+  }
+};
 
 type ChatMessage = {
   role: 'user' | 'assistant';
@@ -109,23 +142,78 @@ const Badge = ({ type }: { type: 'tecnico' | 'divulgativo' | 'ambos' }) => {
 const HomePage = () => (
   <div className="fade-in">
     <header className="home-hero">
-      <h2 id="hero-title">Transformando normativa en <span className="gradient-text">decisiones estratégicas</span></h2>
-      <p id="hero-desc">Plataforma de consulta PRL con enfoque de ingeniería y control de gestión: del cumplimiento legal a la ejecución operativa medible.</p>
-      <div className="hero-inline-note">IA local opcional con Ollama para consultas técnicas sin salir de tu entorno.</div>
+      <div className="hero-content">
+        <h2 id="hero-title">Transformando normativa en <span className="gradient-text">decisiones estratégicas</span></h2>
+        <p id="hero-desc">Plataforma de consulta PRL con enfoque de ingeniería y control de gestión: del cumplimiento legal a la ejecución operativa medible.</p>
+        <div className="hero-actions">
+          <Link href="/buscador"><button className="hero-primary-btn">Búsqueda Inteligente ⌕</button></Link>
+          <div className="hero-inline-note">IA local integrada</div>
+        </div>
+      </div>
+      <div className="hero-visual">
+        <div className="glass-card hero-glass-1">
+          <span className="glass-icon">💡</span>
+          <div>
+            <strong>Referencia Cruzada</strong>
+            <span>RD 486 Anexo III → LPRL Art. 16</span>
+          </div>
+        </div>
+        <div className="glass-card hero-glass-2">
+           <span className="glass-icon">✅</span>
+           <div>
+             <strong>Auditoría Sectorial</strong>
+             <span>Industria · 85% Conforme</span>
+           </div>
+        </div>
+      </div>
     </header>
+
+    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem', marginTop: '1rem' }}>Capacidades Core</div>
+    <div className="features-grid">
+      <Link href="/auditoria">
+        <div className="feature-card" style={{ '--feat-color': '#34d399' } as React.CSSProperties}>
+          <div className="feat-icon">✅</div>
+          <h3>Auditoría Interactiva</h3>
+          <p>Checklists dinámicos adaptados a tu sector de actividad.</p>
+        </div>
+      </Link>
+      <Link href="/referencias">
+        <div className="feature-card" style={{ '--feat-color': '#fbbf24' } as React.CSSProperties}>
+          <div className="feat-icon">🔗</div>
+          <h3>Referencias Cruzadas</h3>
+          <p>Mapeo estratégico: cómo interactúan las leyes entre sí.</p>
+        </div>
+      </Link>
+      <Link href="/fichas">
+        <div className="feature-card" style={{ '--feat-color': '#c084fc' } as React.CSSProperties}>
+          <div className="feat-icon">🎓</div>
+          <h3>Fichas Formativas</h3>
+          <p>Contenido progresivo y estructurado para la capacitación del equipo.</p>
+        </div>
+      </Link>
+    </div>
     
     <div className="home-stats" id="stats-container">
-      <div className="home-stat" id="stat-normas">
-        <span className="num">{leyes.length}</span>
-        <span className="label">Normas Base</span>
+      <div className="home-stat-card">
+        <div className="stat-icon" style={{ background: 'rgba(52, 211, 153, 0.15)', color: '#34d399' }}>📚</div>
+        <div className="stat-data">
+          <span className="num">{leyes.length}</span>
+          <span className="label">Normas Base</span>
+        </div>
       </div>
-      <div className="home-stat" id="stat-fichas">
-        <span className="num">{fichas.length}</span>
-        <span className="label">Fichas Formativas</span>
+      <div className="home-stat-card">
+        <div className="stat-icon" style={{ background: 'rgba(192, 132, 252, 0.15)', color: '#c084fc' }}>🎓</div>
+        <div className="stat-data">
+          <span className="num">{fichas.length}</span>
+          <span className="label">Fichas Formativas</span>
+        </div>
       </div>
-      <div className="home-stat" id="stat-conexiones">
-        <span className="num">{referencias.length}</span>
-        <span className="label">Conexiones</span>
+      <div className="home-stat-card">
+        <div className="stat-icon" style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24' }}>🔀</div>
+        <div className="stat-data">
+          <span className="num">{referencias.length}</span>
+          <span className="label">Conexiones</span>
+        </div>
       </div>
     </div>
 
@@ -234,11 +322,20 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
             {openCaps[cap.id] && (
               <div className="articulos-list">
                 {cap.articulos.map(art => (
-                  <div key={art.id} className="articulo-card fade-in">
+                  <div key={art.id} className="articulo-card fade-in" id={`art-${art.id}`}>
                     <div className="articulo-header">
-                      <span className="art-number">Art. {art.numero}</span>
-                      <span className="art-title">{art.titulo}</span>
-                      <Badge type={art.badge} />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
+                        <span className="art-number">Art. {art.numero}</span>
+                        <span className="art-title">{art.titulo}</span>
+                        <Badge type={art.badge} />
+                      </div>
+                      <button 
+                        className="pdf-btn"
+                        onClick={(e) => { e.preventDefault(); downloadToPDF(`art-${art.id}`, `Articulo_${art.numero}_${ley.id}`); }}
+                        title="Descargar PDF"
+                      >
+                        📥 PDF
+                      </button>
                     </div>
                     <p className="art-text">{art.texto}</p>
                     <div className="art-footer">
@@ -317,11 +414,20 @@ const BuscadorPage = () => {
               <div className="result-group-label">Artículos de Normativa ({results.articulos.length})</div>
               <div className="articulos-list" style={{ marginLeft: 0 }}>
                 {results.articulos.map(res => (
-                  <div key={res.articulo.id} className="articulo-card">
+                  <div key={res.articulo.id} className="articulo-card" id={`search-art-${res.articulo.id}`}>
                     <div className="articulo-header">
-                      <span className="art-number" style={{ color: res.ley.color }}>{res.ley.id.toUpperCase()} · Art. {res.articulo.numero}</span>
-                      <span className="art-title">{res.articulo.titulo}</span>
-                      <Badge type={res.articulo.badge} />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
+                        <span className="art-number" style={{ color: res.ley.color }}>{res.ley.id.toUpperCase()} · Art. {res.articulo.numero}</span>
+                        <span className="art-title">{res.articulo.titulo}</span>
+                        <Badge type={res.articulo.badge} />
+                      </div>
+                      <button 
+                        className="pdf-btn"
+                        onClick={(e) => { e.preventDefault(); downloadToPDF(`search-art-${res.articulo.id}`, `Articulo_${res.articulo.numero}`); }}
+                        title="Descargar PDF"
+                      >
+                        📥 PDF
+                      </button>
                     </div>
                     <p className="art-text">{res.articulo.texto}</p>
                   </div>
@@ -335,7 +441,16 @@ const BuscadorPage = () => {
               <div className="result-group-label">Fichas de Capacitación ({results.fichas.length})</div>
               <div className="fichas-grid">
                 {results.fichas.map(ficha => (
-                  <div key={ficha.id} className="ficha-card">
+                  <div key={ficha.id} className="ficha-card" id={`search-ficha-${ficha.id}`}>
+                    <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10 }}>
+                      <button 
+                        className="pdf-btn"
+                        onClick={(e) => { e.preventDefault(); downloadToPDF(`search-ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
+                        title="Descargar PDF"
+                      >
+                        📥 PDF
+                      </button>
+                    </div>
                     <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
                     <div className="ficha-icon">{ficha.icono}</div>
                     <h3>{ficha.titulo}</h3>
@@ -421,7 +536,16 @@ const FichasPage = () => {
 
       <div className="fichas-grid">
         {filteredFichas.map(ficha => (
-          <div key={ficha.id} className="ficha-card">
+          <div key={ficha.id} className="ficha-card" id={`ficha-${ficha.id}`}>
+            <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10 }}>
+              <button 
+                className="pdf-btn"
+                onClick={(e) => { e.preventDefault(); downloadToPDF(`ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
+                title="Descargar PDF"
+              >
+                📥 PDF
+              </button>
+            </div>
             <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
             <div className="ficha-icon">{ficha.icono}</div>
             <h3>{ficha.titulo}</h3>
@@ -443,128 +567,167 @@ const FichasPage = () => {
   );
 };
 
+// ── Motor de respuesta demo ──────────────────────────────────
+function buildDemoResponse(query: string): string {
+  const ctx = buildNormativeContext(query);
+  const results = searchAll(query);
+
+  if (ctx.articleMatches === 0 && ctx.fichaMatches === 0) {
+    return `No he encontrado artículos directamente relacionados con "${query}" en la base normativa actual.\n\nPuedes reformular la consulta usando términos como: evaluación de riesgos, coordinación de actividades, vigilancia de la salud, equipos de trabajo, lugar de trabajo, formación, o el nombre de una norma (LPRL, RD 39/1997, RD 171/2004…).\n\n— Esta respuesta es generada por el motor de búsqueda interno. Con IA activa, obtendrías un análisis redactado y argumentado.`;
+  }
+
+  const lineas: string[] = [];
+
+  if (results.articulos.length > 0) {
+    lineas.push('**Artículos normativos relevantes encontrados:**\n');
+    results.articulos.slice(0, 5).forEach((res) => {
+      const extracto = res.articulo.texto.length > 300
+        ? res.articulo.texto.slice(0, 300) + '…'
+        : res.articulo.texto;
+      lineas.push(`▸ [${res.ley.codigo} · Art. ${res.articulo.numero}] **${res.articulo.titulo}**\n${extracto}\n`);
+    });
+  }
+
+  if (results.fichas.length > 0) {
+    lineas.push('**Fichas de capacitación relacionadas:**\n');
+    results.fichas.slice(0, 2).forEach((f) => {
+      lineas.push(`▸ ${f.titulo} (${f.nivel}) — ${f.objetivo.slice(0, 180)}…`);
+    });
+  }
+
+  lineas.push(`\n—\nMostrando ${ctx.articleMatches} artículos y ${ctx.fichaMatches} fichas del repositorio interno.\nCon **IA activa** este contenido se analizaría, argumentaría y adaptaría a tu caso concreto.`);
+
+  return lineas.join('\n');
+}
+
+const DEMO_PROMPTS = [
+  '¿Qué obligaciones tiene el empresario en coordinación de actividades?',
+  '¿Cómo se documenta la evaluación inicial de riesgos?',
+  '¿Qué exige el RD 486 sobre condiciones del lugar de trabajo?',
+  '¿Cuándo es obligatoria la vigilancia de la salud?',
+];
+
 const ConsultorIAPage = () => {
-  const [model, setModel] = useState('llama3.1:8b');
   const [question, setQuestion] = useState('');
-  const [useContext, setUseContext] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [backendActive, setBackendActive] = useState<boolean | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: 'Listo para ayudarte con normativa PRL. Formula una consulta y te responderé con enfoque técnico-práctico y citando artículos cuando sea posible.',
+      content: 'Hola. Soy el Consultor IA de PRL España.\n\nEn este momento funciono en **modo vista previa**: analizo tu consulta contra la base normativa interna (LPRL, RSP, CAE, RD 486, Construcción) y te devuelvo los artículos y fichas más relevantes.\n\nCon la integración IA activa, recibirías una respuesta redactada, argumentada y adaptada a tu caso. Escribe tu consulta para ver cómo funcionaría.',
     },
   ]);
 
-  const handleAsk = async () => {
-    const q = question.trim();
+  useEffect(() => {
+    fetch('/api/health')
+      .then((r) => r.ok ? r.json() : Promise.reject())
+      .then((data) => setBackendActive(data?.ok === true))
+      .catch(() => setBackendActive(false));
+  }, []);
+
+  const handleAsk = async (customQ?: string) => {
+    const q = (customQ ?? question).trim();
     if (!q || loading) return;
 
-    setError(null);
     setLoading(true);
     setMessages((prev) => [...prev, { role: 'user', content: q }]);
     setQuestion('');
 
-    const context = useContext ? buildNormativeContext(q) : { contextText: '', articleMatches: 0, fichaMatches: 0 };
+    if (backendActive) {
+      // Modo real: enviar al backend proxy
+      const ctx = buildNormativeContext(q);
+      const systemPrompt = [
+        'Eres un consultor experto en PRL España para técnicos de prevención y mandos intermedios.',
+        'Responde en español claro, con enfoque aplicable y operativo.',
+        'Cita artículos en formato [Ley · Art. N] cuando estén disponibles en el contexto. No inventes artículos.',
+        'Si no tienes base suficiente para responder con seguridad, dilo explícitamente.',
+        ctx.contextText ? `CONTEXTO NORMATIVO INTERNO:\n${ctx.contextText}` : '',
+      ].filter(Boolean).join('\n\n');
 
-    const systemPrompt = [
-      'Eres un consultor experto en PRL España para técnicos de prevención y control de gestión.',
-      'Responde en español claro, con enfoque aplicable y operativo.',
-      'Si hay contexto normativo, cítalo en formato [Ley/Art.] y evita inventar artículos.',
-      'Si no tienes base suficiente, dilo explícitamente y sugiere cómo validar.',
-      context.contextText ? `CONTEXTO NORMATIVO DEL REPOSITORIO:\n${context.contextText}` : '',
-    ].filter(Boolean).join('\n\n');
+      try {
+        const response = await fetch('/api/ollama/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'llama3.1:8b',
+            stream: false,
+            options: { temperature: 0.2, num_predict: 700 },
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: q },
+            ],
+          }),
+        });
 
-    const history = messages.slice(-6).map((m) => ({ role: m.role, content: m.content }));
+        if (!response.ok) throw new Error(`Error ${response.status}`);
+        const data = await response.json();
+        const answer = data?.message?.content?.trim();
+        if (!answer) throw new Error('Sin respuesta del modelo.');
 
-    try {
-      const response = await fetch('/api/ollama/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model,
-          stream: false,
-          options: {
-            temperature: 0.2,
-            num_predict: 700,
-          },
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...history,
-            { role: 'user', content: q },
-          ],
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ollama devolvió ${response.status}. Verifica que esté activo.`);
+        const footer = `\n\nFuentes internas: ${ctx.articleMatches} artículos · ${ctx.fichaMatches} fichas`;
+        setMessages((prev) => [...prev, { role: 'assistant', content: answer + footer }]);
+      } catch {
+        setMessages((prev) => [...prev, { role: 'assistant', content: 'Error al conectar con el motor IA. Verifica que el servicio esté activo.' }]);
       }
-
-      const data = await response.json();
-      const answer = data?.message?.content?.trim();
-      if (!answer) {
-        throw new Error('Ollama no devolvió contenido en la respuesta.');
-      }
-
-      const footer = useContext
-        ? `\n\nFuentes internas detectadas: ${context.articleMatches} artículos y ${context.fichaMatches} fichas relacionadas.`
-        : '';
-
-      setMessages((prev) => [...prev, { role: 'assistant', content: `${answer}${footer}` }]);
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Error inesperado al consultar Ollama.';
-      setError(message);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'No pude conectar con Ollama local. Revisa que esté ejecutándose y que el modelo exista.',
-        },
-      ]);
-    } finally {
-      setLoading(false);
+    } else {
+      // Modo demo: respuesta construida desde el repositorio interno
+      await new Promise((r) => setTimeout(r, 900)); // simula latencia
+      const demoAnswer = buildDemoResponse(q);
+      setMessages((prev) => [...prev, { role: 'assistant', content: demoAnswer }]);
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="fade-in">
       <header className="page-header">
-        <h2>Consultor IA Local</h2>
-        <p>Asistente PRL conectado a Ollama en local con contexto normativo del repositorio para respuestas accionables.</p>
+        <h2>Consultor IA — PRL España</h2>
+        <p>Análisis normativo inteligente con contexto del repositorio interno. Disponible como módulo de implementación personalizada.</p>
       </header>
 
       <div className="ai-panel">
-        <div className="ai-inline-note">
-          <strong>Modo local:</strong> Este módulo consulta Ollama en tu máquina. Si no responde, inicia <code>ollama serve</code> y verifica el modelo.
-        </div>
-        <div className="ai-controls">
-          <label>
-            Modelo Ollama
-            <input
-              className="ai-input"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.1:8b"
-            />
-          </label>
-          <label className="ai-checkbox-wrap">
-            <input
-              type="checkbox"
-              checked={useContext}
-              onChange={(e) => setUseContext(e.target.checked)}
-            />
-            Usar contexto normativo interno (RAG)
-          </label>
+
+        {backendActive === false && (
+          <div className="ai-inline-note ai-demo-banner">
+            <span className="ai-demo-badge">Vista previa</span>
+            <span>Mostrando cómo operaría el consultor con tu base normativa interna. Las respuestas reales requieren integración IA activa.</span>
+          </div>
+        )}
+
+        {backendActive === true && (
+          <div className="ai-inline-note ai-live-banner">
+            <span className="ai-live-badge">IA activa</span>
+            <span>Conectado al motor de IA. Respuestas generadas con contexto normativo del repositorio.</span>
+          </div>
+        )}
+
+        {backendActive === null && (
+          <div className="ai-inline-note">Comprobando conexión con el motor IA…</div>
+        )}
+
+        <div className="ai-demo-prompts">
+          <span className="ai-demo-prompts-label">Consultas de ejemplo:</span>
+          {DEMO_PROMPTS.map((p) => (
+            <button key={p} className="ai-demo-chip" onClick={() => handleAsk(p)}>
+              {p}
+            </button>
+          ))}
         </div>
 
         <div className="ai-chat">
           {messages.map((m, idx) => (
             <div key={idx} className={`ai-msg ai-msg-${m.role}`}>
               <span className="ai-msg-role">{m.role === 'assistant' ? 'Consultor IA' : 'Tú'}</span>
-              <p>{m.content}</p>
+              <p style={{ whiteSpace: 'pre-wrap' }}>{m.content}</p>
             </div>
           ))}
-          {loading && <div className="ai-msg ai-msg-assistant"><span className="ai-msg-role">Consultor IA</span><p>Pensando respuesta...</p></div>}
+          {loading && (
+            <div className="ai-msg ai-msg-assistant">
+              <span className="ai-msg-role">Consultor IA</span>
+              <p>{backendActive ? 'Analizando con IA…' : 'Buscando en repositorio normativo…'}</p>
+            </div>
+          )}
         </div>
 
         <div className="ai-composer">
@@ -572,14 +735,19 @@ const ConsultorIAPage = () => {
             className="ai-input ai-textarea"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ejemplo: ¿Qué obligaciones tengo para coordinación de actividades en obra con dos subcontratas?"
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAsk(); } }}
+            placeholder="Ej: ¿Qué obligaciones tengo para coordinación de actividades con dos subcontratas?"
           />
-          <button className="audit-action-btn" onClick={handleAsk} disabled={loading || !question.trim()}>
-            {loading ? 'Consultando...' : 'Consultar normativa'}
+          <button className="audit-action-btn" onClick={() => handleAsk()} disabled={loading || !question.trim()}>
+            {loading ? 'Analizando…' : 'Consultar'}
           </button>
         </div>
 
-        {error && <div className="ai-error">{error}</div>}
+        <div className="ai-activation-note">
+          <strong>¿Necesitas respuestas generadas por IA?</strong> Este módulo está preparado para conectarse a un modelo de lenguaje local o en la nube. La activación requiere configuración personalizada según tu infraestructura.
+          <span className="ai-activation-link"> Contacta para implementación.</span>
+        </div>
+
       </div>
     </div>
   );

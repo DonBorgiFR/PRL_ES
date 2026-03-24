@@ -1,6 +1,6 @@
 # ROADMAP — PRL España
 
-Estado: 23 de marzo de 2026.
+Estado: 24 de marzo de 2026.
 
 ---
 
@@ -18,7 +18,8 @@ Estado: 23 de marzo de 2026.
 | Referencias cruzadas (17 conexiones) | ✅ Operativo | Añadir conexiones con RD 614/2001 (electrico) y RD 486 Anexo VI |
 | Fichas de capacitacion (10 modulos) | ✅ Operativo | Ampliar a 15 fichas; añadir fichas especificas RD 486 |
 | Buscador inteligente | ✅ Operativo | Mejorar ranking de relevancia; filtro por norma |
-| Consultor IA local (Ollama — dev) | ✅ Operativo en dev | **NO funciona en produccion** — ver bloque 1 pendiente |
+| Consultor IA (vista previa publica) | ✅ Operativo en preview | Activacion real solo como servicio post-implementacion personalizada |
+| Exportación PDF de artículos y fichas | ✅ Operativo | Extender a vista del Checklist Auditoría |
 
 ### Repositorio documental PRL Industria
 
@@ -41,25 +42,26 @@ Estado: 23 de marzo de 2026.
 
 ## Bloques pendientes (en orden de prioridad)
 
-### Bloque 1 — Despliegue IA productivo
-**Por que primero:** el consultor IA es diferenciador clave; actualmente solo funciona en dev.
+### Bloque 1 — Base IA lista para activacion personalizada
+**Por que primero:** mantener el consultor util en modo preview publico y dejar la IA real como capa opcional de servicio.
 
-- [ ] Backend minimo (Node/Express o equivalente) con endpoint `/api/ollama`.
-- [ ] Variables de entorno para host Ollama y token de acceso.
-- [ ] Documentar en `.agent/workflows/build_deploy.md`.
-- [ ] CORS seguro; sin credenciales hardcodeadas.
-- [ ] Variante A: Ollama en red local (intranet corporativa).
-- [ ] Variante B: modelo externo via API (fallback).
+- [x] Backend minimo (Node/Express) con endpoint `/api/ollama/*` y `healthcheck`.
+- [x] Variables de entorno para host Ollama, fallback y token de acceso.
+- [x] Documentado en `.agent/workflows/build_deploy.md`.
+- [x] CORS restringible por lista de origenes + plantilla productiva sin credenciales hardcodeadas.
+- [x] Variante A: Ollama en red local (intranet corporativa).
+- [x] Variante B: modelo externo via API (fallback).
 
 ### Bloque 2 — Exportacion PDF
 **Por que segundo:** los equipos de campo necesitan imprimir evidencias y checklists.
 
-- [ ] Exportar fichas de capacitacion a PDF.
-- [ ] Exportar articulo view a PDF (con referencias cruzadas visibles).
-- [ ] Explorar: `@react-pdf/renderer` o `jsPDF` + `html2canvas`.
+- [x] Exportar fichas de capacitacion a PDF.
+- [x] Exportar articulo view a PDF (con referencias cruzadas visibles).
+- [x] Explorar: `jsPDF` + `html2canvas` (Implementado).
+- [ ] Exportar resultados de Checklist de Auditoría Interactiva.
 
 ### Bloque 3 — UX consultor IA
-**Por que tercero:** mejorar produccion antes de escalar uso.
+**Por que tercero:** mejorar la experiencia de prueba publica antes de escalar activaciones personalizadas.
 
 - [ ] Presets de consulta rapida (botones de prompt frecuentes).
 - [ ] Boton copiar/exportar respuesta.
@@ -91,6 +93,12 @@ Estado: 23 de marzo de 2026.
 ---
 
 ## Convenciones de este archivo
+
+## Decision de producto vigente
+
+- La publicacion del producto **no depende** de tener IA real activa.
+- El consultor IA se mantiene en **modo vista previa** para uso publico.
+- La conexion a modelo real (local o nube) se ofrece como **post-implementacion personalizada**.
 
 - Se actualiza al cierre de cada bloque o iteracion de sesion.
 - Cada modulo completado mantiene su fila con las revisiones pendientes visibles.
