@@ -5,6 +5,8 @@ import { construccion } from './construccion';
 import { rd486 } from './rd486';
 import { referencias } from './referencias';
 import { fichas } from './fichas';
+import { rolesData } from './rolesData';
+import { documentosData } from './documentosData';
 import type { Ley } from './types';
 
 export const leyes: Ley[] = [lprl, rsp, cae, construccion, rd486];
@@ -90,4 +92,4 @@ export function buildNormativeContext(query: string, maxArticles = 6, maxFichas 
   };
 }
 
-export { leyes as default, referencias, fichas, lprl, rsp, cae, construccion, rd486 };
+export { leyes as default, referencias, fichas, lprl, rsp, cae, construccion, rd486, rolesData, documentosData };

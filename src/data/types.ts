@@ -50,6 +50,20 @@ export interface ReferenciaCruzada {
   tipo: 'desarrollo' | 'complemento' | 'especificacion' | 'remision';
 }
 
+export interface DocumentTemplate {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  fields: {
+    name: string;
+    label: string;
+    type: 'text' | 'date' | 'textarea' | 'select';
+    options?: string[];
+  }[];
+  contentTemplate: string; // The markdown/HTML string with placeholders like {{workerName}}
+}
+
 export interface FichaCapacitacion {
   id: string;
   titulo: string;
@@ -60,4 +74,27 @@ export interface FichaCapacitacion {
   normativaRelacionada: string[];
   colectivo: string;
   icono: string;
+  quiz?: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    explanation: string;
+    articleRef?: string;
+  }[];
+}
+
+export interface RoleObligation {
+  id: string;
+  shortLabel: string;
+  label: string;
+  icon: string;
+  description: string;
+  obligations: {
+    title: string;
+    description: string;
+    leyId: string;
+    articuloId: string;
+  }[];
+  fichas: string[];
+  risks: string[];
 }

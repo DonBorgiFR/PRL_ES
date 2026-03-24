@@ -9,7 +9,9 @@ import {
   fichas,
   getLeyById,
   searchAll,
-  buildNormativeContext
+  buildNormativeContext,
+  rolesData,
+  documentosData
 } from './data';
 
 const downloadToPDF = async (elementId: string, filename: string) => {
@@ -80,6 +82,11 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
             <span className="nav-icon">🏠</span> Inicio
           </a>
         </Link>
+        <Link href="/mapa-roles">
+          <a className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
+            <span className="nav-icon">🧭</span> Mapas por Rol
+          </a>
+        </Link>
         <Link href="/buscador">
           <a className={`nav-item ${location === '/buscador' ? 'active' : ''}`} id="link-nav-search" onClick={closeOnMobile}>
             <span className="nav-icon">🔍</span> Buscador Inteligente
@@ -119,6 +126,11 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <Link href="/consultor-ia">
           <a className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
             <span className="nav-icon">🤖</span> Consultor IA Local
+          </a>
+        </Link>
+        <Link href="/generador-docs">
+          <a className={`nav-item ${location === '/generador-docs' ? 'active' : ''}`} id="link-nav-docs" onClick={closeOnMobile}>
+            <span className="nav-icon">📄</span> Generador de Docs
           </a>
         </Link>
       </nav>
@@ -170,6 +182,13 @@ const HomePage = () => (
 
     <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem', marginTop: '1rem' }}>Capacidades Core</div>
     <div className="features-grid">
+      <Link href="/mapa-roles">
+        <div className="feature-card" style={{ '--feat-color': '#f43f5e' } as React.CSSProperties}>
+          <div className="feat-icon">🧭</div>
+          <h3>Mapas de Obligaciones</h3>
+          <p>Descubre normativa y riesgos adaptados a roles específicos en tu empresa.</p>
+        </div>
+      </Link>
       <Link href="/auditoria">
         <div className="feature-card" style={{ '--feat-color': '#34d399' } as React.CSSProperties}>
           <div className="feat-icon">✅</div>
@@ -489,81 +508,220 @@ const ReferenciasPage = () => (
   </div>
 );
 
+// ============================================================
+// MICRO-CURSOS / QUIZ MODAL
+// ============================================================
+const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => void; onFinish: () => void }) => {
+  const quiz = ficha.quiz;
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [answers, setAnswers] = useState<boolean[]>([]);
+  const [finished, setFinished] = useState(false);
+
+  // Prevent background scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = 'auto'; };
+  }, []);
+
+  if (!quiz) return null;
+
+  const handleSelect = (idx: number) => {
+    if (showExplanation) return;
+    setSelectedIdx(idx);
+    setShowExplanation(true);
+    const isCorrect = idx === quiz[currentQuestion].correctIndex;
+    setAnswers(prev => [...prev, isCorrect]);
+  };
+
+  const nextQuestion = () => {
+    if (currentQuestion + 1 < quiz.length) {
+      setCurrentQuestion(c => c + 1);
+      setSelectedIdx(null);
+      setShowExplanation(false);
+    } else {
+      setFinished(true);
+      const passed = answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8);
+      if (passed) {
+        localStorage.setItem(`prl_quiz_${ficha.id}`, 'true');
+        onFinish(); // To trigger a re-render in parent and show the badge
+      }
+    }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content quiz-modal" onClick={e => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>&times;</button>
+        {!finished ? (
+          <div className="quiz-container fade-in">
+            <div className="quiz-header">
+              <span className="quiz-progress-text">Pregunta {currentQuestion + 1} de {quiz.length}</span>
+              <div className="quiz-progress-bar">
+                <div className="quiz-progress-fill" style={{ width: `${((currentQuestion + 0.5) / quiz.length) * 100}%` }}></div>
+              </div>
+            </div>
+            
+            <h3 className="quiz-question">{quiz[currentQuestion].question}</h3>
+            
+            <div className="quiz-options">
+              {quiz[currentQuestion].options.map((opt: string, i: number) => {
+                let btnClass = "quiz-option-btn";
+                if (showExplanation) {
+                  if (i === quiz[currentQuestion].correctIndex) btnClass += " correct";
+                  else if (i === selectedIdx) btnClass += " incorrect";
+                  else btnClass += " disabled";
+                }
+                return (
+                  <button key={i} className={btnClass} onClick={() => handleSelect(i)}>
+                    <span className="quiz-option-letter">{String.fromCharCode(65 + i)}</span>
+                    <span className="quiz-option-text">{opt}</span>
+                  </button>
+                )
+              })}
+            </div>
+            
+            {showExplanation && (
+              <div className={`quiz-explanation fade-in ${selectedIdx === quiz[currentQuestion].correctIndex ? 'success' : 'error'}`}>
+                <h4>{selectedIdx === quiz[currentQuestion].correctIndex ? '¡Correcto!' : 'Respuesta incorrecta'}</h4>
+                <p>{quiz[currentQuestion].explanation}</p>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginTop: '16px'}}>
+                  <span className="quiz-article-ref">📌 {quiz[currentQuestion].articleRef}</span>
+                  <button className="hero-primary-btn" onClick={nextQuestion}>
+                    {currentQuestion + 1 < quiz.length ? 'Siguiente Pregunta →' : 'Ver Resultados'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="quiz-result fade-in">
+            <div className="quiz-result-icon">
+              {answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8) ? '🏆' : '📚'}
+            </div>
+            <h3>{answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8) ? '¡Micro-curso superado!' : 'Necesitas repasar algunos conceptos'}</h3>
+            <p>Has acertado {answers.filter(Boolean).length} de {quiz.length} preguntas.</p>
+            <div style={{marginTop: '24px'}}>
+              <button className="hero-primary-btn" onClick={onClose}>Volver a Fichas</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 const FichasPage = () => {
   const [filterNivel, setFilterNivel] = useState<string | null>(null);
+  const [selectedQuiz, setSelectedQuiz] = useState<any | null>(null);
+  // Un state para forzar re-render cuando se termina un quiz
+  const [refreshIdx, forceUpdate] = useState(0);
   
   const filteredFichas = filterNivel 
     ? fichas.filter(f => f.nivel === filterNivel)
     : fichas;
 
   return (
-    <div className="fade-in">
-      <header className="page-header">
-        <h2>Fichas de Capacitación</h2>
-        <p>Contenido formativo estructurado en tres niveles para diferentes colectivos de la organización.</p>
-      </header>
+    <>
+      <div className="fade-in">
+        <header className="page-header">
+          <h2>Fichas de Capacitación</h2>
+          <p>Contenido formativo estructurado en tres niveles para diferentes colectivos de la organización.</p>
+        </header>
 
-      <div className="tabs-row" id="nivel-tabs">
-        <button 
-          className={`tab-btn ${!filterNivel ? 'active' : ''}`}
-          onClick={() => setFilterNivel(null)}
-          id="tab-nivel-all"
-        >
-          Todas
-        </button>
-        <button 
-          className={`tab-btn ${filterNivel === 'basico' ? 'active' : ''}`}
-          onClick={() => setFilterNivel('basico')}
-          id="tab-nivel-basico"
-        >
-          Básico
-        </button>
-        <button 
-          className={`tab-btn ${filterNivel === 'intermedio' ? 'active' : ''}`}
-          onClick={() => setFilterNivel('intermedio')}
-          id="tab-nivel-intermedio"
-        >
-          Intermedio
-        </button>
-        <button 
-          className={`tab-btn ${filterNivel === 'avanzado' ? 'active' : ''}`}
-          onClick={() => setFilterNivel('avanzado')}
-          id="tab-nivel-avanzado"
-        >
-          Avanzado
-        </button>
-      </div>
+        <div className="tabs-row" id="nivel-tabs">
+          <button 
+            className={`tab-btn ${!filterNivel ? 'active' : ''}`}
+            onClick={() => setFilterNivel(null)}
+            id="tab-nivel-all"
+          >
+            Todas
+          </button>
+          <button 
+            className={`tab-btn ${filterNivel === 'basico' ? 'active' : ''}`}
+            onClick={() => setFilterNivel('basico')}
+            id="tab-nivel-basico"
+          >
+            Básico
+          </button>
+          <button 
+            className={`tab-btn ${filterNivel === 'intermedio' ? 'active' : ''}`}
+            onClick={() => setFilterNivel('intermedio')}
+            id="tab-nivel-intermedio"
+          >
+            Intermedio
+          </button>
+          <button 
+            className={`tab-btn ${filterNivel === 'avanzado' ? 'active' : ''}`}
+            onClick={() => setFilterNivel('avanzado')}
+            id="tab-nivel-avanzado"
+          >
+            Avanzado
+          </button>
+        </div>
 
-      <div className="fichas-grid">
-        {filteredFichas.map(ficha => (
-          <div key={ficha.id} className="ficha-card" id={`ficha-${ficha.id}`}>
-            <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10 }}>
-              <button 
-                className="pdf-btn"
-                onClick={(e) => { e.preventDefault(); downloadToPDF(`ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
-                title="Descargar PDF"
-              >
-                📥 PDF
-              </button>
+        <div className="fichas-grid" key={refreshIdx}>
+          {filteredFichas.map(ficha => {
+            const isCompleted = localStorage.getItem(`prl_quiz_${ficha.id}`) === 'true';
+            
+            return (
+            <div key={ficha.id} className="ficha-card" id={`ficha-${ficha.id}`}>
+              <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10, display: 'flex', gap: '8px' }}>
+                <button 
+                  className="pdf-btn"
+                  onClick={(e) => { e.preventDefault(); downloadToPDF(`ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
+                  title="Descargar PDF"
+                >
+                  📥 PDF
+                </button>
+              </div>
+              <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
+              <div className="ficha-icon">{ficha.icono}</div>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <h3>{ficha.titulo}</h3>
+                {isCompleted && <span style={{fontSize: '1.2rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'}} title="Micro-curso completado">✅</span>}
+              </div>
+              <div className="ficha-meta">
+                <span>⏱️ {ficha.duracion}</span>
+                <span>👥 {ficha.colectivo}</span>
+              </div>
+              <p className="ficha-objetivo">{ficha.objetivo}</p>
+              <ul className="ficha-contenido">
+                {ficha.contenido.map((c, i) => <li key={i}>{c}</li>)}
+              </ul>
+              
+              {ficha.quiz && (
+                <div style={{marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)'}}>
+                  <button 
+                    className="hero-primary-btn" 
+                    style={{width: '100%', display: 'flex', justifyContent: 'center', padding: '8px', fontSize: '0.85rem'}}
+                    onClick={() => setSelectedQuiz(ficha)}
+                  >
+                    📝 Empezar Micro-curso
+                  </button>
+                </div>
+              )}
+              
+              {!ficha.quiz && (
+                <div className="ficha-normativa" style={{marginTop: 'auto'}}>
+                  {ficha.normativaRelacionada.map(n => <span key={n} className="ficha-norm-tag">{n}</span>)}
+                </div>
+              )}
             </div>
-            <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
-            <div className="ficha-icon">{ficha.icono}</div>
-            <h3>{ficha.titulo}</h3>
-            <div className="ficha-meta">
-              <span>⏱️ {ficha.duracion}</span>
-              <span>👥 {ficha.colectivo}</span>
-            </div>
-            <p className="ficha-objetivo">{ficha.objetivo}</p>
-            <ul className="ficha-contenido">
-              {ficha.contenido.map((c, i) => <li key={i}>{c}</li>)}
-            </ul>
-            <div className="ficha-normativa">
-              {ficha.normativaRelacionada.map(n => <span key={n} className="ficha-norm-tag">{n}</span>)}
-            </div>
-          </div>
-        ))}
+            )
+          })}
+        </div>
       </div>
-    </div>
+      
+      {selectedQuiz && (
+        <QuizModal 
+          ficha={selectedQuiz} 
+          onClose={() => setSelectedQuiz(null)} 
+          onFinish={() => forceUpdate((u: number) => u + 1)}
+        />
+      )}
+    </>
   );
 };
 
@@ -1008,6 +1166,225 @@ const AuditoriaPage = () => {
 };
 
 // ============================================================
+// MAPAS DE ROLES
+// ============================================================
+
+const RolesPage = () => {
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
+  const role = rolesData.find(r => r.id === selectedRole);
+
+  return (
+    <div className="fade-in">
+      <header className="page-header">
+        <h2>Mapas de Obligaciones por Rol</h2>
+        <p>Selecciona un perfil para descubrir la normativa fundamental, riesgos característicos y formación recomendada para cada puesto de trabajo.</p>
+      </header>
+
+      {!selectedRole ? (
+        <div className="roles-grid fade-in">
+          {rolesData.map(r => (
+            <div key={r.id} className="role-card" onClick={() => setSelectedRole(r.id)} id={`role-card-${r.id}`}>
+              <div className="role-icon">{r.icon}</div>
+              <h3>{r.shortLabel}</h3>
+              <p>{r.description}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="role-dashboard fade-in">
+          <button className="back-btn" onClick={() => setSelectedRole(null)}>← Volver a roles</button>
+          
+          <div className="role-dashboard-header">
+            <div className="role-icon-large">{role?.icon}</div>
+            <div>
+              <h2>{role?.label}</h2>
+              <p>{role?.description}</p>
+            </div>
+          </div>
+          
+          <div className="role-sections-grid">
+            <div className="role-section left-column">
+              <h3>Obligaciones Legales y Normativa Clave</h3>
+              <div className="role-items-list">
+                {role?.obligations.map((obl, i) => (
+                  <div key={i} className="role-item-card fade-in-delay-1">
+                    <h4>{obl.title}</h4>
+                    <p>{obl.description}</p>
+                    <Link href={`/normativa/${obl.leyId}`}>
+                      {/* En versión final podríamos enviar un state/#hash al artículo. Dejamos el Link completo a la norma para facilidad de UX. */}
+                      <a className="role-link">
+                        Ver {obl.leyId.toUpperCase()} · Art. {obl.articuloId.split('-art')[1] || obl.articuloId} ↗
+                      </a>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="right-column">
+              <div className="role-section">
+                <h3>Riesgos Típicos Asociados</h3>
+                <ul className="role-risks-list fade-in-delay-2">
+                  {role?.risks.map((risk, i) => <li key={i}>⚠️ {risk}</li>)}
+                </ul>
+              </div>
+              
+              <div className="role-section">
+                <h3>Fichas Formativas Recomendadas</h3>
+                <div className="role-fichas-list fade-in-delay-3">
+                  {role?.fichas.map(fId => {
+                    const f = fichas.find(x => x.id === fId);
+                    if (!f) return null;
+                    return (
+                      <Link key={f.id} href="/fichas">
+                        <a className="role-ficha-card">
+                          <span className="ficha-icon-small">{f.icono}</span>
+                          <span style={{flex: 1}}>{f.titulo}</span>
+                          <span className={`ficha-level-badge ${f.nivel}`} style={{position: 'static', margin: 0}}>{f.nivel}</span>
+                        </a>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// GENERADOR DE DOCUMENTOS PRL
+// ============================================================
+
+const DocumentosPage = () => {
+  const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
+  const [formValues, setFormValues] = useState<Record<string, string>>({});
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const template = documentosData.find(d => d.id === selectedDoc);
+
+  const fillTemplate = (tpl: string, values: Record<string, string>) =>
+    tpl.replace(/\{\{(\w+)\}\}/g, (_, k) => values[k] || `[${k}]`);
+
+  const handleGenerate = () => {
+    if (!template) return;
+    const filled = fillTemplate(template.contentTemplate, formValues);
+    setPreview(filled);
+  };
+
+  const handlePrint = () => {
+    const el = document.getElementById('doc-preview-area');
+    if (!el) return;
+    const win = window.open('', '_blank')!;
+    win.document.write(`
+      <html><head><title>Documento PRL</title>
+      <style>
+        body { font-family: Georgia, serif; padding: 40px; color: #111; line-height: 1.7; }
+        h1 { font-size: 1.4rem; border-bottom: 2px solid #333; padding-bottom: 8px; }
+        h3 { font-size: 1rem; margin-top: 24px; }
+      </style></head>
+      <body>${el.innerHTML}</body></html>`);
+    win.document.close();
+    win.print();
+  };
+
+  return (
+    <div className="fade-in">
+      <header className="page-header">
+        <h2>Generador de Documentos PRL</h2>
+        <p>Crea documentos legales pre-rellenados listos para firmar. Imprime o exporta en PDF directamente.</p>
+      </header>
+
+      {!selectedDoc ? (
+        <div className="docs-grid">
+          {documentosData.map(doc => (
+            <div key={doc.id} className="doc-template-card" onClick={() => { setSelectedDoc(doc.id); setFormValues({}); setPreview(null); }} id={`doc-card-${doc.id}`}>
+              <div className="doc-icon">{doc.icon}</div>
+              <h3>{doc.title}</h3>
+              <p>{doc.description}</p>
+              <span className="doc-cta">Crear documento →</span>
+            </div>
+          ))}
+        </div>
+      ) : preview ? (
+        <div className="doc-preview-wrapper fade-in">
+          <div className="doc-preview-toolbar">
+            <button className="back-btn" onClick={() => setPreview(null)}>← Editar datos</button>
+            <div style={{display:'flex', gap: '10px'}}>
+              <button className="pdf-btn" onClick={handlePrint}>🖨️ Imprimir / PDF</button>
+              <button className="back-btn" onClick={() => { setSelectedDoc(null); setPreview(null); }}>Nuevo documento</button>
+            </div>
+          </div>
+          <div className="doc-preview-paper" id="doc-preview-area"
+            dangerouslySetInnerHTML={{ __html:
+              preview
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^# (.+)/gm, '<h1>$1</h1>')
+                .replace(/^### (.+)/gm, '<h3>$1</h3>')
+                .replace(/^\d+\. (.+)/gm, '<li>$1</li>')
+            }}
+          />
+        </div>
+      ) : (
+        <div className="doc-form-wrapper fade-in">
+          <button className="back-btn" onClick={() => setSelectedDoc(null)}>← Volver a plantillas</button>
+          <div className="doc-form-card">
+            <div className="doc-form-header">
+              <span className="doc-icon">{template?.icon}</span>
+              <div>
+                <h3>{template?.title}</h3>
+                <p>{template?.description}</p>
+              </div>
+            </div>
+            <div className="doc-fields-grid">
+              {template?.fields.map(field => (
+                <div key={field.name} className={`doc-field ${field.type === 'textarea' ? 'doc-field-full' : ''}`}>
+                  <label className="doc-label">{field.label}</label>
+                  {field.type === 'textarea' ? (
+                    <textarea
+                      className="doc-input doc-textarea"
+                      rows={4}
+                      value={formValues[field.name] || ''}
+                      onChange={e => setFormValues(v => ({ ...v, [field.name]: e.target.value }))}
+                      placeholder={`Escribe aquí ${field.label.toLowerCase()}...`}
+                    />
+                  ) : field.type === 'select' ? (
+                    <select
+                      className="doc-input doc-select"
+                      value={formValues[field.name] || ''}
+                      onChange={e => setFormValues(v => ({ ...v, [field.name]: e.target.value }))}
+                    >
+                      <option value="">— Selecciona una opción —</option>
+                      {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                  ) : (
+                    <input
+                      className="doc-input"
+                      type={field.type}
+                      value={formValues[field.name] || ''}
+                      onChange={e => setFormValues(v => ({ ...v, [field.name]: e.target.value }))}
+                      placeholder={field.label}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{marginTop: '28px', textAlign: 'right'}}>
+              <button className="hero-primary-btn" onClick={handleGenerate}>📄 Generar documento</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
 // MAIN APP
 // ============================================================
 
@@ -1035,12 +1412,14 @@ const App = () => {
         </div>
         <Switch>
           <Route path="/" component={HomePage} />
+          <Route path="/mapa-roles" component={RolesPage} />
           <Route path="/normativa/:id" component={NormativaPage} />
           <Route path="/buscador" component={BuscadorPage} />
           <Route path="/referencias" component={ReferenciasPage} />
           <Route path="/fichas" component={FichasPage} />
           <Route path="/auditoria" component={AuditoriaPage} />
           <Route path="/consultor-ia" component={ConsultorIAPage} />
+          <Route path="/generador-docs" component={DocumentosPage} />
           <Route>
             <div className="empty-state">Página no encontrada</div>
           </Route>
