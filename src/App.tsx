@@ -13,6 +13,8 @@ import {
   rolesData,
   documentosData
 } from './data';
+import { LANGUAGE_OPTIONS, useLanguage, type Language } from './i18n';
+import { localizeFicha, localizeReference, localizeRole } from './data/localizedContent';
 
 const downloadToPDF = async (elementId: string, filename: string) => {
   const element = document.getElementById(elementId);
@@ -50,12 +52,187 @@ type ChatMessage = {
   content: string;
 };
 
+const getReferenceTypeLabel = (type: string, t: (key: string, params?: Record<string, string | number>) => string) =>
+  t(`references.${type}`);
+
+const getLevelLabel = (level: string, t: (key: string, params?: Record<string, string | number>) => string) =>
+  t(`levels.${level}`);
+
+const getBadgeLabel = (type: 'tecnico' | 'divulgativo' | 'ambos', t: (key: string, params?: Record<string, string | number>) => string) =>
+  t(`badges.${type}`);
+
+const getWelcomeMessage = (t: (key: string, params?: Record<string, string | number>) => string): ChatMessage => ({
+  role: 'assistant',
+  content: t('ai.welcome'),
+});
+
+const getDemoPromptsByCategory = (
+  language: Language,
+  t: (key: string, params?: Record<string, string | number>) => string,
+) => {
+  const promptsByLanguage: Record<Language, string[][]> = {
+    es: [
+      [
+        '¿Qué obligaciones tiene el empresario en coordinación de actividades?',
+        '¿Qué información debe entregar la empresa a los trabajadores?',
+        '¿Qué dice la LPRL sobre la evaluación de riesgos?',
+      ],
+      [
+        '¿Cómo se documenta la evaluación inicial de riesgos?',
+        '¿Qué registros exige el RSP al servicio de prevención?',
+        '¿Qué debe contener el Plan de Emergencia?',
+      ],
+      [
+        '¿Qué exige el RD 486 sobre condiciones del lugar de trabajo?',
+        '¿Cuándo es obligatoria la vigilancia de la salud?',
+        '¿Qué obligaciones genera una obra de construcción según el RD 1627?',
+      ],
+    ],
+    ca: [
+      [
+        'Quines obligacions té l\'empresa en coordinació d\'activitats?',
+        'Quina informació ha de lliurar l\'empresa als treballadors?',
+        'Què diu la LPRL sobre l\'avaluació de riscos?',
+      ],
+      [
+        'Com es documenta l\'avaluació inicial de riscos?',
+        'Quins registres exigeix l\'RSP al servei de prevenció?',
+        'Què ha de contenir el Pla d\'Emergència?',
+      ],
+      [
+        'Què exigeix el RD 486 sobre les condicions del lloc de treball?',
+        'Quan és obligatòria la vigilància de la salut?',
+        'Quines obligacions genera una obra de construcció segons el RD 1627?',
+      ],
+    ],
+    eu: [
+      [
+        'Zer betebehar ditu enpresak jardueren koordinazioan?',
+        'Zein informazio eman behar die enpresak langileei?',
+        'Zer dio LPRLak arriskuen ebaluazioari buruz?',
+      ],
+      [
+        'Nola dokumentatzen da arriskuen hasierako ebaluazioa?',
+        'Zein erregistro eskatzen dizkio RSPk prebentzio-zerbitzuari?',
+        'Zer eduki behar du Larrialdi Planak?',
+      ],
+      [
+        'Zer eskatzen du RD 486k lantokiaren baldintzei buruz?',
+        'Noiz da nahitaezkoa osasunaren zaintza?',
+        'Zer betebehar sortzen ditu eraikuntza-obrak RD 1627ren arabera?',
+      ],
+    ],
+    gl: [
+      [
+        'Que obrigas ten a empresa na coordinación de actividades?',
+        'Que información debe entregar a empresa aos traballadores?',
+        'Que di a LPRL sobre a avaliación de riscos?',
+      ],
+      [
+        'Como se documenta a avaliación inicial de riscos?',
+        'Que rexistros esixe o RSP ao servizo de prevención?',
+        'Que debe conter o Plan de Emerxencia?',
+      ],
+      [
+        'Que esixe o RD 486 sobre as condicións do lugar de traballo?',
+        'Cando é obrigatoria a vixilancia da saúde?',
+        'Que obrigas xera unha obra de construción segundo o RD 1627?',
+      ],
+    ],
+  };
+
+  return [
+  {
+    label: t('ai.categories.business'),
+    color: '#818cf8',
+    prompts: promptsByLanguage[language][0],
+  },
+  {
+    label: t('ai.categories.documentation'),
+    color: '#34d399',
+    prompts: promptsByLanguage[language][1],
+  },
+  {
+    label: t('ai.categories.specific'),
+    color: '#fbbf24',
+    prompts: promptsByLanguage[language][2],
+  },
+];
+};
+
+const getSectores = (t: (key: string, params?: Record<string, string | number>) => string) => [
+  {
+    id: 'construccion',
+    label: t('audit.sectors.construccion.label'),
+    icon: '🏗️',
+    desc: t('audit.sectors.construccion.desc'),
+    leyIds: ['lprl', 'rsp', 'cae', 'construccion'],
+    color: '#f87171',
+  },
+  {
+    id: 'coordinacion',
+    label: t('audit.sectors.coordinacion.label'),
+    icon: '🔄',
+    desc: t('audit.sectors.coordinacion.desc'),
+    leyIds: ['lprl', 'rsp', 'cae'],
+    color: '#fbbf24',
+  },
+  {
+    id: 'industria',
+    label: t('audit.sectors.industria.label'),
+    icon: '🏭',
+    desc: t('audit.sectors.industria.desc'),
+    leyIds: ['lprl', 'rsp'],
+    color: '#34d399',
+  },
+  {
+    id: 'oficinas',
+    label: t('audit.sectors.oficinas.label'),
+    icon: '🏢',
+    desc: t('audit.sectors.oficinas.desc'),
+    leyIds: ['lprl', 'rsp'],
+    color: '#818cf8',
+  },
+  {
+    id: 'hosteleria',
+    label: t('audit.sectors.hosteleria.label'),
+    icon: '🍽️',
+    desc: t('audit.sectors.hosteleria.desc'),
+    leyIds: ['lprl', 'rsp'],
+    color: '#c084fc',
+  },
+];
+
+const LanguageSwitcher = () => {
+  const { language, setLanguage, t } = useLanguage();
+
+  return (
+    <div className="language-switcher" role="group" aria-label={t('language.aria')}>
+      <span className="language-switcher-label">{t('language.selector')}</span>
+      <div className="language-switcher-buttons">
+        {LANGUAGE_OPTIONS.map((option) => (
+          <button
+            key={option.code}
+            className={`language-btn ${language === option.code ? 'active' : ''}`}
+            onClick={() => setLanguage(option.code as Language)}
+            title={option.label}
+            type="button"
+          >
+            {option.shortLabel}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // ============================================================
 // COMPONENTS
 // ============================================================
 
 const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [location] = useLocation();
+  const { t } = useLanguage();
 
   const closeOnMobile = () => {
     if (window.matchMedia('(max-width: 900px)').matches) {
@@ -69,31 +246,31 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <Link href="/">
           <div style={{ cursor: 'pointer' }} id="logo-branding" onClick={closeOnMobile}>
             <img src={brandLogo} alt="Borja Felix Rojas" className="brand-logo" />
-            <h1>PRL España</h1>
-            <span>Control de Gestión · Ingeniería de Datos · PRL</span>
+            <h1>{t('app.title')}</h1>
+            <span>{t('app.subtitle')}</span>
           </div>
         </Link>
       </div>
       
       <nav className="sidebar-nav">
-        <div className="nav-section-label">Principal</div>
+        <div className="nav-section-label">{t('nav.main')}</div>
         <Link href="/">
           <a className={`nav-item ${location === '/' ? 'active' : ''}`} id="link-nav-home" onClick={closeOnMobile}>
-            <span className="nav-icon">🏠</span> Inicio
+            <span className="nav-icon">🏠</span> {t('nav.home')}
           </a>
         </Link>
         <Link href="/mapa-roles">
           <a className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
-            <span className="nav-icon">🧭</span> Mapas por Rol
+            <span className="nav-icon">🧭</span> {t('nav.roles')}
           </a>
         </Link>
         <Link href="/buscador">
           <a className={`nav-item ${location === '/buscador' ? 'active' : ''}`} id="link-nav-search" onClick={closeOnMobile}>
-            <span className="nav-icon">🔍</span> Buscador Inteligente
+            <span className="nav-icon">🔍</span> {t('nav.search')}
           </a>
         </Link>
         
-        <div className="nav-section-label">Normativa</div>
+        <div className="nav-section-label">{t('nav.normative')}</div>
         {leyes.map(ley => (
           <Link key={ley.id} href={`/normativa/${ley.id}`}>
             <a 
@@ -107,30 +284,30 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
           </Link>
         ))}
         
-        <div className="nav-section-label">Recursos</div>
+        <div className="nav-section-label">{t('nav.resources')}</div>
         <Link href="/referencias">
           <a className={`nav-item ${location === '/referencias' ? 'active' : ''}`} id="link-nav-refs" onClick={closeOnMobile}>
-            <span className="nav-icon">🔗</span> Referencias Cruzadas
+            <span className="nav-icon">🔗</span> {t('nav.references')}
           </a>
         </Link>
         <Link href="/fichas">
           <a className={`nav-item ${location === '/fichas' ? 'active' : ''}`} id="link-nav-fichas" onClick={closeOnMobile}>
-            <span className="nav-icon">🎓</span> Fichas de Capacitación
+            <span className="nav-icon">🎓</span> {t('nav.training')}
           </a>
         </Link>
         <Link href="/auditoria">
           <a className={`nav-item ${location === '/auditoria' ? 'active' : ''}`} id="link-nav-auditoria" onClick={closeOnMobile}>
-            <span className="nav-icon">✅</span> Auditoría Interactiva
+            <span className="nav-icon">✅</span> {t('nav.audit')}
           </a>
         </Link>
         <Link href="/consultor-ia">
           <a className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
-            <span className="nav-icon">🤖</span> Consultor IA Local
+            <span className="nav-icon">🤖</span> {t('nav.ai')}
           </a>
         </Link>
         <Link href="/generador-docs">
           <a className={`nav-item ${location === '/generador-docs' ? 'active' : ''}`} id="link-nav-docs" onClick={closeOnMobile}>
-            <span className="nav-icon">📄</span> Generador de Docs
+            <span className="nav-icon">📄</span> {t('nav.docs')}
           </a>
         </Link>
       </nav>
@@ -139,75 +316,74 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
 };
 
 const Badge = ({ type }: { type: 'tecnico' | 'divulgativo' | 'ambos' }) => {
-  const labels = {
-    tecnico: 'Perfil Técnico',
-    divulgativo: 'Divulgativo',
-    ambos: 'General'
-  };
-  return <span className={`badge badge-${type}`}>{labels[type]}</span>;
+  const { t } = useLanguage();
+  return <span className={`badge badge-${type}`}>{getBadgeLabel(type, t)}</span>;
 };
 
 // ============================================================
 // PAGES
 // ============================================================
 
-const HomePage = () => (
+const HomePage = () => {
+  const { t } = useLanguage();
+
+  return (
   <div className="fade-in">
     <header className="home-hero">
       <div className="hero-content">
-        <h2 id="hero-title">Transformando normativa en <span className="gradient-text">decisiones estratégicas</span></h2>
-        <p id="hero-desc">Plataforma de consulta PRL con enfoque de ingeniería y control de gestión: del cumplimiento legal a la ejecución operativa medible.</p>
+        <h2 id="hero-title">{t('home.heroTitle')} <span className="gradient-text">{t('home.heroHighlight')}</span></h2>
+        <p id="hero-desc">{t('home.heroDescription')}</p>
         <div className="hero-actions">
-          <Link href="/buscador"><button className="hero-primary-btn">Búsqueda Inteligente ⌕</button></Link>
-          <div className="hero-inline-note">IA local integrada</div>
+          <Link href="/buscador"><button className="hero-primary-btn">{t('home.heroSearch')}</button></Link>
+          <div className="hero-inline-note">{t('home.heroNote')}</div>
         </div>
       </div>
       <div className="hero-visual">
         <div className="glass-card hero-glass-1">
           <span className="glass-icon">💡</span>
           <div>
-            <strong>Referencia Cruzada</strong>
-            <span>RD 486 Anexo III → LPRL Art. 16</span>
+            <strong>{t('home.crossTitle')}</strong>
+            <span>{t('home.crossText')}</span>
           </div>
         </div>
         <div className="glass-card hero-glass-2">
            <span className="glass-icon">✅</span>
            <div>
-             <strong>Auditoría Sectorial</strong>
-             <span>Industria · 85% Conforme</span>
+             <strong>{t('home.auditTitle')}</strong>
+             <span>{t('home.auditText')}</span>
            </div>
         </div>
       </div>
     </header>
 
-    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem', marginTop: '1rem' }}>Capacidades Core</div>
+    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem', marginTop: '1rem' }}>{t('home.core')}</div>
     <div className="features-grid">
       <Link href="/mapa-roles">
         <div className="feature-card" style={{ '--feat-color': '#f43f5e' } as React.CSSProperties}>
           <div className="feat-icon">🧭</div>
-          <h3>Mapas de Obligaciones</h3>
-          <p>Descubre normativa y riesgos adaptados a roles específicos en tu empresa.</p>
+          <h3>{t('home.featureRolesTitle')}</h3>
+          <p>{t('home.featureRolesText')}</p>
         </div>
       </Link>
       <Link href="/auditoria">
         <div className="feature-card" style={{ '--feat-color': '#34d399' } as React.CSSProperties}>
           <div className="feat-icon">✅</div>
-          <h3>Auditoría Interactiva</h3>
-          <p>Checklists dinámicos adaptados a tu sector de actividad.</p>
+          <h3>{t('home.featureAuditTitle')}</h3>
+          <p>{t('home.featureAuditText')}</p>
         </div>
       </Link>
       <Link href="/referencias">
         <div className="feature-card" style={{ '--feat-color': '#fbbf24' } as React.CSSProperties}>
           <div className="feat-icon">🔗</div>
-          <h3>Referencias Cruzadas</h3>
-          <p>Mapeo estratégico: cómo interactúan las leyes entre sí.</p>
+          <h3>{t('home.featureRefsTitle')}</h3>
+          <p>{t('home.featureRefsText')}</p>
         </div>
       </Link>
       <Link href="/fichas">
         <div className="feature-card" style={{ '--feat-color': '#c084fc' } as React.CSSProperties}>
           <div className="feat-icon">🎓</div>
-          <h3>Fichas Formativas</h3>
-          <p>Contenido progresivo y estructurado para la capacitación del equipo.</p>
+          <h3>{t('home.featureTrainingTitle')}</h3>
+          <p>{t('home.featureTrainingText')}</p>
         </div>
       </Link>
     </div>
@@ -217,26 +393,26 @@ const HomePage = () => (
         <div className="stat-icon" style={{ background: 'rgba(52, 211, 153, 0.15)', color: '#34d399' }}>📚</div>
         <div className="stat-data">
           <span className="num">{leyes.length}</span>
-          <span className="label">Normas Base</span>
+          <span className="label">{t('home.baseRules')}</span>
         </div>
       </div>
       <div className="home-stat-card">
         <div className="stat-icon" style={{ background: 'rgba(192, 132, 252, 0.15)', color: '#c084fc' }}>🎓</div>
         <div className="stat-data">
           <span className="num">{fichas.length}</span>
-          <span className="label">Fichas Formativas</span>
+          <span className="label">{t('home.trainingSheets')}</span>
         </div>
       </div>
       <div className="home-stat-card">
         <div className="stat-icon" style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24' }}>🔀</div>
         <div className="stat-data">
           <span className="num">{referencias.length}</span>
-          <span className="label">Conexiones</span>
+          <span className="label">{t('home.connections')}</span>
         </div>
       </div>
     </div>
 
-    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem' }}>Explorar Normativa</div>
+    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem' }}>{t('home.explore')}</div>
     <div className="cards-grid" id="normativa-grid">
       {leyes.map((ley, idx) => (
         <Link key={ley.id} href={`/normativa/${ley.id}`}>
@@ -258,7 +434,7 @@ const HomePage = () => (
                 onClick={e => e.stopPropagation()}
                 id={`btn-boe-${ley.id}`}
               >
-                BOE ↗
+                {t('home.boe')}
               </a>
             </div>
           </div>
@@ -270,42 +446,44 @@ const HomePage = () => (
       <div className="about-borja-header">
         <img src={brandLogo} alt="Borja Felix Rojas" className="about-borja-avatar" />
         <div>
-          <h3>Perfil Profesional</h3>
-          <p>Borja Felix Rojas · Ingeniería Industrial, Control de Gestión y PRL aplicada a decisiones operativas.</p>
+          <h3>{t('home.profileTitle')}</h3>
+          <p>{t('home.profileText')}</p>
         </div>
       </div>
 
       <div className="about-borja-grid">
         <article className="about-borja-card">
-          <h4>Reporting Ejecutivo</h4>
-          <p>KPI accionables para priorizar riesgos, cumplimiento y rendimiento operativo.</p>
+          <h4>{t('home.reportingTitle')}</h4>
+          <p>{t('home.reportingText')}</p>
         </article>
         <article className="about-borja-card">
-          <h4>Automatización</h4>
-          <p>Integración de datos y procesos para reducir errores y tiempos de ciclo.</p>
+          <h4>{t('home.automationTitle')}</h4>
+          <p>{t('home.automationText')}</p>
         </article>
         <article className="about-borja-card">
-          <h4>Data Analytics</h4>
-          <p>Conexión entre normativa, evidencia documental y decisiones de negocio.</p>
+          <h4>{t('home.analyticsTitle')}</h4>
+          <p>{t('home.analyticsText')}</p>
         </article>
         <article className="about-borja-card">
-          <h4>Mejora Continua</h4>
-          <p>Del control en terreno a la estrategia anual con seguimiento medible.</p>
+          <h4>{t('home.improvementTitle')}</h4>
+          <p>{t('home.improvementText')}</p>
         </article>
       </div>
 
       <div className="about-borja-actions">
-        <a href="https://borjafelixrojas.odoo.com/about-us" target="_blank" rel="noreferrer" className="about-borja-link">Perfil profesional ↗</a>
+        <a href="https://borjafelixrojas.odoo.com/about-us" target="_blank" rel="noreferrer" className="about-borja-link">{t('home.profileLink')}</a>
       </div>
     </section>
   </div>
-);
+  );
+};
 
 const NormativaPage = ({ params }: { params: { id: string } }) => {
   const ley = getLeyById(params.id);
   const [openCaps, setOpenCaps] = useState<Record<string, boolean>>({ 'lprl-cap1': true, 'lprl-cap3': true });
+  const { t } = useLanguage();
 
-  if (!ley) return <div className="empty-state">Normativa no encontrada</div>;
+  if (!ley) return <div className="empty-state">{t('common.notFoundNormative')}</div>;
 
   const toggleCap = (id: string) => {
     setOpenCaps(prev => ({ ...prev, [id]: !prev[id] }));
@@ -315,7 +493,7 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
     <div className="fade-in">
       <div className="law-detail-header">
         <Link href="/">
-          <button className="back-btn">← Volver</button>
+          <button className="back-btn">← {t('common.back')}</button>
         </Link>
         <div className="law-detail-info">
           <div className="law-code" style={{ color: ley.color }}>{ley.codigo}</div>
@@ -351,7 +529,7 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
                       <button 
                         className="pdf-btn"
                         onClick={(e) => { e.preventDefault(); downloadToPDF(`art-${art.id}`, `Articulo_${art.numero}_${ley.id}`); }}
-                        title="Descargar PDF"
+                        title={t('common.downloadPdf')}
                       >
                         📥 PDF
                       </button>
@@ -359,7 +537,7 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
                     <p className="art-text">{art.texto}</p>
                     <div className="art-footer">
                       {art.tags.map(tag => <span key={tag} className="art-tag">#{tag}</span>)}
-                      {art.boeUrl && <a href={art.boeUrl} className="art-boe-link" target="_blank" rel="noreferrer">Ver en BOE ↗</a>}
+                      {art.boeUrl && <a href={art.boeUrl} className="art-boe-link" target="_blank" rel="noreferrer">{t('common.viewInBoe')}</a>}
                     </div>
                   </div>
                 ))}
@@ -375,21 +553,26 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
 const BuscadorPage = () => {
   const [query, setQuery] = useState('');
   const [filterLey, setFilterLey] = useState<string | undefined>();
+  const { language, t } = useLanguage();
   
   const results = useMemo(() => searchAll(query, { leyId: filterLey }), [query, filterLey]);
+  const localizedResultFichas = useMemo(
+    () => results.fichas.map((ficha) => localizeFicha(ficha, language)),
+    [results.fichas, language],
+  );
 
   return (
     <div className="fade-in">
       <header className="page-header">
-        <h2>Buscador Inteligente</h2>
-        <p>Encuentra artículos específicos, definiciones o fichas de capacitación en toda la base normativa.</p>
+        <h2>{t('search.title')}</h2>
+        <p>{t('search.description')}</p>
       </header>
 
       <div className="search-bar">
         <span className="search-icon">🔍</span>
         <input 
           type="text" 
-          placeholder="Buscar 'evaluación de riesgos', 'EPIS', 'caídas'..." 
+          placeholder={t('search.placeholder')} 
           value={query}
           onChange={e => setQuery(e.target.value)}
           autoFocus
@@ -402,7 +585,7 @@ const BuscadorPage = () => {
           onClick={() => setFilterLey(undefined)}
           id="filter-tag-all"
         >
-          Todo
+          {t('common.all')}
         </button>
         {leyes.map(ley => (
           <button 
@@ -419,18 +602,18 @@ const BuscadorPage = () => {
       {!query ? (
         <div className="empty-state">
           <div className="empty-icon">⌨️</div>
-          <p>Escribe algo para empezar a buscar...</p>
+          <p>{t('common.searchStart')}</p>
         </div>
       ) : results.articulos.length === 0 && results.fichas.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">😢</div>
-          <p>No se encontraron resultados para "{query}"</p>
+          <p>{t('common.noResults', { query })}</p>
         </div>
       ) : (
         <div className="search-results">
           {results.articulos.length > 0 && (
             <>
-              <div className="result-group-label">Artículos de Normativa ({results.articulos.length})</div>
+              <div className="result-group-label">{t('search.normativeResults', { count: results.articulos.length })}</div>
               <div className="articulos-list" style={{ marginLeft: 0 }}>
                 {results.articulos.map(res => (
                   <div key={res.articulo.id} className="articulo-card" id={`search-art-${res.articulo.id}`}>
@@ -443,7 +626,7 @@ const BuscadorPage = () => {
                       <button 
                         className="pdf-btn"
                         onClick={(e) => { e.preventDefault(); downloadToPDF(`search-art-${res.articulo.id}`, `Articulo_${res.articulo.numero}`); }}
-                        title="Descargar PDF"
+                        title={t('common.downloadPdf')}
                       >
                         📥 PDF
                       </button>
@@ -455,22 +638,22 @@ const BuscadorPage = () => {
             </>
           )}
 
-          {results.fichas.length > 0 && (
+          {localizedResultFichas.length > 0 && (
             <>
-              <div className="result-group-label">Fichas de Capacitación ({results.fichas.length})</div>
+              <div className="result-group-label">{t('search.trainingResults', { count: localizedResultFichas.length })}</div>
               <div className="fichas-grid">
-                {results.fichas.map(ficha => (
+                {localizedResultFichas.map(ficha => (
                   <div key={ficha.id} className="ficha-card" id={`search-ficha-${ficha.id}`}>
                     <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10 }}>
                       <button 
                         className="pdf-btn"
                         onClick={(e) => { e.preventDefault(); downloadToPDF(`search-ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
-                        title="Descargar PDF"
+                        title={t('common.downloadPdf')}
                       >
                         📥 PDF
                       </button>
                     </div>
-                    <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
+                    <div className={`ficha-level-badge ${ficha.nivel}`}>{getLevelLabel(ficha.nivel, t)}</div>
                     <div className="ficha-icon">{ficha.icono}</div>
                     <h3>{ficha.titulo}</h3>
                     <p className="ficha-objetivo">{ficha.objetivo}</p>
@@ -485,17 +668,24 @@ const BuscadorPage = () => {
   );
 };
 
-const ReferenciasPage = () => (
+const ReferenciasPage = () => {
+  const { language, t } = useLanguage();
+  const localizedReferencias = useMemo(
+    () => referencias.map((ref) => localizeReference(ref, language)),
+    [language],
+  );
+
+  return (
   <div className="fade-in">
     <header className="page-header">
-      <h2>Referencias Cruzadas</h2>
-      <p>Explora cómo se conectan y desarrollan los diferentes marcos normativos entre sí.</p>
+      <h2>{t('references.title')}</h2>
+      <p>{t('references.description')}</p>
     </header>
 
     <div className="ref-grid">
-      {referencias.map(ref => (
+      {localizedReferencias.map(ref => (
         <div key={ref.id} className="ref-card">
-          <div className={`ref-tipo ${ref.tipo}`}>{ref.tipo}</div>
+          <div className={`ref-tipo ${ref.tipo}`}>{getReferenceTypeLabel(ref.tipo, t)}</div>
           <div className="ref-connection">
             <span className="ref-label">{ref.origen.label}</span>
             <span className="ref-arrow">→</span>
@@ -506,7 +696,8 @@ const ReferenciasPage = () => (
       ))}
     </div>
   </div>
-);
+  );
+};
 
 // ============================================================
 // MICRO-CURSOS / QUIZ MODAL
@@ -518,6 +709,7 @@ const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => vo
   const [showExplanation, setShowExplanation] = useState(false);
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [finished, setFinished] = useState(false);
+  const { t } = useLanguage();
 
   // Prevent background scroll
   useEffect(() => {
@@ -557,7 +749,7 @@ const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => vo
         {!finished ? (
           <div className="quiz-container fade-in">
             <div className="quiz-header">
-              <span className="quiz-progress-text">Pregunta {currentQuestion + 1} de {quiz.length}</span>
+              <span className="quiz-progress-text">{t('quiz.questionProgress', { current: currentQuestion + 1, total: quiz.length })}</span>
               <div className="quiz-progress-bar">
                 <div className="quiz-progress-fill" style={{ width: `${((currentQuestion + 0.5) / quiz.length) * 100}%` }}></div>
               </div>
@@ -584,12 +776,12 @@ const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => vo
             
             {showExplanation && (
               <div className={`quiz-explanation fade-in ${selectedIdx === quiz[currentQuestion].correctIndex ? 'success' : 'error'}`}>
-                <h4>{selectedIdx === quiz[currentQuestion].correctIndex ? '¡Correcto!' : 'Respuesta incorrecta'}</h4>
+                <h4>{selectedIdx === quiz[currentQuestion].correctIndex ? t('quiz.correct') : t('quiz.incorrect')}</h4>
                 <p>{quiz[currentQuestion].explanation}</p>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginTop: '16px'}}>
                   <span className="quiz-article-ref">📌 {quiz[currentQuestion].articleRef}</span>
                   <button className="hero-primary-btn" onClick={nextQuestion}>
-                    {currentQuestion + 1 < quiz.length ? 'Siguiente Pregunta →' : 'Ver Resultados'}
+                    {currentQuestion + 1 < quiz.length ? t('quiz.next') : t('quiz.results')}
                   </button>
                 </div>
               </div>
@@ -600,10 +792,10 @@ const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => vo
             <div className="quiz-result-icon">
               {answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8) ? '🏆' : '📚'}
             </div>
-            <h3>{answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8) ? '¡Micro-curso superado!' : 'Necesitas repasar algunos conceptos'}</h3>
-            <p>Has acertado {answers.filter(Boolean).length} de {quiz.length} preguntas.</p>
+            <h3>{answers.filter(Boolean).length >= Math.ceil(quiz.length * 0.8) ? t('quiz.passed') : t('quiz.failed')}</h3>
+            <p>{t('quiz.score', { correct: answers.filter(Boolean).length, total: quiz.length })}</p>
             <div style={{marginTop: '24px'}}>
-              <button className="hero-primary-btn" onClick={onClose}>Volver a Fichas</button>
+              <button className="hero-primary-btn" onClick={onClose}>{t('quiz.backToSheets')}</button>
             </div>
           </div>
         )}
@@ -617,17 +809,22 @@ const FichasPage = () => {
   const [selectedQuiz, setSelectedQuiz] = useState<any | null>(null);
   // Un state para forzar re-render cuando se termina un quiz
   const [refreshIdx, forceUpdate] = useState(0);
+  const { language, t } = useLanguage();
+  const localizedFichas = useMemo(
+    () => fichas.map((ficha) => localizeFicha(ficha, language)),
+    [language],
+  );
   
   const filteredFichas = filterNivel 
-    ? fichas.filter(f => f.nivel === filterNivel)
-    : fichas;
+    ? localizedFichas.filter(f => f.nivel === filterNivel)
+    : localizedFichas;
 
   return (
     <>
       <div className="fade-in">
         <header className="page-header">
-          <h2>Fichas de Capacitación</h2>
-          <p>Contenido formativo estructurado en tres niveles para diferentes colectivos de la organización.</p>
+          <h2>{t('training.title')}</h2>
+          <p>{t('training.description')}</p>
         </header>
 
         <div className="tabs-row" id="nivel-tabs">
@@ -636,28 +833,28 @@ const FichasPage = () => {
             onClick={() => setFilterNivel(null)}
             id="tab-nivel-all"
           >
-            Todas
+            {t('common.allFeminine')}
           </button>
           <button 
             className={`tab-btn ${filterNivel === 'basico' ? 'active' : ''}`}
             onClick={() => setFilterNivel('basico')}
             id="tab-nivel-basico"
           >
-            Básico
+            {t('levels.basico')}
           </button>
           <button 
             className={`tab-btn ${filterNivel === 'intermedio' ? 'active' : ''}`}
             onClick={() => setFilterNivel('intermedio')}
             id="tab-nivel-intermedio"
           >
-            Intermedio
+            {t('levels.intermedio')}
           </button>
           <button 
             className={`tab-btn ${filterNivel === 'avanzado' ? 'active' : ''}`}
             onClick={() => setFilterNivel('avanzado')}
             id="tab-nivel-avanzado"
           >
-            Avanzado
+            {t('levels.avanzado')}
           </button>
         </div>
 
@@ -671,16 +868,16 @@ const FichasPage = () => {
                 <button 
                   className="pdf-btn"
                   onClick={(e) => { e.preventDefault(); downloadToPDF(`ficha-${ficha.id}`, `Ficha_${ficha.id}`); }}
-                  title="Descargar PDF"
+                  title={t('common.downloadPdf')}
                 >
                   📥 PDF
                 </button>
               </div>
-              <div className={`ficha-level-badge ${ficha.nivel}`}>{ficha.nivel}</div>
+              <div className={`ficha-level-badge ${ficha.nivel}`}>{getLevelLabel(ficha.nivel, t)}</div>
               <div className="ficha-icon">{ficha.icono}</div>
               <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                 <h3>{ficha.titulo}</h3>
-                {isCompleted && <span style={{fontSize: '1.2rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'}} title="Micro-curso completado">✅</span>}
+                {isCompleted && <span style={{fontSize: '1.2rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'}} title={t('quiz.completedCourse')}>✅</span>}
               </div>
               <div className="ficha-meta">
                 <span>⏱️ {ficha.duracion}</span>
@@ -698,7 +895,7 @@ const FichasPage = () => {
                     style={{width: '100%', display: 'flex', justifyContent: 'center', padding: '8px', fontSize: '0.85rem'}}
                     onClick={() => setSelectedQuiz(ficha)}
                   >
-                    📝 Empezar Micro-curso
+                    {t('quiz.startCourse')}
                   </button>
                 </div>
               )}
@@ -726,18 +923,18 @@ const FichasPage = () => {
 };
 
 // ── Motor de respuesta demo ──────────────────────────────────
-function buildDemoResponse(query: string): string {
+function buildDemoResponse(query: string, t: (key: string, params?: Record<string, string | number>) => string): string {
   const ctx = buildNormativeContext(query);
   const results = searchAll(query);
 
   if (ctx.articleMatches === 0 && ctx.fichaMatches === 0) {
-    return `No he encontrado artículos directamente relacionados con "${query}" en la base normativa actual.\n\nPuedes reformular la consulta usando términos como: evaluación de riesgos, coordinación de actividades, vigilancia de la salud, equipos de trabajo, lugar de trabajo, formación, o el nombre de una norma (LPRL, RD 39/1997, RD 171/2004…).\n\n— Esta respuesta es generada por el motor de búsqueda interno. Con IA activa, obtendrías un análisis redactado y argumentado.`;
+    return t('ai.noMatches', { query });
   }
 
   const lineas: string[] = [];
 
   if (results.articulos.length > 0) {
-    lineas.push('**Artículos normativos relevantes encontrados:**\n');
+    lineas.push(t('ai.relevantArticles'));
     results.articulos.slice(0, 5).forEach((res) => {
       const extracto = res.articulo.texto.length > 300
         ? res.articulo.texto.slice(0, 300) + '…'
@@ -747,57 +944,22 @@ function buildDemoResponse(query: string): string {
   }
 
   if (results.fichas.length > 0) {
-    lineas.push('**Fichas de capacitación relacionadas:**\n');
+    lineas.push(t('ai.relatedSheets'));
     results.fichas.slice(0, 2).forEach((f) => {
-      lineas.push(`▸ ${f.titulo} (${f.nivel}) — ${f.objetivo.slice(0, 180)}…`);
+      lineas.push(`▸ ${f.titulo} (${getLevelLabel(f.nivel, t)}) — ${f.objetivo.slice(0, 180)}…`);
     });
   }
 
-  lineas.push(`\n—\nMostrando ${ctx.articleMatches} artículos y ${ctx.fichaMatches} fichas del repositorio interno.\nCon **IA activa** este contenido se analizaría, argumentaría y adaptaría a tu caso concreto.`);
+  lineas.push(t('ai.repositorySummary', { articles: ctx.articleMatches, sheets: ctx.fichaMatches }));
 
   return lineas.join('\n');
 }
 
-const WELCOME_MSG: ChatMessage = {
-  role: 'assistant',
-  content: 'Hola. Soy el Consultor IA de PRL España.\n\nEn este momento funciono en **modo vista previa**: analizo tu consulta contra la base normativa interna (LPRL, RSP, CAE, RD 486, Construcción) y te devuelvo los artículos y fichas más relevantes.\n\nCon la integración IA activa, recibirías una respuesta redactada, argumentada y adaptada a tu caso. Escribe tu consulta para ver cómo funcionaría.',
-};
-
-const DEMO_PROMPTS_BY_CATEGORY = [
-  {
-    label: 'Obligaciones empresariales',
-    color: '#818cf8',
-    prompts: [
-      '¿Qué obligaciones tiene el empresario en coordinación de actividades?',
-      '¿Qué información debe entregar la empresa a los trabajadores?',
-      '¿Qué dice la LPRL sobre la evaluación de riesgos?',
-    ],
-  },
-  {
-    label: 'Documentación y procedimientos',
-    color: '#34d399',
-    prompts: [
-      '¿Cómo se documenta la evaluación inicial de riesgos?',
-      '¿Qué registros exige el RSP al servicio de prevención?',
-      '¿Qué debe contener el Plan de Emergencia?',
-    ],
-  },
-  {
-    label: 'Normativa específica',
-    color: '#fbbf24',
-    prompts: [
-      '¿Qué exige el RD 486 sobre condiciones del lugar de trabajo?',
-      '¿Cuándo es obligatoria la vigilancia de la salud?',
-      '¿Qué obligaciones genera una obra de construcción según el RD 1627?',
-    ],
-  },
-];
-
 const LS_KEY = 'prl_consultor_history';
 
 // Extrae el bloque de fuentes del final del mensaje
-const parseMessage = (content: string): { body: string; sources: string | null } => {
-  const idx = content.lastIndexOf('\n\nFuentes internas:');
+const parseMessage = (content: string, sourceLabel: string): { body: string; sources: string | null } => {
+  const idx = content.lastIndexOf(`\n\n${sourceLabel}`);
   if (idx === -1) return { body: content, sources: null };
   return { body: content.slice(0, idx).trim(), sources: content.slice(idx + 2).trim() };
 };
@@ -809,6 +971,8 @@ const ConsultorIAPage = () => {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState(0);
   const chatRef = useRef<HTMLDivElement>(null);
+  const { language, t } = useLanguage();
+  const demoPromptsByCategory = useMemo(() => getDemoPromptsByCategory(language, t), [language, t]);
 
   // Inicializar desde localStorage o con mensaje de bienvenida
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
@@ -816,7 +980,7 @@ const ConsultorIAPage = () => {
       const saved = localStorage.getItem(LS_KEY);
       if (saved) return JSON.parse(saved) as ChatMessage[];
     } catch { /* ignore */ }
-    return [WELCOME_MSG];
+    return [getWelcomeMessage(t)];
   });
 
   // Guardar en localStorage cuando cambian los mensajes
@@ -838,7 +1002,7 @@ const ConsultorIAPage = () => {
 
   const clearHistory = () => {
     localStorage.removeItem(LS_KEY);
-    setMessages([WELCOME_MSG]);
+    setMessages([getWelcomeMessage(t)]);
   };
 
   const copyMessage = (content: string, idx: number) => {
@@ -884,14 +1048,14 @@ const ConsultorIAPage = () => {
         const data = await response.json();
         const answer = data?.message?.content?.trim();
         if (!answer) throw new Error('Sin respuesta del modelo.');
-        const footer = `\n\nFuentes internas: ${ctx.articleMatches} artículos · ${ctx.fichaMatches} fichas`;
+        const footer = `\n\n${t('ai.historyKey')} ${ctx.articleMatches} ${t('common.articles')} · ${ctx.fichaMatches} ${t('common.sheets')}`;
         setMessages((prev) => [...prev, { role: 'assistant', content: answer + footer }]);
       } catch {
-        setMessages((prev) => [...prev, { role: 'assistant', content: 'Error al conectar con el motor IA. Verifica que el servicio esté activo.' }]);
+        setMessages((prev) => [...prev, { role: 'assistant', content: t('ai.connectionError') }]);
       }
     } else {
       await new Promise((r) => setTimeout(r, 700));
-      const demoAnswer = buildDemoResponse(q);
+      const demoAnswer = buildDemoResponse(q, t);
       setMessages((prev) => [...prev, { role: 'assistant', content: demoAnswer }]);
     }
 
@@ -901,32 +1065,32 @@ const ConsultorIAPage = () => {
   return (
     <div className="fade-in">
       <header className="page-header">
-        <h2>Consultor IA — PRL España</h2>
-        <p>Análisis normativo inteligente con contexto del repositorio interno. Disponible como módulo de implementación personalizada.</p>
+        <h2>{t('ai.title')}</h2>
+        <p>{t('ai.description')}</p>
       </header>
 
       <div className="ai-panel">
 
         {backendActive === false && (
           <div className="ai-inline-note ai-demo-banner">
-            <span className="ai-demo-badge">Vista previa</span>
-            <span>Mostrando cómo operaría el consultor con tu base normativa interna. Las respuestas reales requieren integración IA activa.</span>
+            <span className="ai-demo-badge">{t('ai.previewBadge')}</span>
+            <span>{t('ai.previewText')}</span>
           </div>
         )}
         {backendActive === true && (
           <div className="ai-inline-note ai-live-banner">
-            <span className="ai-live-badge">IA activa</span>
-            <span>Conectado al motor de IA. Respuestas generadas con contexto normativo del repositorio.</span>
+            <span className="ai-live-badge">{t('ai.liveBadge')}</span>
+            <span>{t('ai.liveText')}</span>
           </div>
         )}
         {backendActive === null && (
-          <div className="ai-inline-note">Comprobando conexión con el motor IA…</div>
+          <div className="ai-inline-note">{t('ai.checking')}</div>
         )}
 
         {/* Presets por categoría */}
         <div className="ai-presets-wrap">
           <div className="ai-presets-tabs">
-            {DEMO_PROMPTS_BY_CATEGORY.map((cat, i) => (
+            {demoPromptsByCategory.map((cat, i) => (
               <button
                 key={i}
                 className={`ai-preset-tab ${activeCategory === i ? 'active' : ''}`}
@@ -938,7 +1102,7 @@ const ConsultorIAPage = () => {
             ))}
           </div>
           <div className="ai-preset-chips">
-            {DEMO_PROMPTS_BY_CATEGORY[activeCategory].prompts.map((p) => (
+            {demoPromptsByCategory[activeCategory].prompts.map((p) => (
               <button key={p} className="ai-demo-chip" onClick={() => handleAsk(p)} disabled={loading}>
                 {p}
               </button>
@@ -949,18 +1113,18 @@ const ConsultorIAPage = () => {
         {/* Chat */}
         <div className="ai-chat" ref={chatRef}>
           {messages.map((m, idx) => {
-            const { body, sources } = parseMessage(m.content);
+            const { body, sources } = parseMessage(m.content, t('ai.historyKey'));
             return (
               <div key={idx} className={`ai-msg ai-msg-${m.role}`}>
                 <div className="ai-msg-header">
-                  <span className="ai-msg-role">{m.role === 'assistant' ? 'Consultor IA' : 'Tú'}</span>
+                  <span className="ai-msg-role">{m.role === 'assistant' ? t('ai.assistant') : t('ai.you')}</span>
                   {m.role === 'assistant' && (
                     <button
                       className={`ai-copy-btn ${copiedIdx === idx ? 'copied' : ''}`}
                       onClick={() => copyMessage(body, idx)}
-                      title="Copiar respuesta"
+                      title={t('ai.copyTitle')}
                     >
-                      {copiedIdx === idx ? '✓ Copiado' : '📋 Copiar'}
+                      {copiedIdx === idx ? t('ai.copied') : t('ai.copy')}
                     </button>
                   )}
                 </div>
@@ -976,7 +1140,7 @@ const ConsultorIAPage = () => {
           {loading && (
             <div className="ai-msg ai-msg-assistant">
               <div className="ai-msg-header">
-                <span className="ai-msg-role">Consultor IA</span>
+                <span className="ai-msg-role">{t('ai.assistant')}</span>
               </div>
               <p className="ai-typing">
                 <span /><span /><span />
@@ -992,16 +1156,16 @@ const ConsultorIAPage = () => {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAsk(); } }}
-            placeholder="Ej: ¿Qué obligaciones tengo para coordinación de actividades con dos subcontratas?"
+            placeholder={t('ai.placeholder')}
           />
           <div className="ai-composer-actions">
             <button className="audit-action-btn" onClick={() => handleAsk()} disabled={loading || !question.trim()}>
-              {loading ? 'Analizando…' : 'Consultar'}
+              {loading ? t('common.loadingAi') : t('common.consult')}
             </button>
             <button
               className="audit-action-btn ai-clear-btn"
               onClick={clearHistory}
-              title="Borrar historial de conversación"
+              title={t('common.clearHistory')}
             >
               🗑️
             </button>
@@ -1009,8 +1173,8 @@ const ConsultorIAPage = () => {
         </div>
 
         <div className="ai-activation-note">
-          <strong>¿Necesitas respuestas generadas por IA?</strong> Este módulo está preparado para conectarse a un modelo de lenguaje local o en la nube. La activación requiere configuración personalizada según tu infraestructura.
-          <span className="ai-activation-link"> Contacta para implementación.</span>
+          <strong>{t('ai.activationTitle')}</strong> {t('ai.activationText')}
+          <span className="ai-activation-link">{t('ai.activationLink')}</span>
         </div>
 
       </div>
@@ -1022,55 +1186,14 @@ const ConsultorIAPage = () => {
 // AUDITORÍA INTERACTIVA
 // ============================================================
 
-const SECTORES = [
-  {
-    id: 'construccion',
-    label: 'Construcción',
-    icon: '🏗️',
-    desc: 'Obras de edificación y obra civil',
-    leyIds: ['lprl', 'rsp', 'cae', 'construccion'],
-    color: '#f87171',
-  },
-  {
-    id: 'coordinacion',
-    label: 'Coordinación de Actividades',
-    icon: '🔄',
-    desc: 'Subcontratación y concurrencia empresarial',
-    leyIds: ['lprl', 'rsp', 'cae'],
-    color: '#fbbf24',
-  },
-  {
-    id: 'industria',
-    label: 'Industria / Almacén',
-    icon: '🏭',
-    desc: 'Actividades industriales y logísticas',
-    leyIds: ['lprl', 'rsp'],
-    color: '#34d399',
-  },
-  {
-    id: 'oficinas',
-    label: 'Oficinas / Servicios',
-    icon: '🏢',
-    desc: 'Trabajo en entorno de oficina y servicios',
-    leyIds: ['lprl', 'rsp'],
-    color: '#818cf8',
-  },
-  {
-    id: 'hosteleria',
-    label: 'Hostelería / Comercio',
-    icon: '🍽️',
-    desc: 'Sector servicios, hostelería y comercio',
-    leyIds: ['lprl', 'rsp'],
-    color: '#c084fc',
-  },
-];
-
 // ── Exportar Auditoría a PDF (jsPDF text-based) ──────────────────────────
 const exportAuditoriaPDF = (
-  sector: typeof SECTORES[0],
+  sector: ReturnType<typeof getSectores>[0],
   leyesAuditoria: typeof leyes,
   checked: Set<string>,
-  totalIds: string[]
+  totalIds: string[],
+  t: (key: string, params?: Record<string, string | number>) => string,
+  locale: string
 ) => {
   const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
   const pageW = 210;
@@ -1078,7 +1201,7 @@ const exportAuditoriaPDF = (
   const marginL = 14;
   const marginR = 14;
   const contentW = pageW - marginL - marginR;
-  const now = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+  const now = new Date().toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
   let y = 0;
 
   const checkY = (needed = 10) => {
@@ -1097,13 +1220,13 @@ const exportAuditoriaPDF = (
   doc.text('PRL España', marginL, 22);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text('Checklist de Cumplimiento Normativo', marginL, 30);
+  doc.text(t('audit.pdfTitle'), marginL, 30);
   doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
   doc.text(`Sector: ${sector.icon} ${sector.label}`, marginL, 40);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generado: ${now}`, marginL, 49);
+  doc.text(t('audit.pdfGenerated', { date: now }), marginL, 49);
 
   // ── Resumen ──
   y = 66;
@@ -1113,16 +1236,16 @@ const exportAuditoriaPDF = (
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(0, 80, 160);
-  doc.text('Resumen de Progreso', marginL + 4, y + 7);
+  doc.text(t('audit.pdfSummary'), marginL + 4, y + 7);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
   doc.setFontSize(9);
   const progress = totalIds.length ? Math.round((checked.size / totalIds.length) * 100) : 0;
   doc.text(
-    `Verificados: ${checked.size} / ${totalIds.length}   ·   Pendientes: ${totalIds.length - checked.size}   ·   Cumplimiento: ${progress}%`,
+    t('audit.pdfVerified', { checked: checked.size, total: totalIds.length, pending: totalIds.length - checked.size, progress }),
     marginL + 4, y + 15
   );
-  doc.text(`Normativas incluidas: ${leyesAuditoria.map(l => l.codigo).join(', ')}`, marginL + 4, y + 22);
+  doc.text(t('audit.pdfIncluded', { laws: leyesAuditoria.map(l => l.codigo).join(', ') }), marginL + 4, y + 22);
   y += 34;
 
   // ── Artículos ──
@@ -1171,8 +1294,8 @@ const exportAuditoriaPDF = (
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(160, 160, 160);
-    doc.text('PRL España · Checklist de Auditoría', marginL, pageH - 6);
-    doc.text(`Pág. ${i} / ${total}`, pageW - marginR, pageH - 6, { align: 'right' });
+    doc.text(t('audit.pdfFooter'), marginL, pageH - 6);
+    doc.text(`${t('common.pageAbbr')} ${i} / ${total}`, pageW - marginR, pageH - 6, { align: 'right' });
   }
 
   doc.save(`Auditoria_PRL_${sector.id}_${new Date().toISOString().slice(0,10)}.pdf`);
@@ -1182,8 +1305,10 @@ const AuditoriaPage = () => {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [expandedArts, setExpandedArts] = useState<Set<string>>(new Set());
+  const { t, locale } = useLanguage();
+  const sectores = useMemo(() => getSectores(t), [t]);
 
-  const sector = SECTORES.find(s => s.id === selectedSector);
+  const sector = sectores.find(s => s.id === selectedSector);
 
   const leyesAuditoria = useMemo(() => {
     if (!sector) return [];
@@ -1232,11 +1357,11 @@ const AuditoriaPage = () => {
     return (
       <div className="fade-in">
         <header className="page-header">
-          <h2>Auditoría Interactiva</h2>
-          <p>Selecciona el sector de actividad para generar un checklist de cumplimiento normativo personalizado.</p>
+          <h2>{t('audit.title')}</h2>
+          <p>{t('audit.description')}</p>
         </header>
         <div className="auditoria-sectores-grid">
-          {SECTORES.map(s => (
+          {sectores.map(s => (
             <button
               key={s.id}
               className="auditoria-sector-card"
@@ -1248,7 +1373,7 @@ const AuditoriaPage = () => {
               <strong>{s.label}</strong>
               <span className="auditoria-sector-desc">{s.desc}</span>
               <span className="auditoria-sector-leyes">
-                {s.leyIds.length} normativa{s.leyIds.length > 1 ? 's' : ''}
+                {s.leyIds.length === 1 ? t('audit.regulationsCountOne', { count: s.leyIds.length }) : t('audit.regulationsCount', { count: s.leyIds.length })}
               </span>
             </button>
           ))}
@@ -1262,22 +1387,22 @@ const AuditoriaPage = () => {
     <div className="fade-in">
       {/* Header */}
       <div className="auditoria-header">
-        <button className="back-btn" onClick={handleReset}>← Cambiar sector</button>
+        <button className="back-btn" onClick={handleReset}>{t('audit.changeSector')}</button>
         <div className="auditoria-header-info">
           <span className="auditoria-sector-chip" style={{ '--sector-color': sector!.color } as React.CSSProperties}>
             {sector!.icon} {sector!.label}
           </span>
-          <h2>Checklist de Cumplimiento Normativo</h2>
+          <h2>{t('audit.checklistTitle')}</h2>
         </div>
         <div className="auditoria-header-actions">
-          <button className="audit-action-btn" onClick={checkAll}>Marcar todo</button>
-          <button className="audit-action-btn" onClick={uncheckAll}>Limpiar</button>
+          <button className="audit-action-btn" onClick={checkAll}>{t('audit.checkAll')}</button>
+          <button className="audit-action-btn" onClick={uncheckAll}>{t('audit.clear')}</button>
           <button
             className="audit-action-btn audit-export-btn"
-            onClick={() => exportAuditoriaPDF(sector!, leyesAuditoria, checked, totalIds)}
-            title="Exportar checklist completo a PDF"
+            onClick={() => exportAuditoriaPDF(sector!, leyesAuditoria, checked, totalIds, t, locale)}
+            title={t('audit.exportPdfTitle')}
           >
-            📄 Exportar PDF
+            {t('audit.exportPdf')}
           </button>
         </div>
       </div>
@@ -1285,7 +1410,7 @@ const AuditoriaPage = () => {
       {/* Progress bar */}
       <div className="auditoria-progress-wrap">
         <div className="auditoria-progress-labels">
-          <span>{checked.size} de {totalIds.length} verificados</span>
+          <span>{t('audit.verifiedOf', { checked: checked.size, total: totalIds.length })}</span>
           <span className="auditoria-progress-pct">{progress}%</span>
         </div>
         <div className="auditoria-progress-track">
@@ -1300,19 +1425,19 @@ const AuditoriaPage = () => {
       <div className="auditoria-stats">
         <div className="auditoria-stat">
           <span className="auditoria-stat-num">{totalIds.length}</span>
-          <span className="auditoria-stat-label">Requisitos totales</span>
+          <span className="auditoria-stat-label">{t('audit.totalRequirements')}</span>
         </div>
         <div className="auditoria-stat">
           <span className="auditoria-stat-num" style={{ color: '#34d399' }}>{checked.size}</span>
-          <span className="auditoria-stat-label">Verificados</span>
+          <span className="auditoria-stat-label">{t('common.checked')}</span>
         </div>
         <div className="auditoria-stat">
           <span className="auditoria-stat-num" style={{ color: '#fbbf24' }}>{totalIds.length - checked.size}</span>
-          <span className="auditoria-stat-label">Pendientes</span>
+          <span className="auditoria-stat-label">{t('common.pending')}</span>
         </div>
         <div className="auditoria-stat">
           <span className="auditoria-stat-num">{leyesAuditoria.length}</span>
-          <span className="auditoria-stat-label">Normativas</span>
+          <span className="auditoria-stat-label">{t('common.regulations')}</span>
         </div>
       </div>
 
@@ -1362,7 +1487,7 @@ const AuditoriaPage = () => {
                         <button
                           className="auditoria-expand-btn"
                           onClick={() => toggleExpand(art.id)}
-                          title={isExpanded ? 'Ocultar detalle' : 'Ver detalle'}
+                          title={isExpanded ? t('audit.hideDetail') : t('audit.showDetail')}
                         >
                           {isExpanded ? '▲' : '▼'}
                         </button>
@@ -1383,8 +1508,8 @@ const AuditoriaPage = () => {
         <div className="auditoria-complete fade-in">
           <span>✅</span>
           <div>
-            <strong>Auditoría completada</strong>
-            <p>Todos los requisitos normativos han sido verificados para el sector <em>{sector!.label}</em>.</p>
+            <strong>{t('common.completedAudit')}</strong>
+            <p>{t('common.completedAuditText', { sector: sector!.label })}</p>
           </div>
         </div>
       )}
@@ -1398,19 +1523,25 @@ const AuditoriaPage = () => {
 
 const RolesPage = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const { language, t } = useLanguage();
 
-  const role = rolesData.find(r => r.id === selectedRole);
+  const localizedRoles = useMemo(
+    () => rolesData.map((roleData) => localizeRole(roleData, language)),
+    [language],
+  );
+
+  const role = localizedRoles.find(r => r.id === selectedRole);
 
   return (
     <div className="fade-in">
       <header className="page-header">
-        <h2>Mapas de Obligaciones por Rol</h2>
-        <p>Selecciona un perfil para descubrir la normativa fundamental, riesgos característicos y formación recomendada para cada puesto de trabajo.</p>
+        <h2>{t('roles.title')}</h2>
+        <p>{t('roles.description')}</p>
       </header>
 
       {!selectedRole ? (
         <div className="roles-grid fade-in">
-          {rolesData.map(r => (
+          {localizedRoles.map(r => (
             <div key={r.id} className="role-card" onClick={() => setSelectedRole(r.id)} id={`role-card-${r.id}`}>
               <div className="role-icon">{r.icon}</div>
               <h3>{r.shortLabel}</h3>
@@ -1420,7 +1551,7 @@ const RolesPage = () => {
         </div>
       ) : (
         <div className="role-dashboard fade-in">
-          <button className="back-btn" onClick={() => setSelectedRole(null)}>← Volver a roles</button>
+          <button className="back-btn" onClick={() => setSelectedRole(null)}>← {t('common.backToRoles')}</button>
           
           <div className="role-dashboard-header">
             <div className="role-icon-large">{role?.icon}</div>
@@ -1432,7 +1563,7 @@ const RolesPage = () => {
           
           <div className="role-sections-grid">
             <div className="role-section left-column">
-              <h3>Obligaciones Legales y Normativa Clave</h3>
+              <h3>{t('roles.obligations')}</h3>
               <div className="role-items-list">
                 {role?.obligations.map((obl, i) => (
                   <div key={i} className="role-item-card fade-in-delay-1">
@@ -1441,7 +1572,7 @@ const RolesPage = () => {
                     <Link href={`/normativa/${obl.leyId}`}>
                       {/* En versión final podríamos enviar un state/#hash al artículo. Dejamos el Link completo a la norma para facilidad de UX. */}
                       <a className="role-link">
-                        Ver {obl.leyId.toUpperCase()} · Art. {obl.articuloId.split('-art')[1] || obl.articuloId} ↗
+                        {t('roles.viewArticle', { law: obl.leyId.toUpperCase(), article: obl.articuloId.split('-art')[1] || obl.articuloId })}
                       </a>
                     </Link>
                   </div>
@@ -1451,24 +1582,25 @@ const RolesPage = () => {
             
             <div className="right-column">
               <div className="role-section">
-                <h3>Riesgos Típicos Asociados</h3>
+                <h3>{t('roles.risks')}</h3>
                 <ul className="role-risks-list fade-in-delay-2">
                   {role?.risks.map((risk, i) => <li key={i}>⚠️ {risk}</li>)}
                 </ul>
               </div>
               
               <div className="role-section">
-                <h3>Fichas Formativas Recomendadas</h3>
+                <h3>{t('roles.training')}</h3>
                 <div className="role-fichas-list fade-in-delay-3">
                   {role?.fichas.map(fId => {
                     const f = fichas.find(x => x.id === fId);
                     if (!f) return null;
+                    const localizedFicha = localizeFicha(f, language);
                     return (
                       <Link key={f.id} href="/fichas">
                         <a className="role-ficha-card">
                           <span className="ficha-icon-small">{f.icono}</span>
-                          <span style={{flex: 1}}>{f.titulo}</span>
-                          <span className={`ficha-level-badge ${f.nivel}`} style={{position: 'static', margin: 0}}>{f.nivel}</span>
+                          <span style={{flex: 1}}>{localizedFicha.titulo}</span>
+                          <span className={`ficha-level-badge ${localizedFicha.nivel}`} style={{position: 'static', margin: 0}}>{getLevelLabel(localizedFicha.nivel, t)}</span>
                         </a>
                       </Link>
                     )
@@ -1491,6 +1623,7 @@ const DocumentosPage = () => {
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [preview, setPreview] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const template = documentosData.find(d => d.id === selectedDoc);
 
@@ -1508,7 +1641,7 @@ const DocumentosPage = () => {
     if (!el) return;
     const win = window.open('', '_blank')!;
     win.document.write(`
-      <html><head><title>Documento PRL</title>
+      <html><head><title>${t('docs.previewTitle')}</title>
       <style>
         body { font-family: Georgia, serif; padding: 40px; color: #111; line-height: 1.7; }
         h1 { font-size: 1.4rem; border-bottom: 2px solid #333; padding-bottom: 8px; }
@@ -1522,8 +1655,8 @@ const DocumentosPage = () => {
   return (
     <div className="fade-in">
       <header className="page-header">
-        <h2>Generador de Documentos PRL</h2>
-        <p>Crea documentos legales pre-rellenados listos para firmar. Imprime o exporta en PDF directamente.</p>
+        <h2>{t('docs.title')}</h2>
+        <p>{t('docs.description')}</p>
       </header>
 
       {!selectedDoc ? (
@@ -1533,17 +1666,17 @@ const DocumentosPage = () => {
               <div className="doc-icon">{doc.icon}</div>
               <h3>{doc.title}</h3>
               <p>{doc.description}</p>
-              <span className="doc-cta">Crear documento →</span>
+              <span className="doc-cta">{t('common.createDocument')}</span>
             </div>
           ))}
         </div>
       ) : preview ? (
         <div className="doc-preview-wrapper fade-in">
           <div className="doc-preview-toolbar">
-            <button className="back-btn" onClick={() => setPreview(null)}>← Editar datos</button>
+            <button className="back-btn" onClick={() => setPreview(null)}>← {t('common.editData')}</button>
             <div style={{display:'flex', gap: '10px'}}>
-              <button className="pdf-btn" onClick={handlePrint}>🖨️ Imprimir / PDF</button>
-              <button className="back-btn" onClick={() => { setSelectedDoc(null); setPreview(null); }}>Nuevo documento</button>
+              <button className="pdf-btn" onClick={handlePrint}>{t('common.printPdf')}</button>
+              <button className="back-btn" onClick={() => { setSelectedDoc(null); setPreview(null); }}>{t('common.newDocument')}</button>
             </div>
           </div>
           <div className="doc-preview-paper" id="doc-preview-area"
@@ -1559,7 +1692,7 @@ const DocumentosPage = () => {
         </div>
       ) : (
         <div className="doc-form-wrapper fade-in">
-          <button className="back-btn" onClick={() => setSelectedDoc(null)}>← Volver a plantillas</button>
+          <button className="back-btn" onClick={() => setSelectedDoc(null)}>← {t('common.backToTemplates')}</button>
           <div className="doc-form-card">
             <div className="doc-form-header">
               <span className="doc-icon">{template?.icon}</span>
@@ -1578,7 +1711,7 @@ const DocumentosPage = () => {
                       rows={4}
                       value={formValues[field.name] || ''}
                       onChange={e => setFormValues(v => ({ ...v, [field.name]: e.target.value }))}
-                      placeholder={`Escribe aquí ${field.label.toLowerCase()}...`}
+                      placeholder={t('docs.placeholder', { label: field.label.toLowerCase() })}
                     />
                   ) : field.type === 'select' ? (
                     <select
@@ -1586,7 +1719,7 @@ const DocumentosPage = () => {
                       value={formValues[field.name] || ''}
                       onChange={e => setFormValues(v => ({ ...v, [field.name]: e.target.value }))}
                     >
-                      <option value="">— Selecciona una opción —</option>
+                      <option value="">{t('common.selectOption')}</option>
                       {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                   ) : (
@@ -1602,7 +1735,7 @@ const DocumentosPage = () => {
               ))}
             </div>
             <div style={{marginTop: '28px', textAlign: 'right'}}>
-              <button className="hero-primary-btn" onClick={handleGenerate}>📄 Generar documento</button>
+              <button className="hero-primary-btn" onClick={handleGenerate}>{t('common.generateDocument')}</button>
             </div>
           </div>
         </div>
@@ -1617,6 +1750,7 @@ const DocumentosPage = () => {
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="app-layout">
@@ -1624,18 +1758,21 @@ const App = () => {
       <button
         className={`sidebar-backdrop ${isSidebarOpen ? 'show' : ''}`}
         onClick={() => setIsSidebarOpen(false)}
-        aria-label="Cerrar menú"
+        aria-label={t('common.closeMenu')}
       />
       <main className="main-content">
+        <div className="main-toolbar">
         <div className="mobile-topbar">
           <button
             className="mobile-menu-btn"
             onClick={() => setIsSidebarOpen(true)}
-            aria-label="Abrir menú"
+            aria-label={t('common.openMenu')}
           >
             ☰
           </button>
-          <div className="mobile-topbar-title">PRL España</div>
+          <div className="mobile-topbar-title">{t('app.title')}</div>
+        </div>
+          <LanguageSwitcher />
         </div>
         <Switch>
           <Route path="/" component={HomePage} />
@@ -1648,7 +1785,7 @@ const App = () => {
           <Route path="/consultor-ia" component={ConsultorIAPage} />
           <Route path="/generador-docs" component={DocumentosPage} />
           <Route>
-            <div className="empty-state">Página no encontrada</div>
+            <div className="empty-state">{t('common.notFoundPage')}</div>
           </Route>
         </Switch>
       </main>

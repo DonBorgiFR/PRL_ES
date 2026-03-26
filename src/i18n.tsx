@@ -1,0 +1,345 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+
+export type Language = 'es' | 'ca' | 'eu' | 'gl';
+
+type TranslationTree = {
+  [key: string]: string | TranslationTree;
+};
+
+type LanguageContextValue = {
+  language: Language;
+  locale: string;
+  setLanguage: (language: Language) => void;
+  t: (key: string, params?: Record<string, string | number>) => string;
+};
+
+export const LANGUAGE_STORAGE_KEY = 'prl_language';
+
+export const LANGUAGE_OPTIONS: Array<{ code: Language; label: string; shortLabel: string }> = [
+  { code: 'es', label: 'Castellano', shortLabel: 'ES' },
+  { code: 'ca', label: 'Català', shortLabel: 'CA' },
+  { code: 'eu', label: 'Euskara', shortLabel: 'EU' },
+  { code: 'gl', label: 'Galego', shortLabel: 'GL' },
+];
+
+const LOCALE_BY_LANGUAGE: Record<Language, string> = {
+  es: 'es-ES',
+  ca: 'ca-ES',
+  eu: 'eu-ES',
+  gl: 'gl-ES',
+};
+
+const translations: Record<Language, TranslationTree> = {
+  es: {
+    app: {
+      title: 'PRL España',
+      subtitle: 'Control de Gestión · Ingeniería de Datos · PRL',
+    },
+    language: {
+      selector: 'Idioma',
+      aria: 'Selector de idioma',
+    },
+    nav: {
+      main: 'Principal',
+      normative: 'Normativa',
+      resources: 'Recursos',
+      home: 'Inicio',
+      roles: 'Mapas por Rol',
+      search: 'Buscador Inteligente',
+      references: 'Referencias Cruzadas',
+      training: 'Fichas de Capacitación',
+      audit: 'Auditoría Interactiva',
+      ai: 'Consultor IA Local',
+      docs: 'Generador de Docs',
+    },
+    common: {
+      back: 'Volver',
+      backToRoles: 'Volver a roles',
+      backToTemplates: 'Volver a plantillas',
+      editData: 'Editar datos',
+      newDocument: 'Nuevo documento',
+      all: 'Todo',
+      allFeminine: 'Todas',
+      notFoundPage: 'Página no encontrada',
+      notFoundNormative: 'Normativa no encontrada',
+      downloadPdf: 'Descargar PDF',
+      viewInBoe: 'Ver en BOE ↗',
+      createDocument: 'Crear documento →',
+      generateDocument: '📄 Generar documento',
+      printPdf: '🖨️ Imprimir / PDF',
+      selectOption: '— Selecciona una opción —',
+      searchStart: 'Escribe algo para empezar a buscar...',
+      noResults: 'No se encontraron resultados para "{{query}}"',
+      checked: 'Verificados',
+      pending: 'Pendientes',
+      articles: 'artículos',
+      sheets: 'fichas',
+      pageAbbr: 'Pág.',
+      requirements: 'Requisitos totales',
+      regulations: 'Normativas',
+      completedAudit: 'Auditoría completada',
+      completedAuditText: 'Todos los requisitos normativos han sido verificados para el sector {{sector}}.',
+      closeMenu: 'Cerrar menú',
+      openMenu: 'Abrir menú',
+      loadingAi: 'Analizando…',
+      consult: 'Consultar',
+      clearHistory: 'Borrar historial de conversación',
+    },
+    badges: {
+      tecnico: 'Perfil Técnico',
+      divulgativo: 'Divulgativo',
+      ambos: 'General',
+    },
+    levels: {
+      basico: 'Básico',
+      intermedio: 'Intermedio',
+      avanzado: 'Avanzado',
+    },
+    references: {
+      desarrollo: 'desarrollo',
+      complemento: 'complemento',
+      especificacion: 'especificación',
+      remision: 'remisión',
+      title: 'Referencias Cruzadas',
+      description: 'Explora cómo se conectan y desarrollan los diferentes marcos normativos entre sí.',
+    },
+    home: {
+      heroTitle: 'Transformando normativa en',
+      heroHighlight: 'decisiones estratégicas',
+      heroDescription: 'Plataforma de consulta PRL con enfoque de ingeniería y control de gestión: del cumplimiento legal a la ejecución operativa medible.',
+      heroSearch: 'Búsqueda Inteligente ⌕',
+      heroNote: 'IA local integrada',
+      crossTitle: 'Referencia Cruzada',
+      crossText: 'RD 486 Anexo III → LPRL Art. 16',
+      auditTitle: 'Auditoría Sectorial',
+      auditText: 'Industria · 85% Conforme',
+      core: 'Capacidades Core',
+      explore: 'Explorar Normativa',
+      featureRolesTitle: 'Mapas de Obligaciones',
+      featureRolesText: 'Descubre normativa y riesgos adaptados a roles específicos en tu empresa.',
+      featureAuditTitle: 'Auditoría Interactiva',
+      featureAuditText: 'Checklists dinámicos adaptados a tu sector de actividad.',
+      featureRefsTitle: 'Referencias Cruzadas',
+      featureRefsText: 'Mapeo estratégico: cómo interactúan las leyes entre sí.',
+      featureTrainingTitle: 'Fichas Formativas',
+      featureTrainingText: 'Contenido progresivo y estructurado para la capacitación del equipo.',
+      baseRules: 'Normas Base',
+      trainingSheets: 'Fichas Formativas',
+      connections: 'Conexiones',
+      profileTitle: 'Perfil Profesional',
+      profileText: 'Borja Felix Rojas · Ingeniería Industrial, Control de Gestión y PRL aplicada a decisiones operativas.',
+      reportingTitle: 'Reporting Ejecutivo',
+      reportingText: 'KPI accionables para priorizar riesgos, cumplimiento y rendimiento operativo.',
+      automationTitle: 'Automatización',
+      automationText: 'Integración de datos y procesos para reducir errores y tiempos de ciclo.',
+      analyticsTitle: 'Data Analytics',
+      analyticsText: 'Conexión entre normativa, evidencia documental y decisiones de negocio.',
+      improvementTitle: 'Mejora Continua',
+      improvementText: 'Del control en terreno a la estrategia anual con seguimiento medible.',
+      profileLink: 'Perfil profesional ↗',
+      boe: 'BOE ↗',
+    },
+    search: {
+      title: 'Buscador Inteligente',
+      description: 'Encuentra artículos específicos, definiciones o fichas de capacitación en toda la base normativa.',
+      placeholder: 'Buscar "evaluación de riesgos", "EPIS", "caídas"...',
+      normativeResults: 'Artículos de Normativa ({{count}})',
+      trainingResults: 'Fichas de Capacitación ({{count}})',
+    },
+    quiz: {
+      questionProgress: 'Pregunta {{current}} de {{total}}',
+      correct: '¡Correcto!',
+      incorrect: 'Respuesta incorrecta',
+      next: 'Siguiente Pregunta →',
+      results: 'Ver Resultados',
+      passed: '¡Micro-curso superado!',
+      failed: 'Necesitas repasar algunos conceptos',
+      score: 'Has acertado {{correct}} de {{total}} preguntas.',
+      backToSheets: 'Volver a Fichas',
+      completedCourse: 'Micro-curso completado',
+      startCourse: '📝 Empezar Micro-curso',
+    },
+    training: {
+      title: 'Fichas de Capacitación',
+      description: 'Contenido formativo estructurado en tres niveles para diferentes colectivos de la organización.',
+    },
+    normative: {
+      article: 'Art.',
+    },
+    ai: {
+      title: 'Consultor IA — PRL España',
+      description: 'Análisis normativo inteligente con contexto del repositorio interno. Disponible como módulo de implementación personalizada.',
+      previewBadge: 'Vista previa',
+      previewText: 'Mostrando cómo operaría el consultor con tu base normativa interna. Las respuestas reales requieren integración IA activa.',
+      liveBadge: 'IA activa',
+      liveText: 'Conectado al motor de IA. Respuestas generadas con contexto normativo del repositorio.',
+      checking: 'Comprobando conexión con el motor IA…',
+      assistant: 'Consultor IA',
+      you: 'Tú',
+      copy: '📋 Copiar',
+      copied: '✓ Copiado',
+      copyTitle: 'Copiar respuesta',
+      placeholder: 'Ej: ¿Qué obligaciones tengo para coordinación de actividades con dos subcontratas?',
+      activationTitle: '¿Necesitas respuestas generadas por IA?',
+      activationText: 'Este módulo está preparado para conectarse a un modelo de lenguaje local o en la nube. La activación requiere configuración personalizada según tu infraestructura.',
+      activationLink: ' Contacta para implementación.',
+      connectionError: 'Error al conectar con el motor IA. Verifica que el servicio esté activo.',
+      historyKey: 'Fuentes internas:',
+      welcome: 'Hola. Soy el Consultor IA de PRL España.\n\nEn este momento funciono en **modo vista previa**: analizo tu consulta contra la base normativa interna (LPRL, RSP, CAE, RD 486, Construcción) y te devuelvo los artículos y fichas más relevantes.\n\nCon la integración IA activa, recibirías una respuesta redactada, argumentada y adaptada a tu caso. Escribe tu consulta para ver cómo funcionaría.',
+      noMatches: 'No he encontrado artículos directamente relacionados con "{{query}}" en la base normativa actual.\n\nPuedes reformular la consulta usando términos como: evaluación de riesgos, coordinación de actividades, vigilancia de la salud, equipos de trabajo, lugar de trabajo, formación, o el nombre de una norma (LPRL, RD 39/1997, RD 171/2004…).\n\n— Esta respuesta es generada por el motor de búsqueda interno. Con IA activa, obtendrías un análisis redactado y argumentado.',
+      relevantArticles: '**Artículos normativos relevantes encontrados:**\n',
+      relatedSheets: '**Fichas de capacitación relacionadas:**\n',
+      repositorySummary: '\n—\nMostrando {{articles}} artículos y {{sheets}} fichas del repositorio interno.\nCon **IA activa** este contenido se analizaría, argumentaría y adaptaría a tu caso concreto.',
+      categories: {
+        business: 'Obligaciones empresariales',
+        documentation: 'Documentación y procedimientos',
+        specific: 'Normativa específica',
+      },
+    },
+    audit: {
+      title: 'Auditoría Interactiva',
+      description: 'Selecciona el sector de actividad para generar un checklist de cumplimiento normativo personalizado.',
+      changeSector: '← Cambiar sector',
+      checklistTitle: 'Checklist de Cumplimiento Normativo',
+      checkAll: 'Marcar todo',
+      clear: 'Limpiar',
+      exportPdf: '📄 Exportar PDF',
+      exportPdfTitle: 'Exportar checklist completo a PDF',
+      verifiedOf: '{{checked}} de {{total}} verificados',
+      totalRequirements: 'Requisitos totales',
+      completedAudit: 'Auditoría completada',
+      pdfTitle: 'Checklist de Cumplimiento Normativo',
+      pdfSummary: 'Resumen de Progreso',
+      pdfGenerated: 'Generado: {{date}}',
+      pdfVerified: 'Verificados: {{checked}} / {{total}}   ·   Pendientes: {{pending}}   ·   Cumplimiento: {{progress}}%',
+      pdfIncluded: 'Normativas incluidas: {{laws}}',
+      pdfFooter: 'PRL España · Checklist de Auditoría',
+      showDetail: 'Ver detalle',
+      hideDetail: 'Ocultar detalle',
+      regulationsCount: '{{count}} normativas',
+      regulationsCountOne: '{{count}} normativa',
+      sectors: {
+        construccion: { label: 'Construcción', desc: 'Obras de edificación y obra civil' },
+        coordinacion: { label: 'Coordinación de Actividades', desc: 'Subcontratación y concurrencia empresarial' },
+        industria: { label: 'Industria / Almacén', desc: 'Actividades industriales y logísticas' },
+        oficinas: { label: 'Oficinas / Servicios', desc: 'Trabajo en entorno de oficina y servicios' },
+        hosteleria: { label: 'Hostelería / Comercio', desc: 'Sector servicios, hostelería y comercio' },
+      },
+    },
+    roles: {
+      title: 'Mapas de Obligaciones por Rol',
+      description: 'Selecciona un perfil para descubrir la normativa fundamental, riesgos característicos y formación recomendada para cada puesto de trabajo.',
+      obligations: 'Obligaciones Legales y Normativa Clave',
+      risks: 'Riesgos Típicos Asociados',
+      training: 'Fichas Formativas Recomendadas',
+      viewArticle: 'Ver {{law}} · Art. {{article}} ↗',
+    },
+    docs: {
+      title: 'Generador de Documentos PRL',
+      description: 'Crea documentos legales pre-rellenados listos para firmar. Imprime o exporta en PDF directamente.',
+      previewTitle: 'Documento PRL',
+      placeholder: 'Escribe aquí {{label}}...',
+    },
+  },
+  ca: {
+    app: { title: 'PRL Espanya', subtitle: 'Control de Gestió · Enginyeria de Dades · PRL' },
+    language: { selector: 'Idioma', aria: 'Selector d\'idioma' },
+    nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inici', roles: 'Mapes per Rol', search: 'Cercador Intel·ligent', references: 'Referències Creuades', training: 'Fitxes de Formació', audit: 'Auditoria Interactiva', ai: 'Consultor IA Local', docs: 'Generador de Documents' },
+    common: { back: 'Tornar', backToRoles: 'Tornar als rols', backToTemplates: 'Tornar a les plantilles', editData: 'Editar dades', newDocument: 'Document nou', all: 'Tot', allFeminine: 'Totes', notFoundPage: 'Pàgina no trobada', notFoundNormative: 'Normativa no trobada', downloadPdf: 'Descarregar PDF', viewInBoe: 'Veure al BOE ↗', createDocument: 'Crear document →', generateDocument: '📄 Generar document', printPdf: '🖨️ Imprimir / PDF', selectOption: '— Selecciona una opció —', searchStart: 'Escriu alguna cosa per començar a cercar...', noResults: 'No s\'han trobat resultats per a "{{query}}"', checked: 'Verificats', pending: 'Pendents', articles: 'articles', sheets: 'fitxes', pageAbbr: 'Pàg.', requirements: 'Requisits totals', regulations: 'Normatives', completedAudit: 'Auditoria completada', completedAuditText: 'Tots els requisits normatius han estat verificats per al sector {{sector}}.', closeMenu: 'Tancar menú', openMenu: 'Obrir menú', loadingAi: 'Analitzant…', consult: 'Consultar', clearHistory: 'Esborrar historial de conversa' },
+    badges: { tecnico: 'Perfil tècnic', divulgativo: 'Divulgatiu', ambos: 'General' },
+    levels: { basico: 'Bàsic', intermedio: 'Intermedi', avanzado: 'Avançat' },
+    references: { desarrollo: 'desenvolupament', complemento: 'complement', especificacion: 'especificació', remision: 'remissió', title: 'Referències Creuades', description: 'Explora com es connecten i es desenvolupen els diferents marcs normatius entre si.' },
+    home: { heroTitle: 'Transformant normativa en', heroHighlight: 'decisions estratègiques', heroDescription: 'Plataforma de consulta PRL amb enfocament d\'enginyeria i control de gestió: del compliment legal a l\'execució operativa mesurable.', heroSearch: 'Cerca Intel·ligent ⌕', heroNote: 'IA local integrada', crossTitle: 'Referència Creuada', crossText: 'RD 486 Annex III → LPRL Art. 16', auditTitle: 'Auditoria Sectorial', auditText: 'Indústria · 85% Conforme', core: 'Capacitats Core', explore: 'Explorar Normativa', featureRolesTitle: 'Mapes d\'Obligacions', featureRolesText: 'Descobreix normativa i riscos adaptats a rols específics a la teva empresa.', featureAuditTitle: 'Auditoria Interactiva', featureAuditText: 'Checklists dinàmics adaptats al teu sector d\'activitat.', featureRefsTitle: 'Referències Creuades', featureRefsText: 'Mapatge estratègic: com interactuen les lleis entre si.', featureTrainingTitle: 'Fitxes Formatives', featureTrainingText: 'Contingut progressiu i estructurat per a la capacitació de l\'equip.', baseRules: 'Normes Base', trainingSheets: 'Fitxes Formatives', connections: 'Connexions', profileTitle: 'Perfil Professional', profileText: 'Borja Felix Rojas · Enginyeria Industrial, Control de Gestió i PRL aplicada a decisions operatives.', reportingTitle: 'Reporting Executiu', reportingText: 'KPI accionables per prioritzar riscos, compliment i rendiment operatiu.', automationTitle: 'Automatització', automationText: 'Integració de dades i processos per reduir errors i temps de cicle.', analyticsTitle: 'Data Analytics', analyticsText: 'Connexió entre normativa, evidència documental i decisions de negoci.', improvementTitle: 'Millora Contínua', improvementText: 'Del control sobre el terreny a l\'estratègia anual amb seguiment mesurable.', profileLink: 'Perfil professional ↗', boe: 'BOE ↗' },
+    search: { title: 'Cercador Intel·ligent', description: 'Troba articles específics, definicions o fitxes de formació a tota la base normativa.', placeholder: 'Cercar "avaluació de riscos", "EPI", "caigudes"...', normativeResults: 'Articles de Normativa ({{count}})', trainingResults: 'Fitxes de Formació ({{count}})' },
+    quiz: { questionProgress: 'Pregunta {{current}} de {{total}}', correct: 'Correcte!', incorrect: 'Resposta incorrecta', next: 'Pregunta següent →', results: 'Veure Resultats', passed: 'Microcurs superat!', failed: 'Cal repassar alguns conceptes', score: 'Has encertat {{correct}} de {{total}} preguntes.', backToSheets: 'Tornar a Fitxes', completedCourse: 'Microcurs completat', startCourse: '📝 Començar Microcurs' },
+    training: { title: 'Fitxes de Formació', description: 'Contingut formatiu estructurat en tres nivells per a diferents col·lectius de l\'organització.' },
+    normative: { article: 'Art.' },
+    ai: { title: 'Consultor IA — PRL Espanya', description: 'Anàlisi normatiu intel·ligent amb context del repositori intern. Disponible com a mòdul d\'implementació personalitzada.', previewBadge: 'Vista prèvia', previewText: 'Mostrant com operaria el consultor amb la teva base normativa interna. Les respostes reals requereixen integració IA activa.', liveBadge: 'IA activa', liveText: 'Connectat al motor d\'IA. Respostes generades amb context normatiu del repositori.', checking: 'Comprovant connexió amb el motor IA…', assistant: 'Consultor IA', you: 'Tu', copy: '📋 Copiar', copied: '✓ Copiat', copyTitle: 'Copiar resposta', placeholder: 'Ex.: Quines obligacions tinc per a coordinació d\'activitats amb dues subcontractes?', activationTitle: 'Necessites respostes generades per IA?', activationText: 'Aquest mòdul està preparat per connectar-se a un model de llenguatge local o al núvol. L\'activació requereix configuració personalitzada segons la teva infraestructura.', activationLink: ' Contacta per a la implementació.', connectionError: 'Error en connectar amb el motor IA. Verifica que el servei estigui actiu.', historyKey: 'Fonts internes:', welcome: 'Hola. Sóc el Consultor IA de PRL Espanya.\n\nEn aquest moment funciono en **mode vista prèvia**: analitzo la teva consulta contra la base normativa interna (LPRL, RSP, CAE, RD 486, Construcció) i et retorno els articles i fitxes més rellevants.\n\nAmb la integració IA activa, rebries una resposta redactada, argumentada i adaptada al teu cas. Escriu la teva consulta per veure com funcionaria.', noMatches: 'No he trobat articles directament relacionats amb "{{query}}" a la base normativa actual.\n\nPots reformular la consulta amb termes com: avaluació de riscos, coordinació d\'activitats, vigilància de la salut, equips de treball, lloc de treball, formació o el nom d\'una norma (LPRL, RD 39/1997, RD 171/2004…).\n\n— Aquesta resposta és generada pel motor de cerca intern. Amb IA activa, obtindries una anàlisi redactada i argumentada.', relevantArticles: '**Articles normatius rellevants trobats:**\n', relatedSheets: '**Fitxes de formació relacionades:**\n', repositorySummary: '\n—\nMostrant {{articles}} articles i {{sheets}} fitxes del repositori intern.\nAmb **IA activa** aquest contingut s\'analitzaria, s\'argumentaria i s\'adaptaria al teu cas concret.', categories: { business: 'Obligacions empresarials', documentation: 'Documentació i procediments', specific: 'Normativa específica' } },
+    audit: { title: 'Auditoria Interactiva', description: 'Selecciona el sector d\'activitat per generar un checklist de compliment normatiu personalitzat.', changeSector: '← Canviar sector', checklistTitle: 'Checklist de Compliment Normatiu', checkAll: 'Marcar-ho tot', clear: 'Netejar', exportPdf: '📄 Exportar PDF', exportPdfTitle: 'Exportar checklist complet a PDF', verifiedOf: '{{checked}} de {{total}} verificats', totalRequirements: 'Requisits totals', completedAudit: 'Auditoria completada', pdfTitle: 'Checklist de Compliment Normatiu', pdfSummary: 'Resum de Progrés', pdfGenerated: 'Generat: {{date}}', pdfVerified: 'Verificats: {{checked}} / {{total}}   ·   Pendents: {{pending}}   ·   Compliment: {{progress}}%', pdfIncluded: 'Normatives incloses: {{laws}}', pdfFooter: 'PRL Espanya · Checklist d\'Auditoria', showDetail: 'Veure detall', hideDetail: 'Ocultar detall', regulationsCount: '{{count}} normatives', regulationsCountOne: '{{count}} normativa', sectors: { construccion: { label: 'Construcció', desc: 'Obres d\'edificació i obra civil' }, coordinacion: { label: 'Coordinació d\'Activitats', desc: 'Subcontractació i concurrència empresarial' }, industria: { label: 'Indústria / Magatzem', desc: 'Activitats industrials i logístiques' }, oficinas: { label: 'Oficines / Serveis', desc: 'Treball en entorn d\'oficina i serveis' }, hosteleria: { label: 'Hostaleria / Comerç', desc: 'Sector serveis, hostaleria i comerç' } } },
+    roles: { title: 'Mapes d\'Obligacions per Rol', description: 'Selecciona un perfil per descobrir la normativa fonamental, riscos característics i formació recomanada per a cada lloc de treball.', obligations: 'Obligacions Legals i Normativa Clau', risks: 'Riscos Típics Associats', training: 'Fitxes Formatives Recomanades', viewArticle: 'Veure {{law}} · Art. {{article}} ↗' },
+    docs: { title: 'Generador de Documents PRL', description: 'Crea documents legals preemplenats llestos per signar. Imprimeix o exporta directament a PDF.', previewTitle: 'Document PRL', placeholder: 'Escriu aquí {{label}}...' },
+  },
+  eu: {
+    app: { title: 'PRL Espainia', subtitle: 'Kudeaketa Kontrola · Datu Ingeniaritza · PRL' },
+    language: { selector: 'Hizkuntza', aria: 'Hizkuntza-hautatzailea' },
+    nav: { main: 'Nagusia', normative: 'Araudia', resources: 'Baliabideak', home: 'Hasiera', roles: 'Rolen mapak', search: 'Bilatzaile Adimenduna', references: 'Erreferentzia Gurutzatuak', training: 'Prestakuntza fitxak', audit: 'Auditoria Interaktiboa', ai: 'Tokiko IA Aholkularia', docs: 'Dokumentu sortzailea' },
+    common: { back: 'Itzuli', backToRoles: 'Itzuli roletara', backToTemplates: 'Itzuli txantiloietara', editData: 'Datuak editatu', newDocument: 'Dokumentu berria', all: 'Guztia', allFeminine: 'Guztiak', notFoundPage: 'Orria ez da aurkitu', notFoundNormative: 'Araudia ez da aurkitu', downloadPdf: 'Deskargatu PDFa', viewInBoe: 'Ikusi BOEn ↗', createDocument: 'Sortu dokumentua →', generateDocument: '📄 Sortu dokumentua', printPdf: '🖨️ Inprimatu / PDF', selectOption: '— Hautatu aukera bat —', searchStart: 'Idatzi zerbait bilatzen hasteko...', noResults: 'Ez da emaitzarik aurkitu "{{query}}" bilaketarako', checked: 'Egiaztatuta', pending: 'Zain', articles: 'artikulu', sheets: 'fitxa', pageAbbr: 'Or.', requirements: 'Guztizko betekizunak', regulations: 'Araudiak', completedAudit: 'Auditoria osatua', completedAuditText: 'Araudi-betekizun guztiak egiaztatu dira {{sector}} sektorerako.', closeMenu: 'Itxi menua', openMenu: 'Ireki menua', loadingAi: 'Aztertzen…', consult: 'Kontsultatu', clearHistory: 'Ezabatu elkarrizketa-historiala' },
+    badges: { tecnico: 'Profil teknikoa', divulgativo: 'Dibulgatiboa', ambos: 'Orokorra' },
+    levels: { basico: 'Oinarrizkoa', intermedio: 'Ertainekoa', avanzado: 'Aurreratua' },
+    references: { desarrollo: 'garapena', complemento: 'osagarria', especificacion: 'zehaztapena', remision: 'erreferentzia', title: 'Erreferentzia Gurutzatuak', description: 'Aztertu nola konektatzen eta garatzen diren araudi-esparruak elkarren artean.' },
+    home: { heroTitle: 'Araudia bihurtzen', heroHighlight: 'erabaki estrategiko', heroDescription: 'PRL kontsulta-plataforma, ingeniaritza eta kudeaketa-kontrol ikuspegiarekin: legezko betetzetik exekuzio operatibo neurgarrira.', heroSearch: 'Bilaketa Adimenduna ⌕', heroNote: 'Tokiko IA integratua', crossTitle: 'Erreferentzia Gurutzatua', crossText: 'RD 486 III. eranskina → LPRL 16. art.', auditTitle: 'Sektoreko auditoria', auditText: 'Industria · %85 beteta', core: 'Gaitasun nagusiak', explore: 'Araudia aztertu', featureRolesTitle: 'Betebeharren mapak', featureRolesText: 'Ezagutu zure enpresako rol jakinetara egokitutako araudia eta arriskuak.', featureAuditTitle: 'Auditoria Interaktiboa', featureAuditText: 'Zure jarduera-sektorerako egokitutako checklist dinamikoak.', featureRefsTitle: 'Erreferentzia Gurutzatuak', featureRefsText: 'Mapaketa estrategikoa: nola elkarreragiten duten legeek elkarrekin.', featureTrainingTitle: 'Prestakuntza fitxak', featureTrainingText: 'Taldea gaitzeko eduki progresiboa eta egituratua.', baseRules: 'Oinarrizko arauak', trainingSheets: 'Prestakuntza fitxak', connections: 'Konexioak', profileTitle: 'Profil profesionala', profileText: 'Borja Felix Rojas · Industria Ingeniaritza, Kudeaketa Kontrola eta erabaki operatiboetara aplikatutako PRL.', reportingTitle: 'Txosten exekutiboa', reportingText: 'KPI erabilgarriak arriskuak, betetzea eta errendimendu operatiboa lehenesteko.', automationTitle: 'Automatizazioa', automationText: 'Datuen eta prozesuen integrazioa akatsak eta ziklo-denborak murrizteko.', analyticsTitle: 'Data Analytics', analyticsText: 'Araudia, dokumentu-frogak eta negozio-erabakien arteko lotura.', improvementTitle: 'Etengabeko hobekuntza', improvementText: 'Lurreko kontroletik urteko estrategiaraino, jarraipen neurgarriarekin.', profileLink: 'Profil profesionala ↗', boe: 'BOE ↗' },
+    search: { title: 'Bilatzaile Adimenduna', description: 'Aurkitu artikulu zehatzak, definizioak edo prestakuntza-fitxak araudi-base osoan.', placeholder: 'Bilatu "arriskuen ebaluazioa", "EPI", "erorketak"...', normativeResults: 'Araudi-artikuluak ({{count}})', trainingResults: 'Prestakuntza fitxak ({{count}})' },
+    quiz: { questionProgress: '{{current}} / {{total}} galdera', correct: 'Zuzena!', incorrect: 'Erantzun okerra', next: 'Hurrengo galdera →', results: 'Ikusi emaitzak', passed: 'Mikroikastaroa gaindituta!', failed: 'Kontzeptu batzuk berrikusi behar dituzu', score: '{{total}} galderetatik {{correct}} asmatu dituzu.', backToSheets: 'Itzuli fitxetara', completedCourse: 'Mikroikastaroa osatuta', startCourse: '📝 Hasi mikroikastaroa' },
+    training: { title: 'Prestakuntza fitxak', description: 'Erakundeko kolektibo desberdinentzat hiru mailatan egituratutako prestakuntza-edukia.' },
+    normative: { article: 'Art.' },
+    ai: { title: 'IA Aholkularia — PRL Espainia', description: 'Barne-biltegiaren testuingurua duen araudi-azterketa adimenduna. Ezarpen pertsonalizatuko modulu gisa eskuragarri.', previewBadge: 'Aurrebista', previewText: 'Aholkulariak zure barne araudi-basearekin nola lan egingo lukeen erakusten da. Erantzun errealek IA integrazio aktiboa behar dute.', liveBadge: 'IA aktiboa', liveText: 'IA motorrarekin konektatuta. Biltegiko araudi-testuinguruarekin sortutako erantzunak.', checking: 'IA motorrarekin konexioa egiaztatzen…', assistant: 'IA Aholkularia', you: 'Zu', copy: '📋 Kopiatu', copied: '✓ Kopiatuta', copyTitle: 'Kopiatu erantzuna', placeholder: 'Adib.: Zein betebehar ditut bi azpikontraturekin jardueren koordinaziorako?', activationTitle: 'IAk sortutako erantzunak behar dituzu?', activationText: 'Modulu hau tokiko edo hodeiko hizkuntza-eredu batera konektatzeko prest dago. Aktibazioak konfigurazio pertsonalizatua behar du zure azpiegituraren arabera.', activationLink: ' Jarri harremanetan ezarpenerako.', connectionError: 'Errorea IA motorrarekin konektatzean. Egiaztatu zerbitzua aktibo dagoela.', historyKey: 'Barne iturriak:', welcome: 'Kaixo. PRL Espainiako IA Aholkularia naiz.\n\nUne honetan **aurrebista moduan** nabil: zure kontsulta barne araudi-basearen kontra aztertzen dut (LPRL, RSP, CAE, RD 486, Eraikuntza) eta artikulu eta fitxa garrantzitsuenak itzultzen dizkizut.\n\nIA integrazio aktiboarekin, zure kasura egokitutako eta arrazoitutako erantzuna jasoko zenuke. Idatzi zure kontsulta nola funtzionatuko lukeen ikusteko.', noMatches: 'Ez dut "{{query}}" kontsultarekin zuzenean lotutako artikulurik aurkitu uneko araudi-basean.\n\nKontsulta birformulatu dezakezu termino hauekin: arriskuen ebaluazioa, jardueren koordinazioa, osasunaren zaintza, lan-ekipoak, lantokia, prestakuntza edo arau baten izena (LPRL, RD 39/1997, RD 171/2004…).\n\n— Erantzun hau barne bilaketa-motorrak sortzen du. IA aktiboarekin, analisi idatzia eta arrazoitua jasoko zenuke.', relevantArticles: '**Aurkitutako araudi-artikulu garrantzitsuak:**\n', relatedSheets: '**Lotutako prestakuntza-fitxak:**\n', repositorySummary: '\n—\nBarne biltegiko {{articles}} artikulu eta {{sheets}} fitxa erakusten.\n**IA aktiboarekin** eduki hori aztertu, arrazoitu eta zure kasura egokituko litzateke.', categories: { business: 'Enpresa-betebeharrak', documentation: 'Dokumentazioa eta prozedurak', specific: 'Araudi espezifikoa' } },
+    audit: { title: 'Auditoria Interaktiboa', description: 'Hautatu jarduera-sektorea araudia betetzeko checklist pertsonalizatua sortzeko.', changeSector: '← Sektorea aldatu', checklistTitle: 'Araudia Betetzeko Checklista', checkAll: 'Markatu dena', clear: 'Garbitu', exportPdf: '📄 Esportatu PDFa', exportPdfTitle: 'Esportatu checklist osoa PDFra', verifiedOf: '{{checked}} / {{total}} egiaztatuta', totalRequirements: 'Guztizko betekizunak', completedAudit: 'Auditoria osatua', pdfTitle: 'Araudia Betetzeko Checklista', pdfSummary: 'Aurrerapenaren laburpena', pdfGenerated: 'Sortua: {{date}}', pdfVerified: 'Egiaztatuta: {{checked}} / {{total}}   ·   Zain: {{pending}}   ·   Betetzea: {{progress}}%', pdfIncluded: 'Sartutako araudiak: {{laws}}', pdfFooter: 'PRL Espainia · Auditoriaren checklista', showDetail: 'Xehetasuna ikusi', hideDetail: 'Xehetasuna ezkutatu', regulationsCount: '{{count}} araudi', regulationsCountOne: '{{count}} araudi', sectors: { construccion: { label: 'Eraikuntza', desc: 'Eraikuntza eta obra zibila' }, coordinacion: { label: 'Jardueren koordinazioa', desc: 'Azpikontratazioa eta enpresa-bateratzea' }, industria: { label: 'Industria / Biltegia', desc: 'Industria eta logistika jarduerak' }, oficinas: { label: 'Bulegoak / Zerbitzuak', desc: 'Bulego eta zerbitzu ingurunea' }, hosteleria: { label: 'Ostalaritza / Merkataritza', desc: 'Zerbitzuak, ostalaritza eta merkataritza' } } },
+    roles: { title: 'Rol bakoitzeko betebeharren mapak', description: 'Hautatu profil bat lanpostu bakoitzerako funtsezko araudia, ohiko arriskuak eta gomendatutako prestakuntza ezagutzeko.', obligations: 'Legezko betebeharrak eta araudi giltzarria', risks: 'Lotutako arrisku tipikoak', training: 'Gomendatutako prestakuntza-fitxak', viewArticle: 'Ikusi {{law}} · Art. {{article}} ↗' },
+    docs: { title: 'PRL dokumentu-sortzailea', description: 'Sortu sinatzeko prest dauden aurrez betetako dokumentu legalak. Inprimatu edo esportatu zuzenean PDFra.', previewTitle: 'PRL dokumentua', placeholder: 'Idatzi hemen {{label}}...' },
+  },
+  gl: {
+    app: { title: 'PRL España', subtitle: 'Control de Xestión · Enxeñaría de Datos · PRL' },
+    language: { selector: 'Idioma', aria: 'Selector de idioma' },
+    nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inicio', roles: 'Mapas por Rol', search: 'Buscador Intelixente', references: 'Referencias Cruzadas', training: 'Fichas de Capacitación', audit: 'Auditoría Interactiva', ai: 'Consultor IA Local', docs: 'Xerador de Documentos' },
+    common: { back: 'Volver', backToRoles: 'Volver aos roles', backToTemplates: 'Volver aos modelos', editData: 'Editar datos', newDocument: 'Novo documento', all: 'Todo', allFeminine: 'Todas', notFoundPage: 'Páxina non atopada', notFoundNormative: 'Normativa non atopada', downloadPdf: 'Descargar PDF', viewInBoe: 'Ver no BOE ↗', createDocument: 'Crear documento →', generateDocument: '📄 Xerar documento', printPdf: '🖨️ Imprimir / PDF', selectOption: '— Selecciona unha opción —', searchStart: 'Escribe algo para comezar a buscar...', noResults: 'Non se atoparon resultados para "{{query}}"', checked: 'Verificados', pending: 'Pendentes', articles: 'artigos', sheets: 'fichas', pageAbbr: 'Páx.', requirements: 'Requisitos totais', regulations: 'Normativas', completedAudit: 'Auditoría completada', completedAuditText: 'Todos os requisitos normativos foron verificados para o sector {{sector}}.', closeMenu: 'Pechar menú', openMenu: 'Abrir menú', loadingAi: 'Analizando…', consult: 'Consultar', clearHistory: 'Borrar historial da conversa' },
+    badges: { tecnico: 'Perfil técnico', divulgativo: 'Divulgativo', ambos: 'Xeral' },
+    levels: { basico: 'Básico', intermedio: 'Intermedio', avanzado: 'Avanzado' },
+    references: { desarrollo: 'desenvolvemento', complemento: 'complemento', especificacion: 'especificación', remision: 'remisión', title: 'Referencias Cruzadas', description: 'Explora como se conectan e desenvolven os diferentes marcos normativos entre si.' },
+    home: { heroTitle: 'Transformando normativa en', heroHighlight: 'decisións estratéxicas', heroDescription: 'Plataforma de consulta PRL con enfoque de enxeñaría e control de xestión: do cumprimento legal á execución operativa medible.', heroSearch: 'Busca Intelixente ⌕', heroNote: 'IA local integrada', crossTitle: 'Referencia Cruzada', crossText: 'RD 486 Anexo III → LPRL Art. 16', auditTitle: 'Auditoría sectorial', auditText: 'Industria · 85% Conforme', core: 'Capacidades principais', explore: 'Explorar Normativa', featureRolesTitle: 'Mapas de Obrigas', featureRolesText: 'Descubre normativa e riscos adaptados a roles específicos na túa empresa.', featureAuditTitle: 'Auditoría Interactiva', featureAuditText: 'Checklists dinámicos adaptados ao teu sector de actividade.', featureRefsTitle: 'Referencias Cruzadas', featureRefsText: 'Mapeado estratéxico: como interactúan as leis entre si.', featureTrainingTitle: 'Fichas Formativas', featureTrainingText: 'Contido progresivo e estruturado para a capacitación do equipo.', baseRules: 'Normas base', trainingSheets: 'Fichas Formativas', connections: 'Conexións', profileTitle: 'Perfil Profesional', profileText: 'Borja Felix Rojas · Enxeñaría Industrial, Control de Xestión e PRL aplicada a decisións operativas.', reportingTitle: 'Reporting Executivo', reportingText: 'KPIs accionables para priorizar riscos, cumprimento e rendemento operativo.', automationTitle: 'Automatización', automationText: 'Integración de datos e procesos para reducir erros e tempos de ciclo.', analyticsTitle: 'Data Analytics', analyticsText: 'Conexión entre normativa, evidencia documental e decisións de negocio.', improvementTitle: 'Mellora Continua', improvementText: 'Do control no terreo á estratexia anual con seguimento medible.', profileLink: 'Perfil profesional ↗', boe: 'BOE ↗' },
+    search: { title: 'Buscador Intelixente', description: 'Atopa artigos específicos, definicións ou fichas de capacitación en toda a base normativa.', placeholder: 'Buscar "avaliación de riscos", "EPI", "caídas"...', normativeResults: 'Artigos de Normativa ({{count}})', trainingResults: 'Fichas de Capacitación ({{count}})' },
+    quiz: { questionProgress: 'Pregunta {{current}} de {{total}}', correct: 'Correcto!', incorrect: 'Resposta incorrecta', next: 'Seguinte pregunta →', results: 'Ver resultados', passed: 'Microcurso superado!', failed: 'Necesitas repasar algúns conceptos', score: 'Acertaches {{correct}} de {{total}} preguntas.', backToSheets: 'Volver ás fichas', completedCourse: 'Microcurso completado', startCourse: '📝 Comezar microcurso' },
+    training: { title: 'Fichas de Capacitación', description: 'Contido formativo estruturado en tres niveis para diferentes colectivos da organización.' },
+    normative: { article: 'Art.' },
+    ai: { title: 'Consultor IA — PRL España', description: 'Análise normativa intelixente con contexto do repositorio interno. Dispoñible como módulo de implementación personalizada.', previewBadge: 'Vista previa', previewText: 'Mostrando como operaría o consultor coa túa base normativa interna. As respostas reais requiren integración IA activa.', liveBadge: 'IA activa', liveText: 'Conectado ao motor de IA. Respostas xeradas con contexto normativo do repositorio.', checking: 'Comprobando conexión co motor IA…', assistant: 'Consultor IA', you: 'Ti', copy: '📋 Copiar', copied: '✓ Copiado', copyTitle: 'Copiar resposta', placeholder: 'Ex.: Que obrigas teño para coordinación de actividades con dúas subcontratas?', activationTitle: 'Necesitas respostas xeradas por IA?', activationText: 'Este módulo está preparado para conectarse a un modelo de linguaxe local ou na nube. A activación require configuración personalizada segundo a túa infraestrutura.', activationLink: ' Contacta para a implementación.', connectionError: 'Erro ao conectar co motor de IA. Verifica que o servizo estea activo.', historyKey: 'Fontes internas:', welcome: 'Ola. Son o Consultor IA de PRL España.\n\nNeste momento funciono en **modo vista previa**: analizo a túa consulta contra a base normativa interna (LPRL, RSP, CAE, RD 486, Construción) e devolvo os artigos e fichas máis relevantes.\n\nCoa integración IA activa, recibirías unha resposta redactada, argumentada e adaptada ao teu caso. Escribe a túa consulta para ver como funcionaría.', noMatches: 'Non atopei artigos directamente relacionados con "{{query}}" na base normativa actual.\n\nPodes reformular a consulta usando termos como: avaliación de riscos, coordinación de actividades, vixilancia da saúde, equipos de traballo, lugar de traballo, formación ou o nome dunha norma (LPRL, RD 39/1997, RD 171/2004…).\n\n— Esta resposta está xerada polo motor de busca interno. Con IA activa, obterías unha análise redactada e argumentada.', relevantArticles: '**Artigos normativos relevantes atopados:**\n', relatedSheets: '**Fichas de capacitación relacionadas:**\n', repositorySummary: '\n—\nMostrando {{articles}} artigos e {{sheets}} fichas do repositorio interno.\nCon **IA activa** este contido analizaríase, argumentaríase e adaptaríase ao teu caso concreto.', categories: { business: 'Obrigas empresariais', documentation: 'Documentación e procedementos', specific: 'Normativa específica' } },
+    audit: { title: 'Auditoría Interactiva', description: 'Selecciona o sector de actividade para xerar un checklist de cumprimento normativo personalizado.', changeSector: '← Cambiar sector', checklistTitle: 'Checklist de Cumprimento Normativo', checkAll: 'Marcar todo', clear: 'Limpar', exportPdf: '📄 Exportar PDF', exportPdfTitle: 'Exportar checklist completo a PDF', verifiedOf: '{{checked}} de {{total}} verificados', totalRequirements: 'Requisitos totais', completedAudit: 'Auditoría completada', pdfTitle: 'Checklist de Cumprimento Normativo', pdfSummary: 'Resumo de progreso', pdfGenerated: 'Xerado: {{date}}', pdfVerified: 'Verificados: {{checked}} / {{total}}   ·   Pendentes: {{pending}}   ·   Cumprimento: {{progress}}%', pdfIncluded: 'Normativas incluídas: {{laws}}', pdfFooter: 'PRL España · Checklist de Auditoría', showDetail: 'Ver detalle', hideDetail: 'Ocultar detalle', regulationsCount: '{{count}} normativas', regulationsCountOne: '{{count}} normativa', sectors: { construccion: { label: 'Construción', desc: 'Obras de edificación e obra civil' }, coordinacion: { label: 'Coordinación de Actividades', desc: 'Subcontratación e concorrencia empresarial' }, industria: { label: 'Industria / Almacén', desc: 'Actividades industriais e loxísticas' }, oficinas: { label: 'Oficinas / Servizos', desc: 'Traballo en contorna de oficina e servizos' }, hosteleria: { label: 'Hostalaría / Comercio', desc: 'Sector servizos, hostalaría e comercio' } } },
+    roles: { title: 'Mapas de Obrigas por Rol', description: 'Selecciona un perfil para descubrir a normativa fundamental, riscos característicos e formación recomendada para cada posto de traballo.', obligations: 'Obrigas legais e normativa clave', risks: 'Riscos típicos asociados', training: 'Fichas formativas recomendadas', viewArticle: 'Ver {{law}} · Art. {{article}} ↗' },
+    docs: { title: 'Xerador de Documentos PRL', description: 'Crea documentos legais preencheos listos para asinar. Imprime ou exporta directamente en PDF.', previewTitle: 'Documento PRL', placeholder: 'Escribe aquí {{label}}...' },
+  },
+};
+
+const LanguageContext = createContext<LanguageContextValue | null>(null);
+
+function getValue(tree: TranslationTree, key: string): string | undefined {
+  return key.split('.').reduce<string | TranslationTree | undefined>((current, part) => {
+    if (!current || typeof current === 'string') return current;
+    return current[part];
+  }, tree) as string | undefined;
+}
+
+function interpolate(template: string, params: Record<string, string | number> = {}): string {
+  return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) => String(params[key] ?? `{{${key}}}`));
+}
+
+function getInitialLanguage(): Language {
+  const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  if (saved === 'es' || saved === 'ca' || saved === 'eu' || saved === 'gl') return saved;
+  return 'es';
+}
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+
+  useEffect(() => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    document.documentElement.lang = LOCALE_BY_LANGUAGE[language];
+  }, [language]);
+
+  const t = (key: string, params?: Record<string, string | number>) => {
+    const template = getValue(translations[language], key) ?? getValue(translations.es, key) ?? key;
+    return typeof template === 'string' ? interpolate(template, params) : key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, locale: LOCALE_BY_LANGUAGE[language], setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within LanguageProvider');
+  }
+  return context;
+}

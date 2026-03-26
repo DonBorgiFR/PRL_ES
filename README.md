@@ -14,8 +14,9 @@ Una aplicación web que reúne en un solo lugar:
 - Un **buscador inteligente** que busca simultáneamente en artículos y fichas
 - **Referencias cruzadas** entre normas para entender cómo se relacionan
 - **Fichas de capacitación** en 3 niveles con quiz integrado
-- **Auditoría interactiva** sectorial con exportación PDF
+- **Auditoría interactiva** sectorial con exportación PDF (válida como prueba ante inspecciones)
 - **Mapas de obligaciones** por rol profesional (técnico, mando, RRHH)
+- **Gestión específica de CAE** (Coordinación de Actividades Empresariales) para obras simultaneas y sucesivas
 - **Generador de documentos** para PRL (Plan de Prevención, etc.)
 - **Consultor IA** en modo vista previa (búsqueda normativa inteligente sin IA externa)
 
@@ -58,7 +59,7 @@ Módulos formativos en 3 niveles con contenido estructurado, referencias normati
 - **Avanzado:** CAE, Construcción, Régimen sancionador, Auditoría del sistema
 
 ### Auditoría Interactiva + PDF
-Checklist sectorial por tipo de empresa (Oficinas, Industria, Comercio, Construcción). Progreso visual por bloque normativo. Exportación del informe completo a PDF.
+Checklist sectorial por tipo de empresa (Oficinas, Industria, Comercio, Construcción). Progreso visual por bloque normativo. Exportación del informe completo a PDF diseñada para gestionar el caos documental de la CAE en obra y servir como prueba ante requerimientos de subsanación de la Inspección de Trabajo.
 
 ### Mapas por Rol
 Guías de obligaciones para: Técnico PRL, Mando Intermedio, Trabajador, RRHH, Autónomo. Con fichas recomendadas y artículos relevantes por perfil.
