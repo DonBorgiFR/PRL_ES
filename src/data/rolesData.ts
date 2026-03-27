@@ -6,6 +6,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Trabajador de Almacén',
     label: 'Trabajador de Almacén',
     icon: '📦',
+    accentColor: '#f59e0b',
+    surfaceColor: 'rgba(245, 158, 11, 0.18)',
     description: 'Personal operativo encargado de la logística, manipulación de cargas y operaciones en el almacén.',
     obligations: [
       {
@@ -46,6 +48,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Técnico PRL',
     label: 'Técnico de Prevención (SPP o SPA)',
     icon: '🛡️',
+    accentColor: '#14b8a6',
+    surfaceColor: 'rgba(20, 184, 166, 0.18)',
     description: 'Especialista en seguridad laboral encargado de la gestión preventiva técnica en la organización.',
     obligations: [
       {
@@ -85,6 +89,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Encargado de Obra',
     label: 'Encargado / Jefe de Equipo',
     icon: '🏗️',
+    accentColor: '#ef4444',
+    surfaceColor: 'rgba(239, 68, 68, 0.18)',
     description: 'Mando intermedio con responsabilidad directa sobre la ejecución de los trabajos y los equipos operativos.',
     obligations: [
       {
@@ -125,6 +131,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Empresa Contratista',
     label: 'Empresa Contratista / Subcontrata',
     icon: '🤝',
+    accentColor: '#3b82f6',
+    surfaceColor: 'rgba(59, 130, 246, 0.18)',
     description: 'Empresa externa que accede al centro de trabajo para realizar obras, mantenimientos o servicios.',
     obligations: [
       {
@@ -164,6 +172,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Trabajador Oficina',
     label: 'Trabajador de Oficina',
     icon: '💻',
+    accentColor: '#8b5cf6',
+    surfaceColor: 'rgba(139, 92, 246, 0.18)',
     description: 'Personal de tareas administrativas, gestión y uso continuado de Pantallas de Visualización de Datos (PVD).',
     obligations: [
       {
@@ -203,6 +213,8 @@ export const rolesData: RoleObligation[] = [
     shortLabel: 'Responsable RRHH',
     label: 'Responsable de RRHH / Empresa',
     icon: '👥',
+    accentColor: '#ec4899',
+    surfaceColor: 'rgba(236, 72, 153, 0.18)',
     description: 'Perfil directivo encargado de facilitar los recursos, formación y vigilancia de la salud de la plantilla.',
     obligations: [
       {

@@ -88,6 +88,8 @@ export interface RoleObligation {
   shortLabel: string;
   label: string;
   icon: string;
+  accentColor: string;
+  surfaceColor: string;
   description: string;
   obligations: {
     title: string;

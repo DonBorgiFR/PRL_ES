@@ -227,6 +227,105 @@ const LanguageSwitcher = () => {
   );
 };
 
+const NormativaCardIcon = ({ leyId }: { leyId: string }) => {
+  switch (leyId) {
+    case 'lprl':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5.25 18.5 8v4.75c0 3.25-2.3 5.92-6.5 7-4.2-1.08-6.5-3.75-6.5-7V8L12 5.25Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+          <path d="M9.25 11.25h5.5M12 8.85v6.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    case 'rsp':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="4.75" width="14" height="14.5" rx="2.5" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M9 9.25h6M9 12h6M9 14.75h3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M14.5 4.75v3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    case 'cae':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8.5 8.5a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5ZM15.5 21a3.5 3.5 0 0 0-7 0" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M15.5 11.25a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5ZM20.5 21a3.5 3.5 0 0 0-4.2-3.42M12.1 18.1A3.5 3.5 0 0 0 7.9 14.7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="m10.8 9.8 2.2 1.7 2.35-2.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'construccion':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 18.75h16M6.25 18.75V9.5h4.5v9.25M15.5 18.75V6.25h2.25v12.5M10.75 12.25h4.75" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M8.5 7.25h3.25M16.6 4.25h1.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="4.5" width="14" height="15" rx="2.5" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M8.5 9.25h7M8.5 12h7M8.5 14.75h4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+  }
+};
+
+const RoleProfileIcon = ({ roleId }: { roleId: string }) => {
+  switch (roleId) {
+    case 'trabajador-almacen':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4.75 8.25 12 4.5l7.25 3.75V16L12 19.5 4.75 16V8.25Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+          <path d="M4.75 8.25 12 12l7.25-3.75M12 12v7.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'tecnico-prl':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 4.75 18.25 7.4v4.55c0 3.12-2.2 5.68-6.25 6.72-4.05-1.04-6.25-3.6-6.25-6.72V7.4L12 4.75Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+          <path d="m9.2 12.1 1.8 1.8 3.8-4.05" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'encargado-obra':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4.5 18.75h15M6.75 18.75V12.5h4.25v6.25M14.5 18.75V8.25h2.75v10.5M10 10.25h4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M8 9 9.75 6.75h3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'empresa-contratista':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8.25 9.25a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5ZM15.75 20.25a3.75 3.75 0 0 0-7.5 0" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M15.75 11a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5ZM20.25 20.25a3.45 3.45 0 0 0-3.5-3.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="m10.7 11.35 1.45 1.45 3.05-3.15" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'trabajador-oficina':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="4.75" y="5.25" width="14.5" height="10" rx="2" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M9 18.75h6M12 15.25v3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M8.5 9h7M8.5 11.75h4.25" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    case 'responsable-rrhh':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM16 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M4.5 18.75a3.5 3.5 0 0 1 7 0M12.5 18.75a3.5 3.5 0 0 1 7 0" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M12 8.5v4.5M9.75 10.75H14.25" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="4.75" width="14" height="14.5" rx="2.5" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M8.5 9.25h7M8.5 12h7M8.5 14.75h4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+  }
+};
+
 const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references' | 'training' | 'audit' | 'ai' | 'docs' }) => {
   switch (name) {
     case 'home':
@@ -480,8 +579,14 @@ const HomePage = () => {
               style={{ '--card-accent-color': ley.color } as React.CSSProperties}
             id={`card-ley-${ley.id}`}
           >
-            <div className="law-card-icon">{ley.icono}</div>
-            <div className="law-card-code" style={{ color: ley.color }}>{ley.codigo}</div>
+            <div className="law-card-header">
+              <div className="law-card-icon-shell">
+                <div className="law-card-icon">
+                  <NormativaCardIcon leyId={ley.id} />
+                </div>
+              </div>
+              <div className="law-card-code">{ley.codigo}</div>
+            </div>
             <h3>{ley.titulo}</h3>
             <p>{ley.subtitulo}</p>
             <div className="law-card-meta">
@@ -1693,22 +1798,58 @@ const RolesPage = () => {
       {!selectedRole ? (
         <div className="roles-grid fade-in">
           {localizedRoles.map(r => (
-            <div key={r.id} className="role-card" onClick={() => setSelectedRole(r.id)} id={`role-card-${r.id}`}>
-              <div className="role-icon">{r.icon}</div>
+            <div
+              key={r.id}
+              className="role-card"
+              onClick={() => setSelectedRole(r.id)}
+              id={`role-card-${r.id}`}
+              style={{ '--role-accent': r.accentColor, '--role-surface': r.surfaceColor } as React.CSSProperties}
+            >
+              <div className="role-card-top">
+                <div className="role-icon-shell">
+                  <div className="role-icon">
+                    <RoleProfileIcon roleId={r.id} />
+                  </div>
+                </div>
+                <div className="role-card-badges">
+                  <span className="role-card-badge">{r.obligations.length} {t('roles.obligations')}</span>
+                  <span className="role-card-badge subtle">{r.fichas.length} {t('roles.training')}</span>
+                </div>
+              </div>
               <h3>{r.shortLabel}</h3>
               <p>{r.description}</p>
+              <div className="role-card-metrics">
+                <span>
+                  <strong>{r.risks.length}</strong>
+                  {t('roles.risks')}
+                </span>
+                <span>
+                  <strong>{r.obligations.length}</strong>
+                  {t('roles.obligations')}
+                </span>
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="role-dashboard fade-in">
+        <div
+          className="role-dashboard fade-in"
+          style={role ? ({ '--role-accent': role.accentColor, '--role-surface': role.surfaceColor } as React.CSSProperties) : undefined}
+        >
           <button className="back-btn" onClick={() => setSelectedRole(null)}>← {t('common.backToRoles')}</button>
           
           <div className="role-dashboard-header">
-            <div className="role-icon-large">{role?.icon}</div>
-            <div>
+            <div className="role-icon-large">
+              {role ? <RoleProfileIcon roleId={role.id} /> : null}
+            </div>
+            <div className="role-dashboard-copy">
               <h2>{role?.label}</h2>
               <p>{role?.description}</p>
+              <div className="role-dashboard-meta">
+                <span>{role?.obligations.length} {t('roles.obligations')}</span>
+                <span>{role?.risks.length} {t('roles.risks')}</span>
+                <span>{role?.fichas.length} {t('roles.training')}</span>
+              </div>
             </div>
           </div>
           
@@ -1735,7 +1876,7 @@ const RolesPage = () => {
               <div className="role-section">
                 <h3>{t('roles.risks')}</h3>
                 <ul className="role-risks-list fade-in-delay-2">
-                  {role?.risks.map((risk, i) => <li key={i}>⚠️ {risk}</li>)}
+                  {role?.risks.map((risk, i) => <li key={i}>{risk}</li>)}
                 </ul>
               </div>
               
