@@ -8,6 +8,7 @@ import {
   referencias,
   fichas,
   getLeyById,
+  intelligentSearch,
   searchAll,
   buildNormativeContext,
   rolesData,
@@ -226,6 +227,69 @@ const LanguageSwitcher = () => {
   );
 };
 
+const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references' | 'training' | 'audit' | 'ai' | 'docs' }) => {
+  switch (name) {
+    case 'home':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'roles':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 4.5a7.5 7.5 0 1 0 7.5 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M12 8.25v4.25l2.75 2.25" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18.5 5.5 20 4m0 0 1.5 1.5M20 4v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'search':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.8" />
+          <path d="m16 16 3.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+    case 'references':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10 14 7.75 16.25a3 3 0 1 1-4.25-4.25L5.75 9.75A3 3 0 0 1 10 14Zm4-4 2.25-2.25a3 3 0 1 1 4.25 4.25L18.25 14A3 3 0 0 1 14 10Zm-5 2h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'training':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7.5 12 4l8 3.5-8 3.5L4 7.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M7 9.75V15c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5V9.75" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M20 8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+    case 'audit':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" strokeWidth="1.8" />
+          <path d="M9 9h6M9 13h2.5M9.5 17l1.75 1.75L15.5 14.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'ai':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="7" y="7" width="10" height="10" rx="3" stroke="currentColor" strokeWidth="1.8" />
+          <path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M18 6l-1.4 1.4M7.4 16.6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M10 12h4M10.5 14.75h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+    case 'docs':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 4.5h6l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 7 19V6A1.5 1.5 0 0 1 8.5 4.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M14 4.5V9h4" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M9.5 13h5M9.5 16h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+  }
+};
+
 // ============================================================
 // COMPONENTS
 // ============================================================
@@ -244,11 +308,16 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-logo" id="sidebar-header">
         <Link href="/">
-          <div style={{ cursor: 'pointer' }} id="logo-branding" onClick={closeOnMobile}>
-            <img src={brandLogo} alt="Borja Felix Rojas" className="brand-logo" />
-            <h1>{t('app.title')}</h1>
-            <span>{t('app.subtitle')}</span>
-          </div>
+          <a className="sidebar-brand-link" id="logo-branding" onClick={closeOnMobile}>
+            <div className="brand-logo-shell">
+              <img src={brandLogo} alt="Borja Felix Rojas" className="brand-logo" />
+            </div>
+            <div className="brand-copy">
+              <div className="brand-kicker">Sistema PRL</div>
+              <h1>{t('app.title')}</h1>
+              <span>{t('app.subtitle')}</span>
+            </div>
+          </a>
         </Link>
       </div>
       
@@ -256,17 +325,20 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <div className="nav-section-label">{t('nav.main')}</div>
         <Link href="/">
           <a className={`nav-item ${location === '/' ? 'active' : ''}`} id="link-nav-home" onClick={closeOnMobile}>
-            <span className="nav-icon">🏠</span> {t('nav.home')}
+            <span className="nav-icon"><SidebarIcon name="home" /></span>
+            <span className="nav-item-text">{t('nav.home')}</span>
           </a>
         </Link>
         <Link href="/mapa-roles">
           <a className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
-            <span className="nav-icon">🧭</span> {t('nav.roles')}
+            <span className="nav-icon"><SidebarIcon name="roles" /></span>
+            <span className="nav-item-text">{t('nav.roles')}</span>
           </a>
         </Link>
         <Link href="/buscador">
           <a className={`nav-item ${location === '/buscador' ? 'active' : ''}`} id="link-nav-search" onClick={closeOnMobile}>
-            <span className="nav-icon">🔍</span> {t('nav.search')}
+            <span className="nav-icon"><SidebarIcon name="search" /></span>
+            <span className="nav-item-text">{t('nav.search')}</span>
           </a>
         </Link>
         
@@ -287,27 +359,32 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <div className="nav-section-label">{t('nav.resources')}</div>
         <Link href="/referencias">
           <a className={`nav-item ${location === '/referencias' ? 'active' : ''}`} id="link-nav-refs" onClick={closeOnMobile}>
-            <span className="nav-icon">🔗</span> {t('nav.references')}
+            <span className="nav-icon"><SidebarIcon name="references" /></span>
+            <span className="nav-item-text">{t('nav.references')}</span>
           </a>
         </Link>
         <Link href="/fichas">
           <a className={`nav-item ${location === '/fichas' ? 'active' : ''}`} id="link-nav-fichas" onClick={closeOnMobile}>
-            <span className="nav-icon">🎓</span> {t('nav.training')}
+            <span className="nav-icon"><SidebarIcon name="training" /></span>
+            <span className="nav-item-text">{t('nav.training')}</span>
           </a>
         </Link>
         <Link href="/auditoria">
           <a className={`nav-item ${location === '/auditoria' ? 'active' : ''}`} id="link-nav-auditoria" onClick={closeOnMobile}>
-            <span className="nav-icon">✅</span> {t('nav.audit')}
+            <span className="nav-icon"><SidebarIcon name="audit" /></span>
+            <span className="nav-item-text">{t('nav.audit')}</span>
           </a>
         </Link>
         <Link href="/consultor-ia">
           <a className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
-            <span className="nav-icon">🤖</span> {t('nav.ai')}
+            <span className="nav-icon"><SidebarIcon name="ai" /></span>
+            <span className="nav-item-text">{t('nav.ai')}</span>
           </a>
         </Link>
         <Link href="/generador-docs">
           <a className={`nav-item ${location === '/generador-docs' ? 'active' : ''}`} id="link-nav-docs" onClick={closeOnMobile}>
-            <span className="nav-icon">📄</span> {t('nav.docs')}
+            <span className="nav-icon"><SidebarIcon name="docs" /></span>
+            <span className="nav-item-text">{t('nav.docs')}</span>
           </a>
         </Link>
       </nav>
@@ -555,11 +632,25 @@ const BuscadorPage = () => {
   const [filterLey, setFilterLey] = useState<string | undefined>();
   const { language, t } = useLanguage();
   
-  const results = useMemo(() => searchAll(query, { leyId: filterLey }), [query, filterLey]);
+  const results = useMemo(() => intelligentSearch(query, { leyId: filterLey }), [query, filterLey]);
   const localizedResultFichas = useMemo(
     () => results.fichas.map((ficha) => localizeFicha(ficha, language)),
     [results.fichas, language],
   );
+
+  const confidenceLabel = useMemo(() => {
+    if (!results.insights) return '';
+    if (results.insights.confidence === 'alta') return 'Confianza alta';
+    if (results.insights.confidence === 'media') return 'Confianza media';
+    return 'Confianza baja';
+  }, [results.insights]);
+
+  const applySuggestion = (suggestionQuery: string, suggestionLeyId?: string) => {
+    setQuery(suggestionQuery);
+    if (suggestionLeyId) {
+      setFilterLey(suggestionLeyId);
+    }
+  };
 
   return (
     <div className="fade-in">
@@ -598,6 +689,67 @@ const BuscadorPage = () => {
           </button>
         ))}
       </div>
+
+      {query && results.insights && (
+        <section className="search-intelligence-panel" id="search-intelligence-panel">
+          <div className="search-intelligence-header">
+            <span className="search-intelligence-kicker">Inteligencia controlada</span>
+            <span className={`search-confidence-badge ${results.insights.confidence}`}>{confidenceLabel}</span>
+          </div>
+
+          <p className="search-intelligence-intent">
+            <strong>Intencion detectada:</strong> {results.insights.intentLabel}
+          </p>
+          <p className="search-intelligence-explanation">{results.insights.explanation}</p>
+
+          {results.insights.suggestedLeyes.length > 0 && (
+            <div className="search-intelligence-row">
+              <span className="search-intelligence-row-label">Leyes sugeridas</span>
+              <div className="search-intelligence-chips">
+                {results.insights.suggestedLeyes.map((leyId) => (
+                  <button
+                    key={`suggested-law-${leyId}`}
+                    type="button"
+                    className={`filter-chip ${filterLey === leyId ? 'active' : ''}`}
+                    onClick={() => setFilterLey(leyId)}
+                  >
+                    {leyId.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {results.insights.expandedTerms.length > 0 && (
+            <div className="search-intelligence-row">
+              <span className="search-intelligence-row-label">Terminos relacionados</span>
+              <div className="search-intelligence-keywords">
+                {results.insights.expandedTerms.slice(0, 6).map((term) => (
+                  <span key={`expanded-term-${term}`} className="search-keyword-pill">{term}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {results.insights.suggestions.length > 0 && (
+            <div className="search-intelligence-row">
+              <span className="search-intelligence-row-label">Sugerencias guiadas</span>
+              <div className="search-intelligence-chips">
+                {results.insights.suggestions.map((suggestion, index) => (
+                  <button
+                    key={`guided-suggestion-${index}`}
+                    type="button"
+                    className="filter-chip"
+                    onClick={() => applySuggestion(suggestion.query, suggestion.leyId)}
+                  >
+                    {suggestion.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       {!query ? (
         <div className="empty-state">

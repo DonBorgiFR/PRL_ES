@@ -33,7 +33,7 @@ const translations: Record<Language, TranslationTree> = {
   es: {
     app: {
       title: 'PRL España',
-      subtitle: 'Control de Gestión · Ingeniería de Datos · PRL',
+      subtitle: 'Prevención · Cumplimiento · Operación',
     },
     language: {
       selector: 'Idioma',
@@ -242,7 +242,7 @@ const translations: Record<Language, TranslationTree> = {
     },
   },
   ca: {
-    app: { title: 'PRL Espanya', subtitle: 'Control de Gestió · Enginyeria de Dades · PRL' },
+    app: { title: 'PRL Espanya', subtitle: 'Prevenció · Compliment · Operació' },
     language: { selector: 'Idioma', aria: 'Selector d\'idioma' },
     nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inici', roles: 'Mapes per Rol', search: 'Cercador Intel·ligent', references: 'Referències Creuades', training: 'Fitxes de Formació', audit: 'Auditoria Interactiva', ai: 'Consultor IA Local', docs: 'Generador de Documents' },
     common: { back: 'Tornar', backToRoles: 'Tornar als rols', backToTemplates: 'Tornar a les plantilles', editData: 'Editar dades', newDocument: 'Document nou', all: 'Tot', allFeminine: 'Totes', notFoundPage: 'Pàgina no trobada', notFoundNormative: 'Normativa no trobada', downloadPdf: 'Descarregar PDF', viewInBoe: 'Veure al BOE ↗', createDocument: 'Crear document →', generateDocument: '📄 Generar document', printPdf: '🖨️ Imprimir / PDF', selectOption: '— Selecciona una opció —', searchStart: 'Escriu alguna cosa per començar a cercar...', noResults: 'No s\'han trobat resultats per a "{{query}}"', checked: 'Verificats', pending: 'Pendents', articles: 'articles', sheets: 'fitxes', pageAbbr: 'Pàg.', requirements: 'Requisits totals', regulations: 'Normatives', completedAudit: 'Auditoria completada', completedAuditText: 'Tots els requisits normatius han estat verificats per al sector {{sector}}.', closeMenu: 'Tancar menú', openMenu: 'Obrir menú', loadingAi: 'Analitzant…', consult: 'Consultar', clearHistory: 'Esborrar historial de conversa' },
@@ -260,7 +260,7 @@ const translations: Record<Language, TranslationTree> = {
     docs: { title: 'Generador de Documents PRL', description: 'Crea documents legals preemplenats llestos per signar. Imprimeix o exporta directament a PDF.', previewTitle: 'Document PRL', placeholder: 'Escriu aquí {{label}}...' },
   },
   eu: {
-    app: { title: 'PRL Espainia', subtitle: 'Kudeaketa Kontrola · Datu Ingeniaritza · PRL' },
+    app: { title: 'PRL Espainia', subtitle: 'Prebentzioa · Betetzea · Operazioa' },
     language: { selector: 'Hizkuntza', aria: 'Hizkuntza-hautatzailea' },
     nav: { main: 'Nagusia', normative: 'Araudia', resources: 'Baliabideak', home: 'Hasiera', roles: 'Rolen mapak', search: 'Bilatzaile Adimenduna', references: 'Erreferentzia Gurutzatuak', training: 'Prestakuntza fitxak', audit: 'Auditoria Interaktiboa', ai: 'Tokiko IA Aholkularia', docs: 'Dokumentu sortzailea' },
     common: { back: 'Itzuli', backToRoles: 'Itzuli roletara', backToTemplates: 'Itzuli txantiloietara', editData: 'Datuak editatu', newDocument: 'Dokumentu berria', all: 'Guztia', allFeminine: 'Guztiak', notFoundPage: 'Orria ez da aurkitu', notFoundNormative: 'Araudia ez da aurkitu', downloadPdf: 'Deskargatu PDFa', viewInBoe: 'Ikusi BOEn ↗', createDocument: 'Sortu dokumentua →', generateDocument: '📄 Sortu dokumentua', printPdf: '🖨️ Inprimatu / PDF', selectOption: '— Hautatu aukera bat —', searchStart: 'Idatzi zerbait bilatzen hasteko...', noResults: 'Ez da emaitzarik aurkitu "{{query}}" bilaketarako', checked: 'Egiaztatuta', pending: 'Zain', articles: 'artikulu', sheets: 'fitxa', pageAbbr: 'Or.', requirements: 'Guztizko betekizunak', regulations: 'Araudiak', completedAudit: 'Auditoria osatua', completedAuditText: 'Araudi-betekizun guztiak egiaztatu dira {{sector}} sektorerako.', closeMenu: 'Itxi menua', openMenu: 'Ireki menua', loadingAi: 'Aztertzen…', consult: 'Kontsultatu', clearHistory: 'Ezabatu elkarrizketa-historiala' },
@@ -278,7 +278,7 @@ const translations: Record<Language, TranslationTree> = {
     docs: { title: 'PRL dokumentu-sortzailea', description: 'Sortu sinatzeko prest dauden aurrez betetako dokumentu legalak. Inprimatu edo esportatu zuzenean PDFra.', previewTitle: 'PRL dokumentua', placeholder: 'Idatzi hemen {{label}}...' },
   },
   gl: {
-    app: { title: 'PRL España', subtitle: 'Control de Xestión · Enxeñaría de Datos · PRL' },
+    app: { title: 'PRL España', subtitle: 'Prevención · Cumprimento · Operación' },
     language: { selector: 'Idioma', aria: 'Selector de idioma' },
     nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inicio', roles: 'Mapas por Rol', search: 'Buscador Intelixente', references: 'Referencias Cruzadas', training: 'Fichas de Capacitación', audit: 'Auditoría Interactiva', ai: 'Consultor IA Local', docs: 'Xerador de Documentos' },
     common: { back: 'Volver', backToRoles: 'Volver aos roles', backToTemplates: 'Volver aos modelos', editData: 'Editar datos', newDocument: 'Novo documento', all: 'Todo', allFeminine: 'Todas', notFoundPage: 'Páxina non atopada', notFoundNormative: 'Normativa non atopada', downloadPdf: 'Descargar PDF', viewInBoe: 'Ver no BOE ↗', createDocument: 'Crear documento →', generateDocument: '📄 Xerar documento', printPdf: '🖨️ Imprimir / PDF', selectOption: '— Selecciona unha opción —', searchStart: 'Escribe algo para comezar a buscar...', noResults: 'Non se atoparon resultados para "{{query}}"', checked: 'Verificados', pending: 'Pendentes', articles: 'artigos', sheets: 'fichas', pageAbbr: 'Páx.', requirements: 'Requisitos totais', regulations: 'Normativas', completedAudit: 'Auditoría completada', completedAuditText: 'Todos os requisitos normativos foron verificados para o sector {{sector}}.', closeMenu: 'Pechar menú', openMenu: 'Abrir menú', loadingAi: 'Analizando…', consult: 'Consultar', clearHistory: 'Borrar historial da conversa' },
