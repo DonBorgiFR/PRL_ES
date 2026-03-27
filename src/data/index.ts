@@ -192,8 +192,22 @@ function detectIntent(normalizedQuery: string, tokens: string[]) {
     let score = 0;
     for (const keyword of rule.keywords) {
       const nKeyword = normalizeText(keyword);
+      const keywordTokens = tokenize(nKeyword);
+
       if (normalizedQuery.includes(nKeyword)) score += 2;
-      if (tokens.includes(nKeyword)) score += 1;
+
+      if (tokens.includes(nKeyword)) {
+        score += 1;
+      }
+
+      if (keywordTokens.length > 1) {
+        const overlap = keywordTokens.filter((token) => tokens.includes(token)).length;
+        if (overlap === keywordTokens.length) {
+          score += 2 + keywordTokens.length;
+        } else if (overlap > 0) {
+          score += overlap;
+        }
+      }
     }
     if (score > bestScore) {
       bestScore = score;
@@ -211,8 +225,18 @@ function detectIntent(normalizedQuery: string, tokens: string[]) {
 
 function detectLeyHints(normalizedQuery: string, intent: IntentRule | null) {
   const detectedByQuery: string[] = [];
+  const tokens = tokenize(normalizedQuery);
+
   for (const entry of LEY_KEYWORDS) {
-    if (entry.keywords.some((keyword) => normalizedQuery.includes(normalizeText(keyword)))) {
+    if (
+      entry.keywords.some((keyword) => {
+        const nKeyword = normalizeText(keyword);
+        if (normalizedQuery.includes(nKeyword)) return true;
+
+        const keywordTokens = tokenize(nKeyword);
+        return keywordTokens.length > 1 && keywordTokens.every((token) => tokens.includes(token));
+      })
+    ) {
       detectedByQuery.push(entry.leyId);
     }
   }

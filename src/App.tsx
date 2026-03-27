@@ -640,10 +640,27 @@ const BuscadorPage = () => {
 
   const confidenceLabel = useMemo(() => {
     if (!results.insights) return '';
-    if (results.insights.confidence === 'alta') return 'Confianza alta';
-    if (results.insights.confidence === 'media') return 'Confianza media';
-    return 'Confianza baja';
-  }, [results.insights]);
+    return t(`search.intelligence.confidence.${results.insights.confidence}`);
+  }, [results.insights, t]);
+
+  const translatedIntentLabel = useMemo(() => {
+    if (!results.insights) return '';
+    const key = `search.intelligence.intent.${results.insights.intentId}`;
+    const translated = t(key);
+    return translated === key ? results.insights.intentLabel : translated;
+  }, [results.insights, t]);
+
+  const translatedExplanation = useMemo(() => {
+    if (!results.insights) return '';
+
+    if (results.insights.intentId === 'general') {
+      return t('search.intelligence.explanation.general');
+    }
+
+    return t('search.intelligence.explanation.intent', {
+      intent: translatedIntentLabel.toLowerCase(),
+    });
+  }, [results.insights, translatedIntentLabel, t]);
 
   const applySuggestion = (suggestionQuery: string, suggestionLeyId?: string) => {
     setQuery(suggestionQuery);
@@ -693,18 +710,18 @@ const BuscadorPage = () => {
       {query && results.insights && (
         <section className="search-intelligence-panel" id="search-intelligence-panel">
           <div className="search-intelligence-header">
-            <span className="search-intelligence-kicker">Inteligencia controlada</span>
+            <span className="search-intelligence-kicker">{t('search.intelligence.kicker')}</span>
             <span className={`search-confidence-badge ${results.insights.confidence}`}>{confidenceLabel}</span>
           </div>
 
           <p className="search-intelligence-intent">
-            <strong>Intencion detectada:</strong> {results.insights.intentLabel}
+            <strong>{t('search.intelligence.intentDetected')}</strong> {translatedIntentLabel}
           </p>
-          <p className="search-intelligence-explanation">{results.insights.explanation}</p>
+          <p className="search-intelligence-explanation">{translatedExplanation}</p>
 
           {results.insights.suggestedLeyes.length > 0 && (
             <div className="search-intelligence-row">
-              <span className="search-intelligence-row-label">Leyes sugeridas</span>
+              <span className="search-intelligence-row-label">{t('search.intelligence.suggestedLaws')}</span>
               <div className="search-intelligence-chips">
                 {results.insights.suggestedLeyes.map((leyId) => (
                   <button
@@ -722,7 +739,7 @@ const BuscadorPage = () => {
 
           {results.insights.expandedTerms.length > 0 && (
             <div className="search-intelligence-row">
-              <span className="search-intelligence-row-label">Terminos relacionados</span>
+              <span className="search-intelligence-row-label">{t('search.intelligence.relatedTerms')}</span>
               <div className="search-intelligence-keywords">
                 {results.insights.expandedTerms.slice(0, 6).map((term) => (
                   <span key={`expanded-term-${term}`} className="search-keyword-pill">{term}</span>
@@ -733,7 +750,7 @@ const BuscadorPage = () => {
 
           {results.insights.suggestions.length > 0 && (
             <div className="search-intelligence-row">
-              <span className="search-intelligence-row-label">Sugerencias guiadas</span>
+              <span className="search-intelligence-row-label">{t('search.intelligence.guidedSuggestions')}</span>
               <div className="search-intelligence-chips">
                 {results.insights.suggestions.map((suggestion, index) => (
                   <button
