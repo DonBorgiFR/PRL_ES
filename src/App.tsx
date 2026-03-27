@@ -307,8 +307,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
   return (
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-logo" id="sidebar-header">
-        <Link href="/">
-          <a className="sidebar-brand-link" id="logo-branding" onClick={closeOnMobile}>
+        <Link href="/" className="sidebar-brand-link" id="logo-branding" onClick={closeOnMobile}>
             <div className="brand-logo-shell">
               <img src={brandLogo} alt="Borja Felix Rojas" className="brand-logo" />
             </div>
@@ -317,75 +316,58 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
               <h1>{t('app.title')}</h1>
               <span>{t('app.subtitle')}</span>
             </div>
-          </a>
         </Link>
       </div>
       
       <nav className="sidebar-nav">
         <div className="nav-section-label">{t('nav.main')}</div>
-        <Link href="/">
-          <a className={`nav-item ${location === '/' ? 'active' : ''}`} id="link-nav-home" onClick={closeOnMobile}>
+        <Link href="/" className={`nav-item ${location === '/' ? 'active' : ''}`} id="link-nav-home" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="home" /></span>
             <span className="nav-item-text">{t('nav.home')}</span>
-          </a>
         </Link>
-        <Link href="/mapa-roles">
-          <a className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
+        <Link href="/mapa-roles" className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="roles" /></span>
             <span className="nav-item-text">{t('nav.roles')}</span>
-          </a>
         </Link>
-        <Link href="/buscador">
-          <a className={`nav-item ${location === '/buscador' ? 'active' : ''}`} id="link-nav-search" onClick={closeOnMobile}>
+        <Link href="/buscador" className={`nav-item ${location === '/buscador' ? 'active' : ''}`} id="link-nav-search" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="search" /></span>
             <span className="nav-item-text">{t('nav.search')}</span>
-          </a>
         </Link>
         
         <div className="nav-section-label">{t('nav.normative')}</div>
         {leyes.map(ley => (
-          <Link key={ley.id} href={`/normativa/${ley.id}`}>
-            <a 
-              className={`nav-item ${location === `/normativa/${ley.id}` ? 'active' : ''}`} 
-              id={`link-nav-ley-${ley.id}`}
-              onClick={closeOnMobile}
-            >
-              <div className="nav-dot" style={{ backgroundColor: ley.color }}></div>
-              {ley.id.toUpperCase()}
-            </a>
+          <Link
+            key={ley.id}
+            href={`/normativa/${ley.id}`}
+            className={`nav-item ${location === `/normativa/${ley.id}` ? 'active' : ''}`}
+            id={`link-nav-ley-${ley.id}`}
+            onClick={closeOnMobile}
+          >
+            <div className="nav-dot" style={{ backgroundColor: ley.color }}></div>
+            {ley.id.toUpperCase()}
           </Link>
         ))}
         
         <div className="nav-section-label">{t('nav.resources')}</div>
-        <Link href="/referencias">
-          <a className={`nav-item ${location === '/referencias' ? 'active' : ''}`} id="link-nav-refs" onClick={closeOnMobile}>
+        <Link href="/referencias" className={`nav-item ${location === '/referencias' ? 'active' : ''}`} id="link-nav-refs" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="references" /></span>
             <span className="nav-item-text">{t('nav.references')}</span>
-          </a>
         </Link>
-        <Link href="/fichas">
-          <a className={`nav-item ${location === '/fichas' ? 'active' : ''}`} id="link-nav-fichas" onClick={closeOnMobile}>
+        <Link href="/fichas" className={`nav-item ${location === '/fichas' ? 'active' : ''}`} id="link-nav-fichas" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="training" /></span>
             <span className="nav-item-text">{t('nav.training')}</span>
-          </a>
         </Link>
-        <Link href="/auditoria">
-          <a className={`nav-item ${location === '/auditoria' ? 'active' : ''}`} id="link-nav-auditoria" onClick={closeOnMobile}>
+        <Link href="/auditoria" className={`nav-item ${location === '/auditoria' ? 'active' : ''}`} id="link-nav-auditoria" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="audit" /></span>
             <span className="nav-item-text">{t('nav.audit')}</span>
-          </a>
         </Link>
-        <Link href="/consultor-ia">
-          <a className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
+        <Link href="/consultor-ia" className={`nav-item ${location === '/consultor-ia' ? 'active' : ''}`} id="link-nav-ai" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="ai" /></span>
             <span className="nav-item-text">{t('nav.ai')}</span>
-          </a>
         </Link>
-        <Link href="/generador-docs">
-          <a className={`nav-item ${location === '/generador-docs' ? 'active' : ''}`} id="link-nav-docs" onClick={closeOnMobile}>
+        <Link href="/generador-docs" className={`nav-item ${location === '/generador-docs' ? 'active' : ''}`} id="link-nav-docs" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="docs" /></span>
             <span className="nav-item-text">{t('nav.docs')}</span>
-          </a>
         </Link>
       </nav>
     </aside>
