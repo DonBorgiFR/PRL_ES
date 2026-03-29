@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Route, Switch, useLocation, Link } from 'wouter';
 import brandLogo from '../logo.jpeg';
+import { ProfileModal } from './ProfileModal';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import {
@@ -484,6 +485,7 @@ const Badge = ({ type }: { type: 'tecnico' | 'divulgativo' | 'ambos' }) => {
 
 const HomePage = () => {
   const { t } = useLanguage();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
   <div className="fade-in">
@@ -615,29 +617,31 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="about-borja-grid">
-        <article className="about-borja-card">
-          <h4>{t('home.reportingTitle')}</h4>
-          <p>{t('home.reportingText')}</p>
-        </article>
-        <article className="about-borja-card">
-          <h4>{t('home.automationTitle')}</h4>
-          <p>{t('home.automationText')}</p>
-        </article>
-        <article className="about-borja-card">
-          <h4>{t('home.analyticsTitle')}</h4>
-          <p>{t('home.analyticsText')}</p>
-        </article>
-        <article className="about-borja-card">
-          <h4>{t('home.improvementTitle')}</h4>
-          <p>{t('home.improvementText')}</p>
-        </article>
-      </div>
-
       <div className="about-borja-actions">
-        <a href="https://borjafelixrojas.odoo.com/about-us" target="_blank" rel="noreferrer" className="about-borja-link">{t('home.profileLink')}</a>
+        <button
+          className="profile-open-btn"
+          onClick={() => setIsProfileOpen(true)}
+          id="btn-open-profile"
+          aria-label="Ver perfil profesional completo"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {t('home.profileLink')}
+        </button>
+        <a
+          href="https://borjafelixrojas.odoo.com/about-us"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="about-borja-link about-borja-link-soft"
+        >
+          Portfolio →
+        </a>
       </div>
     </section>
+
+    <ProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
   </div>
   );
 };
