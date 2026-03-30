@@ -1,6 +1,6 @@
-# PRL España — Base de Conocimiento Normativo para SST
+# PRL España — Cultura de Prevención y Misión Estratégica
 
-> Herramienta profesional de consulta, formación y auditoría de la normativa española en **Prevención de Riesgos Laborales**. Diseñada para técnicos de prevención, mandos intermedios y responsables de RRHH.
+> **Más que Normativa:** Una plataforma diseñada para transformar el complejo marco legal español en decisiones operativas que salvan vidas. Cada día, 1.800 personas sufren un accidente laboral en España; nuestro compromiso es reducir esa cifra a través de datos, capacitación y blindaje normativo.
 
 [![Deploy](https://github.com/DonBorgiFR/PRL-Espana/actions/workflows/deploy.yml/badge.svg)](https://github.com/DonBorgiFR/PRL-Espana/actions/workflows/deploy.yml)
 
@@ -8,26 +8,24 @@
 
 ## ¿Qué es PRL España?
 
-Una aplicación web que reúne en un solo lugar:
+Una herramienta de alto impacto para técnicos de prevención y líderes de seguridad que integra:
 
-- El **contenido íntegro** de las 8 normas PRL más demandadas en España
-- Un **buscador inteligente** que busca simultáneamente en artículos y fichas
-- **Referencias cruzadas** entre normas para entender cómo se relacionan
-- **Fichas de capacitación** en 3 niveles con quiz integrado
-- **Auditoría interactiva** sectorial con exportación PDF (válida como prueba ante inspecciones)
-- **Mapas de obligaciones** por rol profesional (técnico, mando, RRHH)
-- **Gestión específica de CAE** (Coordinación de Actividades Empresariales) para obras simultaneas y sucesivas
-- **Generador de documentos** para PRL (Plan de Prevención, etc.)
-- **Consultor IA** en modo vista previa (búsqueda normativa inteligente sin IA externa)
+- **Radiografía del Riesgo:** Visualización de datos críticos de siniestralidad (INSST/OIT) para fomentar la toma de conciencia.
+- **Evolución Legislativa:** Un viaje visual por la historia de la PRL en España (1900-2026).
+- **Blindaje Normativo:** Más de **300 artículos íntegros** de las 8 normas clave, cruzados dinámicamente con módulos formativos.
+- **Buscador Inteligente:** Consulta simultánea en leyes y fichas técnicas con IA local.
+- **Auditoría interactiva:** Checklist sectorial con generación de informes PDF para evidencias ante la Inspección.
+- **Mapas de obligaciones:** Adaptados a cada rol (Técnico, Mando, RRHH, Trabajador).
+- **Gestión de CAE:** Control específico de coordinación en obras y contratas.
 
-No requiere instalación ni cuenta. Funciona 100% en el navegador.
+No requiere instalación ni cuenta. Privacidad total: funciona 100% en el navegador.
 
 ---
 
 ## 📋 Normativa incluida (8 normas base)
 
 | Norma | Código | Contenido |
-|---|---|---|
+| :--- | :--- | :--- |
 | ⚖️ LPRL | Ley 31/1995 | Marco jurídico fundamental de la PRL en España |
 | 🏢 RSP | RD 39/1997 | Servicios de prevención, evaluación de riesgos, auditorías |
 | 🤝 CAE | RD 171/2004 | Coordinación de actividades empresariales (contratas) |
@@ -44,14 +42,18 @@ Cada norma incluye: capítulos, artículos completos, etiquetas de búsqueda y e
 ## 🚀 Funcionalidades principales
 
 ### Buscador Inteligente
+
 Busca en tiempo real en los artículos y fichas de las 8 normas. Filtra por ley o nivel. Resultados con badges técnico/divulgativo y acceso directo al artículo.
 
 ### Referencias Cruzadas (23 conexiones)
+
 Mapa visual de cómo se relacionan los artículos entre normas. Por ejemplo:
+
 - LPRL Art. 15 → RD 773/1997 Art. 1 (jerarquía de controles → EPI como última medida)
 - RD 1215 Anexo I.C → RD 614 Art. 7 (LOTO + Regla de Oro eléctrica)
 
 ### Fichas de Capacitación (10 fichas)
+
 Módulos formativos en 3 niveles con contenido estructurado, referencias normativas y quiz interactivo (5 preguntas, corrección automática).
 
 - **Básico:** Fundamentos LPRL, Derechos y Obligaciones, Participación
@@ -59,12 +61,15 @@ Módulos formativos en 3 niveles con contenido estructurado, referencias normati
 - **Avanzado:** CAE, Construcción, Régimen sancionador, Auditoría del sistema
 
 ### Auditoría Interactiva + PDF
+
 Checklist sectorial por tipo de empresa (Oficinas, Industria, Comercio, Construcción). Progreso visual por bloque normativo. Exportación del informe completo a PDF diseñada para gestionar el caos documental de la CAE en obra y servir como prueba ante requerimientos de subsanación de la Inspección de Trabajo.
 
 ### Mapas por Rol
+
 Guías de obligaciones para: Técnico PRL, Mando Intermedio, Trabajador, RRHH, Autónomo. Con fichas recomendadas y artículos relevantes por perfil.
 
 ### Consultor IA (Vista Previa)
+
 Escribe tu consulta y el sistema busca en la base normativa interna devolviendo los artículos y fichas más relevantes. Botón copiar, historial persistente y presets por categoría. Sin necesidad de IA externa.
 
 ---
@@ -97,7 +102,7 @@ npm run preview  # sirve dist/ en http://localhost:4173
 
 ## 📁 Estructura del proyecto
 
-```
+```text
 PRL-Espana/
 ├── src/
 │   ├── App.tsx              ← toda la lógica de UI (vistas, componentes)
@@ -182,10 +187,11 @@ Código: uso libre para fines formativos y profesionales en entornos PRL.
 ## 📈 Estado del proyecto (Marzo 2026)
 
 | Bloque | Estado |
-|---|---|
+| :--- | :--- |
 | 1 — Backend proxy IA | ✅ Completado |
 | 2 — Exportación PDF (Fichas, Artículos, Auditoría) | ✅ Completado |
 | 3 — UX Consultor IA (presets, historial, copiar) | ✅ Completado |
 | 4 — Workflows de agente | ✅ Completado |
 | 5 — Ampliación normativa (RD 614, 1215, 773) | ✅ Completado |
 | 6 — Repo espejo + CI/CD | ✅ Completado |
+| 7 — Rediseño Estratégico y Concienciación | ✅ Completado |

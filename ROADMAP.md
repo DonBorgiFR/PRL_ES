@@ -9,7 +9,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 ### Aplicacion web (SPA React + TypeScript)
 
 | Modulo | Estado | Revisiones pendientes |
-|---|---|---|
+| :--- | :--- | :--- |
 | Base normativa LPRL (Ley 31/1995) | ✅ Operativo | Ampliar articulos menos cubiertos |
 | Base normativa RSP (RD 39/1997) | ✅ Operativo | Ampliar capitulos de organización del SP |
 | Base normativa CAE (RD 171/2004) | ✅ Operativo | Añadir fichas de capacitacion especificas |
@@ -24,7 +24,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 ### Repositorio documental PRL Industria
 
 | Modulo | Estado | Revisiones pendientes |
-|---|---|---|
+| :--- | :--- | :--- |
 | FLW-01 Evaluacion de riesgos | ✅ Operativo | Añadir checklist especifico por tipo de puesto industrial |
 | FLW-02 Induccion nuevo ingreso | ✅ Operativo | Adaptar a contratas y ETTs |
 | FLW-03 CAE contratas | ✅ Operativo | Ampliar para obras con Plan de Seguridad activo |
@@ -43,6 +43,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 ## Bloques pendientes (en orden de prioridad)
 
 ### Bloque 1 — Base IA lista para activacion personalizada
+
 **Por que primero:** mantener el consultor util en modo preview publico y dejar la IA real como capa opcional de servicio.
 
 - [x] Backend minimo (Node/Express) con endpoint `/api/ollama/*` y `healthcheck`.
@@ -53,6 +54,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [x] Variante B: modelo externo via API (fallback).
 
 ### Bloque 2 — Exportacion PDF
+
 **Por que segundo:** los equipos de campo necesitan imprimir evidencias y checklists.
 
 - [x] Exportar fichas de capacitacion a PDF.
@@ -61,6 +63,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [x] Exportar resultados de Checklist de Auditoría Interactiva.
 
 ### Bloque 3 — UX consultor IA
+
 **Por que tercero:** mejorar la experiencia de prueba publica antes de escalar activaciones personalizadas.
 
 - [ ] Presets de consulta rapida (botones de prompt frecuentes).
@@ -69,6 +72,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [ ] Indicador de fuentes usadas en la respuesta.
 
 ### Bloque 4 — Consistencia interna y workflows de agente
+
 **Por que cuarto:** documentar para no perder prácticas establecidas.
 
 - [x] `.agent/workflows/add_ficha.md` — proceso para añadir ficha de capacitacion.
@@ -76,7 +80,8 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [x] `.agent/workflows/add_norma.md` — proceso para integrar nueva norma al data layer.
 
 ### Bloque 5 — Ampliacion normativa
-**Por que quinto:** completar cobertura para sectores mas demandados.
+
+**Por que quinto:** completar coverage para sectores mas demandados.
 
 - [x] RD 614/2001 — Riesgo electrico (alta demanda en industria y mantenimiento). 8 artículos, color cian.
 - [x] RD 1215/1997 — Equipos de trabajo (complementa RD 486 Anexo I.C). 7 artículos, color violeta.
@@ -84,11 +89,22 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [ ] Ampliar RD 486 con Anexo VI (condiciones de proteccion — EPI). Pendiente.
 
 ### Bloque 6 — Repo espejo operativo
+
 **Por que sexto:** materializar estrategia ya documentada.
 
-- [ ] Crear repo GitHub dedicado para equipos de prevencion.
-- [ ] Configurar GitHub Actions para sync automatico desde este repo.
-- [ ] README publico con guia de uso para tecnicos PRL sin perfil tecnico.
+- [x] Crear repo GitHub dedicado para equipos de prevencion.
+- [x] Configurar GitHub Actions para sync automatico desde este repo.
+- [x] README publico con guia de uso para tecnicos PRL sin perfil tecnico.
+
+### Bloque 7 — Rediseño Estratégico y de Concienciación
+
+**Por que septimo:** transformar la utilidad técnica en una misión de impacto y valor corporativo.
+
+- [x] Nuevo Hero con enfoque en "Cultura de Prevención" y misión estratégica.
+- [x] Radiografía del Riesgo: visualización de datos de impacto (Siniestralidad 2024).
+- [x] Timeline histórico: Evolución normativa en España (1900-2026).
+- [x] Blindaje Normativo: visualización del volumen de datos (artículos x fichas).
+- [x] Traducción completa (ES, CA, EU, GL) del nuevo sistema de comunicación.
 
 ---
 

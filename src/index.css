@@ -572,10 +572,256 @@ body {
   50% { transform: translateY(-8px) translateX(var(--tx, 0)); }
 }
 
+/* ── Mission Section ── */
+.mission-section {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--space-2xl);
+  padding: 0 var(--space-md);
+}
+
+.mission-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: var(--space-md);
+  background: linear-gradient(130deg, #f8fafc 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mission-section p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Impact Stats ── */
+.stats-impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.impact-card {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-slow);
+}
+
+.impact-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
+  pointer-events: none;
+}
+
+.impact-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4);
+}
+
+.impact-label-top {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.impact-value {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  background: linear-gradient(to bottom, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.impact-subtitle {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.impact-card.critical {
+  border-color: rgba(248, 113, 113, 0.25);
+  background: linear-gradient(145deg, rgba(69, 10, 10, 0.2), rgba(15, 23, 42, 0.6));
+}
+
+.impact-card.critical .impact-value {
+  background: linear-gradient(to bottom, #fca5a5, #f87171);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2.2rem;
+  margin: 15px 0;
+}
+
+/* ── Evolution Timeline ── */
+.evolution-section {
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-2xl) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.evolution-section h3 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: var(--space-2xl);
+}
+
+.timeline-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: var(--space-lg);
+}
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--border), var(--text-muted), var(--border));
+  z-index: 0;
+}
+
+.timeline-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot {
+  width: 48px;
+  height: 48px;
+  background: var(--bg-surface);
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: var(--space-md);
+  transition: all var(--transition);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.timeline-item:hover .timeline-dot {
+  border-color: #818cf8;
+  color: #818cf8;
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(129, 140, 248, 0.3);
+}
+
+.timeline-content h4 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.timeline-content p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .timeline-container { flex-direction: column; gap: var(--space-xl); }
+  .timeline-container::before { display: none; }
+  .timeline-item { flex-direction: row; text-align: left; gap: var(--space-md); }
+  .timeline-dot { margin-bottom: 0; flex-shrink: 0; }
+}
+
+/* ── Database Insights ── */
+.database-insight-section {
+  background: radial-gradient(circle at center, rgba(30, 41, 59, 0.45) 0%, transparent 100%);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.database-insight-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.database-insight-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+.database-insight-content p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+.db-cta-group {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.btn-premium {
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+.btn-primary-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #000;
+  box-shadow: 0 10px 20px -10px rgba(251, 191, 36, 0.5);
+}
+
+.btn-secondary-outline {
+  border: 1px solid var(--border-hover);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-premium:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
 @media (max-width: 900px) {
-  .home-hero { flex-direction: column; padding: var(--space-lg); }
+  .home-hero { flex-direction: column; padding: var(--space-lg); text-align: center; }
+  .hero-actions { justify-content: center; }
   .hero-visual { display: none; }
 }
+
 
 /* ============================================================ */
 /* FEATURES GRID */

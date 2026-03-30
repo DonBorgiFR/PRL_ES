@@ -488,27 +488,33 @@ const HomePage = () => {
   const { t } = useLanguage();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
+  const totalArticles = useMemo(() => {
+    return leyes.reduce((acc, ley) => 
+      acc + ley.capitulos.reduce((cAcc, cap) => cAcc + cap.articulos.length, 0)
+    , 0);
+  }, []);
+
   return (
   <div className="fade-in">
     <header className="home-hero">
       <div className="hero-content">
-        <h2 id="hero-title">{t('home.heroTitle')} <span className="gradient-text">{t('home.heroHighlight')}</span></h2>
+        <h2 id="hero-title">{t('home.heroTitle')} <br/><span className="gradient-text">{t('home.heroHighlight')}</span></h2>
         <p id="hero-desc">{t('home.heroDescription')}</p>
         <div className="hero-actions">
-          <Link href="/buscador"><button className="hero-primary-btn">{t('home.heroSearch')}</button></Link>
-          <div className="hero-inline-note">{t('home.heroNote')}</div>
+          <Link href="/auditoria"><button className="hero-primary-btn">{t('home.ctaAudit')}</button></Link>
+          <Link href="/fichas"><button className="hero-inline-note" style={{ background: 'rgba(255,255,255,0.05)', cursor: 'pointer' }}>{t('home.ctaTraining')}</button></Link>
         </div>
       </div>
       <div className="hero-visual">
         <div className="glass-card hero-glass-1">
-          <span className="glass-icon">💡</span>
+          <span className="glass-icon">⚖️</span>
           <div>
             <strong>{t('home.crossTitle')}</strong>
             <span>{t('home.crossText')}</span>
           </div>
         </div>
         <div className="glass-card hero-glass-2">
-           <span className="glass-icon">✅</span>
+           <span className="glass-icon">🛡️</span>
            <div>
              <strong>{t('home.auditTitle')}</strong>
              <span>{t('home.auditText')}</span>
@@ -516,6 +522,64 @@ const HomePage = () => {
         </div>
       </div>
     </header>
+
+    <section className="mission-section">
+      <div className="nav-section-label" style={{ display: 'inline-block', marginBottom: '0.5rem' }}>{t('home.missionTitle')}</div>
+      <p>{t('home.missionSubtitle')}</p>
+    </section>
+
+    <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1.5rem', textAlign: 'center' }}>{t('home.statsTitle')}</div>
+    <div className="stats-impact-grid">
+      <div className="impact-card">
+        <span className="impact-label-top">{t('home.statsWorldTitle')}</span>
+        <span className="impact-value">{t('home.statsWorldValue')}</span>
+        <span className="impact-subtitle">{t('home.statsWorldLabel')}</span>
+      </div>
+      <div className="impact-card">
+        <span className="impact-label-top">{t('home.statsSpainTitle')}</span>
+        <span className="impact-value">{t('home.statsSpainValue')}</span>
+        <span className="impact-subtitle">{t('home.statsSpainLabel')}</span>
+      </div>
+      <div className="impact-card critical">
+        <span className="impact-label-top">{t('home.statsCriticalTitle')}</span>
+        <span className="impact-value">{t('home.statsCriticalValue')}</span>
+        <span className="impact-subtitle">{t('home.statsCriticalLabel')}</span>
+      </div>
+    </div>
+
+    <section className="evolution-section">
+      <h3>{t('home.evolutionTitle')}</h3>
+      <div className="timeline-container">
+        <div className="timeline-item">
+          <div className="timeline-dot">1900</div>
+          <div className="timeline-content">
+            <h4>{t('home.evolution1900Title')}</h4>
+            <p>{t('home.evolution1900Text')}</p>
+          </div>
+        </div>
+        <div className="timeline-item">
+          <div className="timeline-dot">1978</div>
+          <div className="timeline-content">
+            <h4>{t('home.evolution1978Title')}</h4>
+            <p>{t('home.evolution1978Text')}</p>
+          </div>
+        </div>
+        <div className="timeline-item">
+          <div className="timeline-dot">1995</div>
+          <div className="timeline-content">
+            <h4>{t('home.evolution1995Title')}</h4>
+            <p>{t('home.evolution1995Text')}</p>
+          </div>
+        </div>
+        <div className="timeline-item">
+          <div className="timeline-dot">2026</div>
+          <div className="timeline-content">
+            <h4>{t('home.evolution2026Title')}</h4>
+            <p>{t('home.evolution2026Text')}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem', marginTop: '1rem' }}>{t('home.core')}</div>
     <div className="features-grid">
@@ -548,38 +612,25 @@ const HomePage = () => {
         </div>
       </Link>
     </div>
-    
-    <div className="home-stats" id="stats-container">
-      <div className="home-stat-card">
-        <div className="stat-icon" style={{ background: 'rgba(52, 211, 153, 0.15)', color: '#34d399' }}>📚</div>
-        <div className="stat-data">
-          <span className="num">{leyes.length}</span>
-          <span className="label">{t('home.baseRules')}</span>
-        </div>
-      </div>
-      <div className="home-stat-card">
-        <div className="stat-icon" style={{ background: 'rgba(192, 132, 252, 0.15)', color: '#c084fc' }}>🎓</div>
-        <div className="stat-data">
-          <span className="num">{fichas.length}</span>
-          <span className="label">{t('home.trainingSheets')}</span>
-        </div>
-      </div>
-      <div className="home-stat-card">
-        <div className="stat-icon" style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24' }}>🔀</div>
-        <div className="stat-data">
-          <span className="num">{referencias.length}</span>
-          <span className="label">{t('home.connections')}</span>
-        </div>
-      </div>
-    </div>
 
+    <section className="database-insight-section">
+      <div className="database-insight-content">
+        <h3>{t('home.databaseTitle')}</h3>
+        <p>{t('home.databaseText', { articles: totalArticles, fichas: fichas.length })}</p>
+        <div className="db-cta-group">
+          <Link href="/buscador" className="btn-premium btn-primary-gold" style={{ display: 'inline-block' }}>{t('home.heroSearch')}</Link>
+          <Link href="/referencias" className="btn-premium btn-secondary-outline" style={{ display: 'inline-block' }}>{t('nav.references')}</Link>
+        </div>
+      </div>
+    </section>
+    
     <div className="nav-section-label" style={{ paddingLeft: 0, marginBottom: '1rem' }}>{t('home.explore')}</div>
     <div className="cards-grid" id="normativa-grid">
       {leyes.map((ley, idx) => (
         <Link key={ley.id} href={`/normativa/${ley.id}`}>
           <div 
             className={`law-card fade-in-delay-${idx + 1}`} 
-              style={{ '--card-accent-color': ley.color } as React.CSSProperties}
+            style={{ '--card-accent-color': ley.color } as React.CSSProperties}
             id={`card-ley-${ley.id}`}
           >
             <div className="law-card-header">
