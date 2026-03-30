@@ -10,7 +10,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-01',
     titulo: 'Fundamentos de la Prevención de Riesgos Laborales',
     nivel: 'basico',
-    duracion: '2h',
+    duracion: '5-10 min',
     colectivo: 'Todos los trabajadores',
     icono: '📚',
     objetivo: 'Comprender el marco legal básico de la PRL, los conceptos fundamentales y la importancia de la prevención en el entorno de trabajo.',
@@ -21,6 +21,20 @@ export const fichas: FichaCapacitacion[] = [
       'Principios de la acción preventiva (art. 15 LPRL): 9 principios jerárquicos',
       'Plan de Prevención y Evaluación de Riesgos: qué son y para qué sirven',
       'Riesgos más frecuentes en el trabajo: caídas, golpes, sobresfuerzos, contactos eléctricos',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Pilar: La Ley 31/1995 LPRL',
+        texto: 'La Ley de Prevención de Riesgos Laborales (LPRL) es la espina dorsal normativa en España. Su objetivo principal no es castigar, sino crear una cultura de seguridad real que prevenga daños a la salud de los trabajadores. Obliga a que la seguridad sea un pilar integrado en todas las fases de la actividad empresarial.'
+      },
+      {
+        titulo: '2. Peligro vs Riesgo: La diferencia fundamental',
+        texto: 'A menudo se confunden, pero son distintos. El **Peligro** es la fuente o situación con capacidad de causar daño (ej: un cable eléctrico pelado). El **Riesgo** es la combinación de la probabilidad de que ocurra ese daño y la severidad del mismo (ej: la probabilidad de que alguien toque el cable x el daño de electrocución). Un Técnico de PRL no siempre puede eliminar el peligro, pero siempre debe minimizar el riesgo.'
+      },
+      {
+        titulo: '3. El Deber de Protección y los Principios de Acción (Art. 15)',
+        texto: 'El empresario tiene el deber inexcusable de garantizar la seguridad. Esto se hace mediante los Principios de la Acción Preventiva: combatir los riesgos en su origen, adaptar el trabajo a la persona y, crucialmente, **anteponer siempre la protección colectiva frente a la individual** (es decir, poner una barandilla perimetral antes que darle un arnés a un trabajador).'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 2', 'LPRL Art. 4', 'LPRL Art. 14', 'LPRL Art. 15'],
     quiz: [
@@ -90,7 +104,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-02',
     titulo: 'Derechos y Obligaciones en Materia de PRL',
     nivel: 'basico',
-    duracion: '1.5h',
+    duracion: '5-10 min',
     colectivo: 'Todos los trabajadores',
     icono: '⚖️',
     objetivo: 'Conocer los derechos de los trabajadores en materia de seguridad y salud, así como sus obligaciones y la de los empresarios.',
@@ -101,6 +115,20 @@ export const fichas: FichaCapacitacion[] = [
       'Derecho a la formación (art. 19): teoría y práctica dentro de la jornada',
       'Derecho a paralizar el trabajo ante riesgo grave e inminente (art. 21)',
       'Derecho a la vigilancia de la salud (art. 22): carácter voluntario y excepciones',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Derecho Central (Art. 14)',
+        texto: 'La Ley otorga a cada trabajador el **Derecho a una protección eficaz**. Pero, como los derechos de uno son las obligaciones del otro, esto significa directamente que el empresario tiene el correlativo **deber de garantizar la seguridad**. Este nivel de protección no puede depender de la economía de la empresa; si una actividad no puede realizarse de forma segura, no debe realizarse.'
+      },
+      {
+        titulo: '2. Obligaciones en el terreno (Art. 29)',
+        texto: 'La prevención no es pasiva. El artículo 29 exige al empleado una serie de tareas. No basta con ponerse el casco cuando alguien mira; se exige velar racionalmente por la propia seguridad y la de los compañeros. Si un trabajador decide "saltarse" un sistema de seguridad para terminar antes, y ocurre un accidente, puede ser sancionado duramente o perder ciertos derechos indemnizatorios.'
+      },
+      {
+        titulo: '3. El Freno de Emergencia (Art. 21)',
+        texto: 'El derecho más extremo y poderoso del técnico o de los representantes sindicales: paralizar la obra. Ante un **Riesgo Grave e Inminente** (ej. una zanja de 4 metros sin entibar con personas dentro), los trabajadores o sus representantes pueden detener legalmente la actividad hasta que el empresario resuelva la situación de peligro. Nadie puede ser sancionado por activar esta medida si lo hizo de buena fe.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 14', 'LPRL Art. 18', 'LPRL Art. 19', 'LPRL Art. 21', 'LPRL Art. 29'],
     quiz: [
@@ -158,7 +186,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-03',
     titulo: 'Participación de los Trabajadores en PRL',
     nivel: 'basico',
-    duracion: '1.5h',
+    duracion: '5-10 min',
     colectivo: 'Trabajadores y representantes',
     icono: '🤝',
     objetivo: 'Entender los mecanismos de participación y representación en PRL: delegados de prevención y Comité de Seguridad y Salud.',
@@ -169,6 +197,20 @@ export const fichas: FichaCapacitacion[] = [
       'Comité de Seguridad y Salud: composición paritaria, 50+ trabajadores',
       'Consulta obligatoria antes de decisiones (art. 33 LPRL)',
       'Garantías y sigilo profesional de los representantes',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. La Voz del Trabajador (Art. 34)',
+        texto: 'La prevención no se impone, se construye. Los trabajadores tienen derecho a participar activamente en cuestiones de seguridad. Este derecho garantiza que las decisiones de prevención no se tomen a sus espaldas, sino consultando a quienes están expuestos al riesgo de primera mano.'
+      },
+      {
+        titulo: '2. Delegados de Prevención',
+        texto: 'Son los representantes específicos de los trabajadores en materia preventiva (Art. 35). Tienen amplias competencias: desde acompañar a los inspectores de trabajo hasta emitir informes previos a decisiones importantes. No es un cargo meramente sindical, es un rol analítico con garantías especiales de actuación.'
+      },
+      {
+        titulo: '3. El Comité de Seguridad y Salud',
+        texto: 'Obligatorio en empresas de 50 o más trabajadores. Es un órgano paritario y colegiado. A diferencia de otros foros laborales, aquí se sientan frente a frente la dirección y los delegados de prevención para debatir exclusivamente sobre política de seguridad. Sus reuniones son periódicas de carácter trimestral como mínimo.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 33', 'LPRL Art. 34', 'LPRL Art. 35', 'LPRL Art. 36', 'LPRL Art. 38'],
     quiz: [
@@ -215,7 +257,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-04',
     titulo: 'Evaluación de Riesgos Laborales',
     nivel: 'intermedio',
-    duracion: '3h',
+    duracion: '5-10 min',
     colectivo: 'Técnicos y mandos intermedios',
     icono: '🔍',
     objetivo: 'Dominar el proceso de evaluación de riesgos laborales, metodologías aplicables y el contenido documental mínimo requerido.',
@@ -227,6 +269,20 @@ export const fichas: FichaCapacitacion[] = [
       'Criterios de valoración: trivial, tolerable, moderado, importante, intolerable',
       'Documentación de la evaluación: contenido mínimo según art. 23 LPRL',
       'Planificación derivada: medidas correctoras con plazo, responsable y recursos',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Corazón Preventivo (RSP Art. 3)',
+        texto: 'La Evaluación de Riesgos es el núcleo de actuación técnica. No es "rellenar un papel", es un proceso iterativo. Combina la identificación exhaustiva de cada peligro por puesto de trabajo y la priorización posterior. Lo que no se mide objetivamente (o no se evalúa), no se puede prevenir con eficacia.'
+      },
+      {
+        titulo: '2. La Fórmula del Riesgo',
+        texto: 'Para estimar el riesgo se cruzan empíricamente dos variables: **Probabilidad** (Alta, Media, Baja) y **Consecuencia** (Ligeramente dañino, Dañino, Extremadamente dañino). Un riesgo Trivial no requiere acción inmediata, pero un riesgo Intolerable exige la paralización absoluta hasta que se recupere la normalidad de su entorno.'
+      },
+      {
+        titulo: '3. Planificación Derivada',
+        texto: 'Una evaluación de riesgos sin planificación es puramente académica. Si se detecta un riesgo que no puede evitarse de raíz, la empresa está obligada por ley a planificar de inmediato las acciones correctoras (Planificación de Actividad Preventiva). Su formalidad exige detallar la Acción, el Responsable, Plazos y Recursos económicos asignables.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 16', 'LPRL Art. 23', 'RSP Art. 3', 'RSP Art. 4', 'RSP Art. 6'],
     quiz: [
@@ -272,7 +328,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-05',
     titulo: 'Organización de la Prevención en la Empresa',
     nivel: 'intermedio',
-    duracion: '3h',
+    duracion: '5-10 min',
     colectivo: 'Técnicos y responsables de PRL',
     icono: '🏢',
     objetivo: 'Conocer las modalidades de organización preventiva, sus requisitos legales y cuándo es obligatoria cada una.',
@@ -284,6 +340,20 @@ export const fichas: FichaCapacitacion[] = [
       'Servicio de Prevención Ajeno (SPA): concierto, seguimiento, acreditación',
       'Servicio de Prevención Mancomunado: sectores y grupos empresariales',
       'Auditorías internas del sistema de prevención: periodicidad y alcance',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Esqueleto Estructural (RSP)',
+        texto: 'El Reglamento de los Servicios de Prevención obliga a la empresa a "organizarse" bajo una modalidad oficial aprobada legalmente. Las modalidades escalan desde la Asunción Personal (el propio empresario asume gestiones de campo en pymes < 10) hasta el imponente Servicio de Prevención Propio (obligatorio orgánicamente con > 500 trabajadores).'
+      },
+      {
+        titulo: '2. Trabajadores Designados vs SPA',
+        texto: 'La empresa puede nombrar internamente *Trabajadores Designados* provistos de capacitación específica (Técnico Básico/Medio/Superior) y con su tiempo productivo liberado en porcentaje. Si no dispone de esa capacidad interna, procede a la externalización del deber de análisis suscribiendo un concierto con un *Servicio de Prevención Ajeno* (SPA). En ambos casos, el máximo responsable legal por daños sigue siendo el empresario final.'
+      },
+      {
+        titulo: '3. Auditoría Interna Reglamentaria',
+        texto: 'Cualquier empresa que genere su prevención "internamente de forma autónoma" (como un SPP o Trabajador Designado) y no posea el filtro de revisión externa, se obliga legalmente por el Art. 29 RSP a someter todo su sistema de control a una Auditoría Regulatoria de evaluación periódica expedida por auditores cualificados, como garantía de rigor y eficacia real.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 30', 'LPRL Art. 31', 'RSP Art. 10', 'RSP Art. 11', 'RSP Art. 14', 'RSP Art. 16', 'RSP Art. 24'],
     quiz: [
@@ -329,7 +399,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-06',
     titulo: 'Protección de Colectivos Especialmente Sensibles',
     nivel: 'intermedio',
-    duracion: '2h',
+    duracion: '5-10 min',
     colectivo: 'RRHH, mandos y técnicos PRL',
     icono: '🛡️',
     objetivo: 'Conocer las medidas específicas de protección para trabajadores con especial vulnerabilidad: mujeres embarazadas, menores y discapacitados.',
@@ -340,6 +410,20 @@ export const fichas: FichaCapacitacion[] = [
       'Protección de los menores de 18 años (art. 27): evaluación previa al inicio',
       'Trabajadores temporales y ETT (art. 28): igualdad en protección',
       'Adaptación del puesto versus cambio de puesto: criterios de prioridad',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. Más Allá de la Norma General (Art. 25)',
+        texto: 'A veces, los Límites de Exposición ambiental estándar fallan. Asumir esfuerzos laborales no detona la misma fatiga en una persona en salud óptima frente a un empleado con alta vulnerabilidad patológica o menores de edad. El sistema legal determina expresamente que el empleador ajuste los escenarios para garantizar la seguridad clínica de trabajadores que se consideren *Especialmente Sensibles*.'
+      },
+      {
+        titulo: '2. Protección a la Maternidad',
+        texto: 'La prevención del daño debe ajustarse biológicamente. Ante periodos de embarazo o lactancia temprana, si las revisiones evaluadoras del contexto señalan peligro ambiental (químicos/cargas) y no existe adaptación posible, el Art. 26 impera movilidad: rotar de actividad hacia zonas neutras y, en casos de impedimento fáctico, se cursará baja cautelar por "Riesgo Integral por Embarazo".'
+      },
+      {
+        titulo: '3. Menores y Eventuales (Art. 28)',
+        texto: 'El estado legal determina de forma cristalina proteger a los no veteranos. La rotación temporal o vinculación vía ETT no anula garantías. Se otorga la totalidad de recursos protectores a los fijos que hacia un temporal de corto plazo. Además, integrar a menores de 18 años requerirá previamente una evaluación a medida, sabiendo que múltiples oficios (manipulación peligrosa, minería, exposición alta a ruidos) les quedan vetados por completo, evitando su sobrecarga biológica formativa.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 25', 'LPRL Art. 26', 'LPRL Art. 27', 'LPRL Art. 28'],
     quiz: [
@@ -386,7 +470,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-07',
     titulo: 'Coordinación de Actividades Empresariales (CAE)',
     nivel: 'avanzado',
-    duracion: '4h',
+    duracion: '5-10 min',
     colectivo: 'Técnicos PRL, coordinadores, contratas',
     icono: '🔗',
     objetivo: 'Aplicar correctamente el RD 171/2004 en situaciones de concurrencia empresarial: deberes, documentación e instrumentos de coordinación.',
@@ -399,6 +483,20 @@ export const fichas: FichaCapacitacion[] = [
       'Medios de coordinación: reuniones, intercambio de documentos, instrucciones conjuntas',
       'Coordinador de Actividades Preventivas: designación, funciones y perfil',
       'Plataformas CAE: uso de sistemas informatizados de gestión documental',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Laberinto de la Concurrencia',
+        texto: 'Cuando múltiples empresas operan bajo el mismo techo, el riesgo no se suma, se multiplica. El RD 171/2004 nace para evitar el "eso no me toca a mí". Todas las empresas concurrentes tienen un *Deber de Cooperación* obligado, debiendo informarse recíprocamente de los riesgos que cada una aporta al centro de trabajo.'
+      },
+      {
+        titulo: '2. Empresario Titular vs Principal',
+        texto: 'El *Empresario Titular* (quien gestiona el centro) debe emitir instrucciones antes de empezar. Pero el *Empresario Principal* (quien contrata para su propia actividad) asume más peso: el deber *in vigilando*. Debe comprobar que su contrata tiene la prevención al día; si la contrata falla, la responsabilidad resbala hacia el principal.'
+      },
+      {
+        titulo: '3. Medios de Coordinación y CAE',
+        texto: 'La ley exige medios técnicos para este intercambio organizativo. Desde burocracia de reuniones hasta designar un *Coordinador de Actividades Preventivas*. Hoy en día, en centros multiproveedor, esta vigilancia se delega en Plataformas CAE (software de homologación documental en la nube).'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 24', 'CAE Art. 3', 'CAE Art. 4', 'CAE Art. 5', 'CAE Art. 7', 'CAE Art. 11', 'CAE Art. 13'],
     quiz: [
@@ -444,7 +542,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-08',
     titulo: 'Seguridad en Obras de Construcción',
     nivel: 'avanzado',
-    duracion: '5h',
+    duracion: '5-10 min',
     colectivo: 'Técnicos PRL construcción, coordinadores CSS',
     icono: '🏗️',
     objetivo: 'Conocer las obligaciones específicas del sector de la construcción: ESS/EBSS, PSS, coordinación de SST y obligaciones de todos los agentes.',
@@ -458,6 +556,20 @@ export const fichas: FichaCapacitacion[] = [
       'Libro de Incidencias: uso obligatorio, quién puede anotarlo y destinatarios',
       'Obligaciones de contratistas, subcontratistas y autónomos',
       'Aviso previo a la autoridad laboral',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Sector de la Dureza (RD 1627)',
+        texto: 'La construcción es la industria con mayor siniestralidad mortal. Por eso el RD 1627/1997 impone reglas exclusivas antes y durante el hormigón. La base de todo radica en que el Promotor encargue redactar el *Estudio de Seguridad y Salud (ESS)* en la misma fase de proyecto arquitectónico, presupuestando la seguridad desde el día cero.'
+      },
+      {
+        titulo: '2. El Plan y la Subcontratación',
+        texto: 'El contratista adjudicatario toma el ESS y aterriza sus medidas redactando el *Plan de Seguridad y Salud (PSS)*. Ojo a la jerarquía operativa: ningún albañil entra al pozo hasta que el Coordinador de Seguridad visione y apruebe formalmente ese Plan y firme el acta de obra inicial.'
+      },
+      {
+        titulo: '3. El CSS y el Libro Oficial',
+        texto: 'Si en la obra hay más de una empresa o autónomos concurrentes, es innegociable designar al *Coordinador de Seguridad y Salud (CSS)*. Ocupará el liderazgo prevencionista y custodiará el *Libro de Incidencias* para anotar los incumplimientos, pudiendo ejecutar la orden de paralización inmediata si detecta inminencia grave.'
+      }
     ],
     normativaRelacionada: ['RD 1627 Art. 3', 'RD 1627 Art. 4', 'RD 1627 Art. 5', 'RD 1627 Art. 7', 'RD 1627 Art. 9'],
     quiz: [
@@ -503,7 +615,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-09',
     titulo: 'Régimen Sancionador en PRL',
     nivel: 'avanzado',
-    duracion: '2.5h',
+    duracion: '5-10 min',
     colectivo: 'Responsables empresa, técnicos PRL, RRHH',
     icono: '⚠️',
     objetivo: 'Conocer el régimen sancionador de la LPRL: tipos de infracciones, cuantías de sanciones y responsabilidades concurrentes.',
@@ -516,6 +628,20 @@ export const fichas: FichaCapacitacion[] = [
       'Reincidencia: agravante que puede multiplicar la sanción',
       'Paralización de trabajos por la Inspección (art. 44)',
       'Recargo de prestaciones: 30%-50% sobre la indemnización de accidente',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. Responsabilidades Múltiples',
+        texto: 'En Seguridad Laboral, pagar una multa administrativa no absuelve tus malas praxis. La LPRL establece que las infracciones generan un efecto de onda expansiva: el empresario puede ser condenado por vía *Administrativa* (multa de Inspección), *Civil* (pagos ciegos indemnizatorios a la víctima) y *Penal* (delito criminal contra trabajadores si se demuestra culpa grave).'
+      },
+      {
+        titulo: '2. La LISOS y sus Multas',
+        texto: 'La Ley de Infracciones y Sanciones marca tramos aterrorizantes para la pyme. Un defecto *Grave* (omitir formación clave, ignorar una evaluación) sitúa su banda de cobro entre 2.000€ y 40.000€. Una temeridad *Muy Grave* (desproteger a embarazadas o esconder caídas letales) arranca de 40.000€ y llega a perforar el límite superior de los 800.000€.'
+      },
+      {
+        titulo: '3. El Recargo de Prestaciones',
+        texto: 'La peor condena financiera imaginable. Si ocurre un accidente fruto de la falta flagrante de medidas, Seguridad Social impondrá el "*Recargo de Prestación*". La empresa sentenciada (sin apoyo de aseguradoras ni mutuas, totalmente de su propio banco) deberá sufragarle de por vida al accidentado un sobresueldo del 30% al 50% de su invalidez.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 42', 'LPRL Art. 43', 'LPRL Art. 44', 'LPRL Art. 45', 'LPRL Art. 47', 'LPRL Art. 48'],
     quiz: [
@@ -561,7 +687,7 @@ export const fichas: FichaCapacitacion[] = [
     id: 'ficha-10',
     titulo: 'Auditoría del Sistema de Prevención',
     nivel: 'avanzado',
-    duracion: '3.5h',
+    duracion: '5-10 min',
     colectivo: 'Técnicos PRL superiores, responsables de SPP',
     icono: '📋',
     objetivo: 'Comprender el papel de la auditoría en el sistema de gestión preventiva, los requisitos legales y el alcance de la evaluación externa.',
@@ -574,6 +700,20 @@ export const fichas: FichaCapacitacion[] = [
       'Informe de auditoría: contenido mínimo y conservación',
       'Diferencias entre auditoría interna (mejora continua) y auditoría legal (RSP)',
       'Relación con la norma ISO 45001 y el ciclo PDCA en gestión de SST',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. El Ojo Clínico de la Revisión',
+        texto: 'Generar toneladas de folios estáticos y firmados no te librará de la cárcel si se demuestra abandono real. La **Auditoría Reglamentaria** transciende la inspección punitiva, actuando como análisis sistémico profundo para dictaminar y revelar si tus protocolos se ejecutan genuinamente de forma resolutiva entre tus peones.'
+      },
+      {
+        titulo: '2. ¿Quiénes Sufren la Criba?',
+        texto: 'El axioma es cristalino: "Nadie puede validarse honestamente a sí mismo". Estarán forzadas a contratar auditores externos cualificados todas las empresas que generen internamente su prevención (a través de SPP estructurados u obreros designados), no subcontratándolo al 100% hacia un organismo técnico externo (SPA).'
+      },
+      {
+        titulo: '3. Las Vigencias y el Reloj Reglado',
+        texto: 'La redacción legal establece el plazo bautismal del Examen en el margen rígido de **12 meses** desde consolidar su autogestión primera. Superada la reválida con dictamen positivo, el ritmo de evaluación cíclica se normaliza renovando su evaluación legal estricta cada **4 intensivos años**.'
+      }
     ],
     normativaRelacionada: ['LPRL Art. 30', 'RSP Art. 24', 'RSP Art. 34'],
     quiz: [

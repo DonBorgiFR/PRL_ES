@@ -4,6 +4,7 @@ import brandLogo from '../logo.jpeg';
 import { ProfileModal } from './ProfileModal';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import {
   leyes,
   referencias,
@@ -649,9 +650,56 @@ const HomePage = () => {
 const NormativaPage = ({ params }: { params: { id: string } }) => {
   const ley = getLeyById(params.id);
   const [openCaps, setOpenCaps] = useState<Record<string, boolean>>({ 'lprl-cap1': true, 'lprl-cap3': true });
+  const [viewMode, setViewMode] = useState<'resumen' | 'articulos'>('resumen');
   const { t } = useLanguage();
 
-  if (!ley) return <div className="empty-state">{t('common.notFoundNormative')}</div>;
+  const lawStats = useMemo(() => {
+    if (!ley) return null;
+    let totalArticulos = 0;
+    let tecnico = 0;
+    let divulgativo = 0;
+    let ambos = 0;
+    const allTags: string[] = [];
+
+    ley.capitulos.forEach(cap => {
+      totalArticulos += cap.articulos.length;
+      cap.articulos.forEach(art => {
+        if (art.badge === 'tecnico') tecnico++;
+        if (art.badge === 'divulgativo') divulgativo++;
+        if (art.badge === 'ambos') ambos++;
+        allTags.push(...art.tags);
+      });
+    });
+
+    const tagCounts = allTags.reduce((acc, tag) => {
+      acc[tag] = (acc[tag] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const topTags = Object.entries(tagCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(entry => entry[0]);
+
+    const maxDensity = Math.max(...ley.capitulos.map(c => c.articulos.length));
+    const density = ley.capitulos.map(c => ({
+      label: c.numero,
+      count: c.articulos.length,
+      heightPercent: maxDensity === 0 ? 0 : Math.round((c.articulos.length / maxDensity) * 100)
+    }));
+
+    return {
+      totalCapitulos: ley.capitulos.length,
+      totalArticulos,
+      tecnicoPercent: Math.round((tecnico / totalArticulos) * 100) || 0,
+      divulgativoPercent: Math.round((divulgativo / totalArticulos) * 100) || 0,
+      ambosPercent: Math.round((ambos / totalArticulos) * 100) || 0,
+      topTags,
+      density
+    };
+  }, [ley]);
+
+  if (!ley || !lawStats) return <div className="empty-state">{t('common.notFoundNormative')}</div>;
 
   const toggleCap = (id: string) => {
     setOpenCaps(prev => ({ ...prev, [id]: !prev[id] }));
@@ -670,50 +718,155 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="law-detail">
-        {ley.capitulos.map(cap => (
-          <div key={cap.id} className="capitulo">
-            <div 
-              className={`capitulo-header ${openCaps[cap.id] ? 'open' : ''}`}
-              onClick={() => toggleCap(cap.id)}
-            >
-              <div className="capitulo-number" style={{ background: ley.color + '20', color: ley.color }}>
-                {cap.numero}
-              </div>
-              <h3>{cap.titulo}</h3>
-              <span className="chevron">▼</span>
-            </div>
-            
-            {openCaps[cap.id] && (
-              <div className="articulos-list">
-                {cap.articulos.map(art => (
-                  <div key={art.id} className="articulo-card fade-in" id={`art-${art.id}`}>
-                    <div className="articulo-header">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
-                        <span className="art-number">Art. {art.numero}</span>
-                        <span className="art-title">{art.titulo}</span>
-                        <Badge type={art.badge} />
-                      </div>
-                      <button 
-                        className="pdf-btn"
-                        onClick={(e) => { e.preventDefault(); downloadToPDF(`art-${art.id}`, `Articulo_${art.numero}_${ley.id}`); }}
-                        title={t('common.downloadPdf')}
-                      >
-                        📥 PDF
-                      </button>
-                    </div>
-                    <p className="art-text">{art.texto}</p>
-                    <div className="art-footer">
-                      {art.tags.map(tag => <span key={tag} className="art-tag">#{tag}</span>)}
-                      {art.boeUrl && <a href={art.boeUrl} className="art-boe-link" target="_blank" rel="noreferrer">{t('common.viewInBoe')}</a>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="normativa-tabs-container">
+        <div className="normativa-tabs">
+          <button 
+            className={`normativa-tab-btn ${viewMode === 'resumen' ? 'active' : ''}`}
+            onClick={() => setViewMode('resumen')}
+          >
+            Vista Previa
+          </button>
+          <button 
+            className={`normativa-tab-btn ${viewMode === 'articulos' ? 'active' : ''}`}
+            onClick={() => setViewMode('articulos')}
+          >
+            Explorar Artículado
+          </button>
+        </div>
       </div>
+
+      {viewMode === 'resumen' ? (
+        <div className="resumen-panel fade-in">
+          <div className="resumen-grid">
+            <div className="resumen-main">
+              <div className="resumen-card">
+                <div className="resumen-card-header">
+                  <span className="resumen-icon">🎯</span>
+                  <h3>Conceptos Clave del Marco Normativo</h3>
+                </div>
+                <div className="keywords-cloud">
+                  {lawStats.topTags.sort((a, b) => a.localeCompare(b)).map(tag => (
+                    <span key={tag} className="resumen-keyword">{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="resumen-card">
+                <div className="resumen-card-header">
+                  <span className="resumen-icon">📊</span>
+                  <h3>Perfil del Contenido</h3>
+                </div>
+                <div className="profile-chart-container">
+                  <div className="stacked-bar-chart">
+                    {lawStats.tecnicoPercent > 0 && (
+                      <div className="stacked-segment tecnico" style={{ width: `${lawStats.tecnicoPercent}%` }} title={`Técnico: ${lawStats.tecnicoPercent}%`}>
+                        {lawStats.tecnicoPercent > 10 && <span>{lawStats.tecnicoPercent}%</span>}
+                      </div>
+                    )}
+                    {lawStats.ambosPercent > 0 && (
+                      <div className="stacked-segment ambos" style={{ width: `${lawStats.ambosPercent}%` }} title={`Ambos: ${lawStats.ambosPercent}%`}>
+                        {lawStats.ambosPercent > 10 && <span>{lawStats.ambosPercent}%</span>}
+                      </div>
+                    )}
+                    {lawStats.divulgativoPercent > 0 && (
+                      <div className="stacked-segment divulgativo" style={{ width: `${lawStats.divulgativoPercent}%` }} title={`Divulgativo: ${lawStats.divulgativoPercent}%`}>
+                        {lawStats.divulgativoPercent > 10 && <span>{lawStats.divulgativoPercent}%</span>}
+                      </div>
+                    )}
+                  </div>
+                  <div className="profile-legend">
+                    <div className="legend-item"><span className="legend-dot tecnico"></span>Técnico</div>
+                    <div className="legend-item"><span className="legend-dot ambos"></span>Mixto</div>
+                    <div className="legend-item"><span className="legend-dot divulgativo"></span>Divulgativo</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="resumen-sidebar">
+              <div className="resumen-stats-card">
+                <div className="stat-box">
+                  <span className="stat-num">{lawStats.totalCapitulos}</span>
+                  <span className="stat-lbl">Capítulos</span>
+                </div>
+                <div className="stat-box">
+                  <span className="stat-num">{lawStats.totalArticulos}</span>
+                  <span className="stat-lbl">Artículos</span>
+                </div>
+              </div>
+
+              <div className="resumen-card">
+                <div className="resumen-card-header">
+                  <span className="resumen-icon">📈</span>
+                  <h3>Densidad Normativa</h3>
+                </div>
+                <p className="resumen-desc">Artículos por capítulo</p>
+                <div className="density-chart">
+                  {lawStats.density.map((d, i) => (
+                    <div key={i} className="density-bar-container" title={`Capítulo ${d.label}: ${d.count} artículos`}>
+                      <div className="density-bar" style={{ height: `${Math.max(d.heightPercent, 5)}%`, backgroundColor: ley.color }}></div>
+                      <span className="density-label">{d.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button 
+                className="resumen-cta-btn" 
+                style={{ backgroundColor: ley.color }}
+                onClick={() => setViewMode('articulos')}
+              >
+                Comenzar a Leer →
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="law-detail fade-in">
+          {ley.capitulos.map(cap => (
+            <div key={cap.id} className="capitulo">
+              <div 
+                className={`capitulo-header ${openCaps[cap.id] ? 'open' : ''}`}
+                onClick={() => toggleCap(cap.id)}
+              >
+                <div className="capitulo-number" style={{ background: ley.color + '20', color: ley.color }}>
+                  {cap.numero}
+                </div>
+                <h3>{cap.titulo}</h3>
+                <span className="chevron">▼</span>
+              </div>
+              
+              {openCaps[cap.id] && (
+                <div className="articulos-list">
+                  {cap.articulos.map(art => (
+                    <div key={art.id} className="articulo-card fade-in" id={`art-${art.id}`}>
+                      <div className="articulo-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
+                          <span className="art-number">Art. {art.numero}</span>
+                          <span className="art-title">{art.titulo}</span>
+                          <Badge type={art.badge} />
+                        </div>
+                        <button 
+                          className="pdf-btn"
+                          onClick={(e) => { e.preventDefault(); downloadToPDF(`art-${art.id}`, `Articulo_${art.numero}_${ley.id}`); }}
+                          title={t('common.downloadPdf')}
+                        >
+                          📥 PDF
+                        </button>
+                      </div>
+                      <p className="art-text">{art.texto}</p>
+                      <div className="art-footer">
+                        {art.tags.map(tag => <span key={tag} className="art-tag">#{tag}</span>)}
+                        {art.boeUrl && <a href={art.boeUrl} className="art-boe-link" target="_blank" rel="noreferrer">{t('common.viewInBoe')}</a>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -964,6 +1117,7 @@ const ReferenciasPage = () => {
 // ============================================================
 const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => void; onFinish: () => void }) => {
   const quiz = ficha.quiz;
+  const [isReading, setIsReading] = useState(!!ficha.modulosLectura && ficha.modulosLectura.length > 0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -1006,7 +1160,29 @@ const QuizModal = ({ ficha, onClose, onFinish }: { ficha: any; onClose: () => vo
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content quiz-modal" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>&times;</button>
-        {!finished ? (
+        {isReading ? (
+          <div className="reading-container fade-in" style={{ padding: '24px', overflowY: 'auto', maxHeight: '80vh' }}>
+            <h2 style={{ marginBottom: '16px', color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.4rem' }}>
+              <span>{ficha.icono}</span>
+              {ficha.titulo}
+            </h2>
+            <div className="reading-modules" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {ficha.modulosLectura?.map((modulo: { titulo: string; texto: string }, i: number) => (
+                <div key={i} className="modulo-card" style={{ background: 'rgba(255,255,255,0.03)', borderLeft: '4px solid var(--primary)', padding: '16px', borderRadius: '8px' }}>
+                  <h3 style={{ marginBottom: '8px', color: '#f3f4f6', fontSize: '1.1rem' }}>{modulo.titulo}</h3>
+                  <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+                    {modulo.texto.split('**').map((part, idx) => idx % 2 === 1 ? <strong key={idx} style={{color: '#fff'}}>{part}</strong> : part)}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="hero-primary-btn" onClick={() => setIsReading(false)}>
+                Iniciar Evaluación (Quiz) →
+              </button>
+            </div>
+          </div>
+        ) : !finished ? (
           <div className="quiz-container fade-in">
             <div className="quiz-header">
               <span className="quiz-progress-text">{t('quiz.questionProgress', { current: currentQuestion + 1, total: quiz.length })}</span>
@@ -1460,18 +1636,9 @@ const exportAuditoriaPDF = (
   const pageH = 297;
   const marginL = 14;
   const marginR = 14;
-  const contentW = pageW - marginL - marginR;
   const now = new Date().toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
-  let y = 0;
 
-  const checkY = (needed = 10) => {
-    if (y + needed > pageH - 14) {
-      doc.addPage();
-      y = 16;
-    }
-  };
-
-  // ── Portada ──
+  // ── Portada Header ──
   doc.setFillColor(8, 12, 20);
   doc.rect(0, 0, pageW, 55, 'F');
   doc.setTextColor(255, 255, 255);
@@ -1483,16 +1650,16 @@ const exportAuditoriaPDF = (
   doc.text(t('audit.pdfTitle'), marginL, 30);
   doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
-  doc.text(`Sector: ${sector.icon} ${sector.label}`, marginL, 40);
+  doc.text(`Sector: ${sector.label}`, marginL, 40);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text(t('audit.pdfGenerated', { date: now }), marginL, 49);
 
   // ── Resumen ──
-  y = 66;
+  let y = 66;
   doc.setTextColor(30, 30, 30);
   doc.setFillColor(240, 249, 255);
-  doc.roundedRect(marginL, y, contentW, 26, 2, 2, 'F');
+  doc.roundedRect(marginL, y, pageW - 28, 26, 2, 2, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(0, 80, 160);
@@ -1506,57 +1673,51 @@ const exportAuditoriaPDF = (
     marginL + 4, y + 15
   );
   doc.text(t('audit.pdfIncluded', { laws: leyesAuditoria.map(l => l.codigo).join(', ') }), marginL + 4, y + 22);
-  y += 34;
 
-  // ── Artículos ──
-  for (const ley of leyesAuditoria) {
-    checkY(14);
-    doc.setFillColor(20, 30, 60);
-    doc.rect(marginL, y, contentW, 9, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text(`${ley.icono}  ${ley.codigo} — ${ley.titulo}`, marginL + 3, y + 6);
-    y += 12;
-
-    for (const cap of ley.capitulos) {
-      checkY(8);
-      doc.setTextColor(80, 100, 140);
-      doc.setFont('helvetica', 'bolditalic');
-      doc.setFontSize(8.5);
-      doc.text(`${cap.numero}  ${cap.titulo}`, marginL + 2, y);
-      y += 5;
-
-      for (const art of cap.articulos) {
-        checkY(7);
+  // ── Data para autoTable ──
+  const tableBody: any[] = [];
+  leyesAuditoria.forEach(ley => {
+    tableBody.push([
+      { content: `${ley.codigo} — ${ley.titulo}`, colSpan: 3, styles: { fillColor: [20, 30, 60], textColor: [255, 255, 255], fontStyle: 'bold' } }
+    ]);
+    ley.capitulos.forEach(cap => {
+      cap.articulos.forEach(art => {
         const isChecked = checked.has(art.id);
-        // checkbox symbol
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(9);
-        doc.setTextColor(isChecked ? 22 : 150, isChecked ? 163 : 150, isChecked ? 74 : 150);
-        const mark = isChecked ? '[✓]' : '[ ]';
-        doc.text(mark, marginL + 2, y);
-        doc.setTextColor(isChecked ? 30 : 80, 30, 30);
-        const label = `Art. ${art.numero}  ${art.titulo}`;
-        const lines = doc.splitTextToSize(label, contentW - 16) as string[];
-        doc.text(lines, marginL + 13, y);
-        y += Math.max(lines.length * 4.5, 6);
-      }
-      y += 2;
-    }
-    y += 4;
-  }
+        const estado = isChecked ? 'OK' : 'Pte.';
+        const colorEstado = isChecked ? [22, 163, 74] : [156, 163, 175];
+        
+        tableBody.push([
+          `Art. ${art.numero}`,
+          art.titulo,
+          { content: estado, styles: { fillColor: colorEstado, textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center', valign: 'middle' } }
+        ]);
+      });
+    });
+  });
 
-  // ── Pie de página en todas las páginas ──
-  const total = (doc as any).internal.getNumberOfPages();
-  for (let i = 1; i <= total; i++) {
-    doc.setPage(i);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(160, 160, 160);
-    doc.text(t('audit.pdfFooter'), marginL, pageH - 6);
-    doc.text(`${t('common.pageAbbr')} ${i} / ${total}`, pageW - marginR, pageH - 6, { align: 'right' });
-  }
+  autoTable(doc, {
+    startY: 100,
+    head: [['Ref.', 'Requisito Formativo / Normativo', 'Estado']],
+    body: tableBody,
+    theme: 'grid',
+    headStyles: { fillColor: [15, 23, 42], textColor: 255 },
+    columnStyles: {
+      0: { cellWidth: 25 },
+      1: { cellWidth: 'auto' },
+      2: { cellWidth: 20 }
+    },
+    styles: { fontSize: 8.5 },
+    margin: { left: marginL, right: marginR },
+    didDrawPage: (data) => {
+      // Footer
+      const total = (doc as any).internal.getNumberOfPages();
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(160, 160, 160);
+      doc.text(t('audit.pdfFooter'), marginL, pageH - 6);
+      doc.text(`${t('common.pageAbbr')} ${data.pageNumber} / ${total}`, pageW - marginR, pageH - 6, { align: 'right' });
+    }
+  });
 
   doc.save(`Auditoria_PRL_${sector.id}_${new Date().toISOString().slice(0,10)}.pdf`);
 };

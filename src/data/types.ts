@@ -71,6 +71,7 @@ export interface FichaCapacitacion {
   duracion: string;
   objetivo: string;
   contenido: string[];
+  modulosLectura?: { titulo: string; texto: string; icono?: string }[];
   normativaRelacionada: string[];
   colectivo: string;
   icono: string;
