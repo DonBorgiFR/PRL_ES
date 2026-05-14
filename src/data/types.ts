@@ -9,7 +9,9 @@ export interface Articulo {
   id: string;
   numero: string;
   titulo: string;
-  texto: string;
+  texto?: string; // Se mantiene por retrocompatibilidad temporal, se migrará a textoLegal / textoResumen
+  textoLegal?: string;
+  textoResumen?: string;
   badge: BadgeType;
   boeUrl?: string;
   tags: string[];

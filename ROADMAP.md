@@ -14,9 +14,9 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 | Base normativa RSP (RD 39/1997) | ✅ Operativo | Ampliar capitulos de organización del SP |
 | Base normativa CAE (RD 171/2004) | ✅ Operativo | Añadir fichas de capacitacion especificas |
 | Base normativa Construccion (RD 1627/1997) | ✅ Operativo | Ampliar articulos de coordinacion de seguridad |
-| Base normativa RD 486/1997 | ✅ Operativo | Ampliar Anexo V ergonomia, añadir Anexo VI EPI |
-| Referencias cruzadas (17 conexiones) | ✅ Operativo | Añadir conexiones con RD 614/2001 (electrico) y RD 486 Anexo VI |
-| Fichas de capacitacion (10 modulos) | ✅ Operativo | Ampliar a 15 fichas; añadir fichas especificas RD 486 |
+| Base normativa RD 486/1997 | ✅ Operativo | Revisar exhaustividad de Anexos |
+| Referencias cruzadas (17 conexiones) | ✅ Operativo | Añadir conexiones con RD 614/2001 (electrico) y RD 773/1997 (EPI) |
+| Fichas de capacitacion (10 modulos) | ✅ Operativo | Ampliar a 15 fichas; añadir fichas especificas RD 486 y RD 773 |
 | Buscador inteligente | ✅ Operativo | Mejorar ranking de relevancia; filtro por norma |
 | Consultor IA (vista previa publica) | ✅ Operativo en preview | Activacion real solo como servicio post-implementacion personalizada |
 | Exportación PDF de artículos y fichas | ✅ Operativo | Extender a vista del Checklist Auditoría |
@@ -86,7 +86,7 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [x] RD 614/2001 — Riesgo electrico (alta demanda en industria y mantenimiento). 8 artículos, color cian.
 - [x] RD 1215/1997 — Equipos de trabajo (complementa RD 486 Anexo I.C). 7 artículos, color violeta.
 - [x] RD 773/1997 — EPI (complementa jerarquia de controles). 8 artículos, color rosa.
-- [ ] Ampliar RD 486 con Anexo VI (condiciones de proteccion — EPI). Pendiente.
+- [ ] Revisar exhaustividad del RD 486/1997 (Anexos I al VI). Pendiente.
 
 ### Bloque 6 — Repo espejo operativo
 

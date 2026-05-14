@@ -905,7 +905,24 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
                           📥 PDF
                         </button>
                       </div>
-                      <p className="art-text">{art.texto}</p>
+                      <div className="art-content-dual">
+                        {art.textoResumen && (
+                          <div className="art-resumen-box" style={{ marginBottom: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--secondary)' }}>
+                            <p className="art-text" style={{ margin: 0 }}>{art.textoResumen}</p>
+                          </div>
+                        )}
+                        {art.textoLegal && (
+                          <div className="art-legal-box" style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
+                            <details className="legal-details">
+                              <summary style={{ cursor: 'pointer', color: 'var(--primary)', fontWeight: 600, outline: 'none' }}>Ver articulado íntegro (BOE)</summary>
+                              <p className="art-text" style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{art.textoLegal}</p>
+                            </details>
+                          </div>
+                        )}
+                        {!art.textoLegal && !art.textoResumen && (
+                          <p className="art-text">{art.texto}</p>
+                        )}
+                      </div>
                       <div className="art-footer">
                         {art.tags.map(tag => <span key={tag} className="art-tag">#{tag}</span>)}
                         {art.boeUrl && <a href={art.boeUrl} className="art-boe-link" target="_blank" rel="noreferrer">{t('common.viewInBoe')}</a>}
@@ -1095,7 +1112,26 @@ const BuscadorPage = () => {
                         📥 PDF
                       </button>
                     </div>
-                    <p className="art-text">{res.articulo.texto}</p>
+                    <div className="art-content-dual">
+                      {res.articulo.textoResumen && (
+                        <div className="art-resumen-box" style={{ marginBottom: '0.5rem', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--secondary)' }}>
+                          <p className="art-text" style={{ margin: 0 }}>{res.articulo.textoResumen}</p>
+                        </div>
+                      )}
+                      {res.articulo.textoLegal && (
+                        <div className="art-legal-box" style={{ padding: '0.75rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
+                          <details className="legal-details">
+                            <summary style={{ cursor: 'pointer', color: 'var(--primary)', fontWeight: 600, outline: 'none', fontSize: '0.9rem' }}>Ver articulado íntegro (BOE)</summary>
+                            <p className="art-text" style={{ marginTop: '0.75rem', fontStyle: 'italic', opacity: 0.9 }}>
+                              {res.articulo.textoLegal.length > 600 ? res.articulo.textoLegal.slice(0, 600) + '...' : res.articulo.textoLegal}
+                            </p>
+                          </details>
+                        </div>
+                      )}
+                      {!res.articulo.textoLegal && !res.articulo.textoResumen && (
+                        <p className="art-text">{res.articulo.texto}</p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1423,9 +1459,10 @@ function buildDemoResponse(query: string, t: (key: string, params?: Record<strin
   if (results.articulos.length > 0) {
     lineas.push(t('ai.relevantArticles'));
     results.articulos.slice(0, 5).forEach((res) => {
-      const extracto = res.articulo.texto.length > 300
-        ? res.articulo.texto.slice(0, 300) + '…'
-        : res.articulo.texto;
+      const content = res.articulo.textoLegal || res.articulo.textoResumen || res.articulo.texto || '';
+      const extracto = content.length > 300
+        ? content.slice(0, 300) + '…'
+        : content;
       lineas.push(`▸ [${res.ley.codigo} · Art. ${res.articulo.numero}] **${res.articulo.titulo}**\n${extracto}\n`);
     });
   }
@@ -1964,7 +2001,11 @@ const AuditoriaPage = () => {
                           {isExpanded ? '▲' : '▼'}
                         </button>
                         {isExpanded && (
-                          <p className="auditoria-item-text fade-in">{art.texto}</p>
+                          <div className="auditoria-item-text fade-in">
+                            {art.textoResumen && <p style={{ marginBottom: '0.5rem' }}>{art.textoResumen}</p>}
+                            {art.textoLegal && <p style={{ fontStyle: 'italic', opacity: 0.9, fontSize: '0.9em' }}>{art.textoLegal}</p>}
+                            {!art.textoLegal && !art.textoResumen && <p>{art.texto}</p>}
+                          </div>
                         )}
                       </div>
                     );

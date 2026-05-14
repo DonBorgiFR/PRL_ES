@@ -269,7 +269,7 @@ function scoreArticulo(
   hintedLeyes: string[],
 ) {
   const title = normalizeText(articulo.titulo);
-  const text = normalizeText(articulo.texto);
+  const text = normalizeText([articulo.textoLegal, articulo.textoResumen, articulo.texto].filter(Boolean).join(' '));
   const tags = articulo.tags.map((tag) => normalizeText(tag));
 
   let score = 0;
@@ -414,9 +414,10 @@ export function searchAll(query: string, filtros?: { leyId?: string; nivel?: str
 export function buildNormativeContext(query: string, maxArticles = 6, maxFichas = 3) {
   const results = searchAll(query);
   const articleLines = results.articulos.slice(0, maxArticles).map((res) => {
-    const text = res.articulo.texto.length > 420
-      ? `${res.articulo.texto.slice(0, 420)}...`
-      : res.articulo.texto;
+    const content = res.articulo.textoLegal || res.articulo.textoResumen || res.articulo.texto || '';
+    const text = content.length > 420
+      ? `${content.slice(0, 420)}...`
+      : content;
     return `- [${res.ley.codigo} · Art. ${res.articulo.numero}] ${res.articulo.titulo}: ${text}`;
   });
 
