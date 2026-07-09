@@ -252,7 +252,7 @@ export const rolesData: RoleObligation[] = [
   {
     id: 'directora-centre',
     shortLabel: 'Directora de Centre',
-    label: 'Directora de Centre / Mando Intermedio (Incoop)',
+    label: 'Directora de Centre / Mando Intermedio (Cooperativa)',
     icon: '👩‍💼',
     accentColor: '#10b981',
     surfaceColor: 'rgba(16, 185, 129, 0.18)',
@@ -287,7 +287,7 @@ export const rolesData: RoleObligation[] = [
   {
     id: 'personal-aula-cuidado',
     shortLabel: 'Personal Aula/Cura',
-    label: 'Personal de Aula y Cuidado Directo (Incoop)',
+    label: 'Personal de Aula y Cuidado Directo (Cooperativa)',
     icon: '🧸',
     accentColor: '#f59e0b',
     surfaceColor: 'rgba(245, 158, 11, 0.18)',
@@ -323,7 +323,7 @@ export const rolesData: RoleObligation[] = [
   {
     id: 'area-persones',
     shortLabel: 'Àrea de Persones',
-    label: 'Responsable del Àrea de Persones / RH (Incoop)',
+    label: 'Responsable del Àrea de Persones / RH (Cooperativa)',
     icon: '👥',
     accentColor: '#ec4899',
     surfaceColor: 'rgba(236, 72, 153, 0.18)',
@@ -358,7 +358,7 @@ export const rolesData: RoleObligation[] = [
   {
     id: 'control-gestio-pmo',
     shortLabel: 'Control de Gestió / PMO',
-    label: 'Control de Gestió, Finanzas y Licitaciones (Incoop)',
+    label: 'Control de Gestió, Finanzas y Licitaciones (Cooperativa)',
     icon: '📊',
     accentColor: '#3b82f6',
     surfaceColor: 'rgba(59, 130, 246, 0.18)',

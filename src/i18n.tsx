@@ -39,16 +39,16 @@ const translations: Record<Language, TranslationTree> = {
       selector: 'Idioma',
       aria: 'Selector de idioma',
     },
-    incoop: {
-      sidebar: 'Cooperativa Incoop',
-      title: 'Panel Operativo Incoop',
+    cooperativa: {
+      sidebar: 'Módulo Cooperativo',
+      title: 'Módulo Cooperativo de PRL',
       subtitle: 'Gestión preventiva para servicios a personas y tercer sector',
       tabs: {
         auditoria: 'Auditoría',
         roles: 'Roles de Cooperativa',
         fichas: 'Fichas de Cuidado',
       },
-      rolesDesc: 'Visualiza las responsabilidades y riesgos específicos de la estructura organizativa de Incoop.',
+      rolesDesc: 'Visualiza las responsabilidades y riesgos específicos de la estructura organizativa de la cooperativa.',
       fichasDesc: 'Fichas de capacitación enfocadas al cuidado social, ergonomía y bienestar emocional.'
     },
     nav: {
@@ -306,16 +306,16 @@ const translations: Record<Language, TranslationTree> = {
   ca: {
     app: { title: 'PRL Espanya', subtitle: 'Prevenció · Compliment · Operació' },
     language: { selector: 'Idioma', aria: 'Selector d\'idioma' },
-    incoop: {
-      sidebar: 'Espai Incoop',
-      title: 'Tauler Operatiu Incoop',
+    cooperativa: {
+      sidebar: 'Espai Cooperatiu',
+      title: 'Tauler Cooperatiu de PRL',
       subtitle: 'Gestió preventiva per a serveis a persones i tercer sector',
       tabs: {
         auditoria: 'Auditoria',
         roles: 'Rols de Cooperativa',
         fichas: 'Fitxes de Cura',
       },
-      rolesDesc: 'Visualitza les responsabilitats i riscos específics de l\'estructura organitzativa d\'Incoop.',
+      rolesDesc: 'Visualitza les responsabilitats i riscos específics de l\'estructura organitzativa de la cooperativa.',
       fichasDesc: 'Fitxes de capacitació enfocades a la cura social, ergonomia i benestar emocional.'
     },
     nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inici', roles: 'Mapes per Rol', search: 'Cercador Intel·ligent', references: 'Referències Creuades', training: 'Fitxes de Formació', audit: 'Auditoria Interactiva', ai: 'Consultor IA Local', docs: 'Generador de Documents' },

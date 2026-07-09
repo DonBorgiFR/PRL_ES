@@ -902,7 +902,7 @@ export const fichas: FichaCapacitacion[] = [
     titulo: 'Prevención del Burnout y Fatiga por Compasión',
     nivel: 'avanzado',
     duracion: '5-10 min',
-    colectivo: 'Personal de atención directa, coordinadores y mandos de Incoop',
+    colectivo: 'Personal de atención directa, coordinadores y mandos de la cooperativa',
     icono: '🧠',
     objetivo: 'Identificar y prevenir los factores de riesgo psicosocial asociados al cuidado de personas vulnerables y la gestión de la dependencia.',
     contenido: [

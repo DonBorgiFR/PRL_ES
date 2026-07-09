@@ -1,4 +1,4 @@
-export interface IncoopChecklistItem {
+export interface CooperativaChecklistItem {
   id: string;
   pregunta: string;
   preguntaCa: string;
@@ -8,7 +8,7 @@ export interface IncoopChecklistItem {
   articuloId: string;
 }
 
-export interface IncoopService {
+export interface CooperativaService {
   id: string;
   nombre: string;
   nombreCa: string;
@@ -16,10 +16,10 @@ export interface IncoopService {
   desc: string;
   descCa: string;
   color: string;
-  items: IncoopChecklistItem[];
+  items: CooperativaChecklistItem[];
 }
 
-export const incoopServices: IncoopService[] = [
+export const cooperativaServices: CooperativaService[] = [
   {
     id: 'escola-bressol',
     nombre: 'Escoles Bressol',
@@ -53,7 +53,7 @@ export const incoopServices: IncoopService[] = [
         preguntaCa: '¿S\'imparteix formació en cura foniàtrica i control del soroll ambiental per prevenir nòduls vocals (malaltia professional)?',
         justificacion: 'RD 1299/2006 - Cuadro de Enfermedades Profesionales en la Seguridad Social.',
         justificacionCa: 'RD 1299/2006 - Quadre de Malalties Professionals a la Seguretat Social.',
-        leyId: 'lprl', // Dado que no hay ley directa cargada para rd1299, referenciamos LPRL
+        leyId: 'lprl',
         articuloId: 'lprl-art15'
       },
       {
@@ -162,7 +162,7 @@ export const incoopServices: IncoopService[] = [
       {
         id: 'gg-04',
         pregunta: '¿Los pasillos, accesos y zonas de baño disponen de pavimentos antideslizantes, asideros adecuados y libres de obstáculos?',
-        preguntaCa: '¿Els passadissos, accessos i zones de bany disposen de paviments antideslliscants, agafadors adequats i lliures d\'obstacles?',
+        preguntaCa: '¿Els passadissos, accessos i zones de bany disposen d\'paviments antideslliscants, agafadors adequats i lliures d\'obstacles?',
         justificacion: 'RD 486/1997 - Condiciones de seguridad en los pavimentos, rampas y escaleras.',
         justificacionCa: 'RD 486/1997 - Condicions de seguretat als paviments, rampa i escales.',
         leyId: 'rd486',

@@ -72,9 +72,9 @@ Guías de obligaciones para: Técnico PRL, Mando Intermedio, Trabajador, RRHH, A
 
 Escribe tu consulta y el sistema busca en la base normativa interna devolviendo los artículos y fichas más relevantes. Botón copiar, historial persistente y presets por categoría. Sin necesidad de IA externa.
 
-### 🤝 Módulo Cooperativo (Espai Incoop)
+### 🤝 Módulo Cooperativo
 
-Una sección dedicada exclusivamente a la operativa y blindaje preventivo de la cooperativa **Incoop, SCCL**:
+Una sección dedicada exclusivamente a la operativa y blindaje preventivo de las cooperativas del tercer sector y servicios a personas:
 - **Auditorías por Servicio:** Checklists interactivos de cumplimiento específicos para *Escoles Bressol*, *Lleure Educatiu* y *Gent Gran / Dependència*, cruzando normativas de Reales Decretos y Convenios Colectivos del sector con persistencia local (`localStorage`) y barra de progreso.
 - **Rols de Cooperativa:** Mapas de obligaciones, riesgos y fichas recomendadas específicos para perfiles como *Directora de Centre* (Cap d'emergència), *Personal d'Aula i Cura Directa*, *Àrea de Persones (RH)* y *Control de Gestió / PMO*.
 - **Fitxes de Cura:** Fichas formativas adaptadas a las particularidades de la cooperativa: prevención foniátrica en aula, ergonomía infantil, movilización de dependientes y prevención psicosocial/burnout.
@@ -129,7 +129,7 @@ PRL-Espana/
 │       ├── referencias.ts   ← 23 referencias cruzadas
 │       ├── rolesData.ts     ← mapas por rol profesional (incl. 4 cooperativos)
 │       ├── documentosData.ts
-│       └── incoopData.ts    ← checklists específicos de cooperativa 🆕
+│       └── cooperativaData.ts    ← checklists específicos de cooperativa 🆕
 ├── .agent/
 │   └── workflows/
 │       ├── add_ficha.md     ← cómo añadir una ficha nueva
@@ -140,7 +140,7 @@ PRL-Espana/
 │       └── deploy.yml       ← CI/CD → GitHub Pages
 ├── docs/
 │   ├── prl-industria/       ← documentación operativa (flujos, plantillas)
-│   ├── contexto_incoop_prl.md ← contexto para adaptación cooperativa
+│   ├── contexto_cooperativa_prl.md ← contexto para adaptación cooperativa
 │   ├── llm_integration.md   ← guía de integración LLM / Ollama
 │   ├── potencial_explotaciones.md ← notas sobre futuros desarrollos
 │   └── PENDIENTES_NORMATIVA.txt ← notas de normativa pendiente
@@ -213,5 +213,5 @@ Código: uso libre para fines formativos y profesionales en entornos PRL.
 | 5 — Ampliación normativa (RD 614, 1215, 773) | ✅ Completado |
 | 6 — Repo espejo + CI/CD | ✅ Completado |
 | 7 — Rediseño Estratégico y Concienciación | ✅ Completado |
-| 8 — Módulo Cooperativo (Fase 1-4: Fichas, Roles y Auditorías Incoop) | ✅ Completado |
+| 8 — Módulo Cooperativo (Fase 1-4: Fichas, Roles y Auditorías Cooperativas) | ✅ Completado |
 | 9 — Informes PDF para Licitaciones Públicas (Fase 5) | ⏸️ En Pausa |

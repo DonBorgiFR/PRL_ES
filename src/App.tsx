@@ -18,7 +18,7 @@ import {
 } from './data';
 import { LANGUAGE_OPTIONS, useLanguage, type Language } from './i18n';
 import { localizeFicha, localizeReference, localizeRole } from './data/localizedContent';
-import { incoopServices } from './data/incoopData';
+import { cooperativaServices } from './data/cooperativaData';
 
 const downloadToPDF = async (elementId: string, filename: string) => {
   const element = document.getElementById(elementId);
@@ -429,7 +429,7 @@ const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references
   }
 };
 
-const IncoopIcon = ({ name, size = '1.2em' }: { name: 'audit' | 'roles' | 'fichas' | 'bressol' | 'lleure' | 'gent-gran' | 'ficha-11' | 'ficha-12' | 'ficha-13'; size?: string }) => {
+const CooperativaIcon = ({ name, size = '1.2em' }: { name: 'audit' | 'roles' | 'fichas' | 'bressol' | 'lleure' | 'gent-gran' | 'ficha-11' | 'ficha-12' | 'ficha-13'; size?: string }) => {
   const style = { width: size, height: size, stroke: 'currentColor' };
   switch (name) {
     case 'audit':
@@ -536,7 +536,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         </Link>
         <Link href="/cooperativa" className={`nav-item ${location === '/cooperativa' ? 'active' : ''}`} id="link-nav-cooperativa" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="cooperativa" /></span>
-            <span className="nav-item-text">{t('incoop.sidebar')}</span>
+            <span className="nav-item-text">{t('cooperativa.sidebar')}</span>
         </Link>
         <Link href="/mapa-roles" className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="roles" /></span>
@@ -2446,7 +2446,7 @@ const DocumentosPage = () => {
 };
 
 // ============================================================
-// MÓDULO COOPERATIVA INCOOP
+// MÓDULO COOPERATIVA
 // ============================================================
 
 const CooperativaPage = () => {
@@ -2457,12 +2457,12 @@ const CooperativaPage = () => {
 
   // 1. Lógica de Auditorías con Persistencia en LocalStorage
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(() => {
-    const saved = localStorage.getItem('prl_incoop_checked_v1');
+    const saved = localStorage.getItem('prl_cooperativa_checked_v1');
     return saved ? JSON.parse(saved) : {};
   });
 
   useEffect(() => {
-    localStorage.setItem('prl_incoop_checked_v1', JSON.stringify(checkedItems));
+    localStorage.setItem('prl_cooperativa_checked_v1', JSON.stringify(checkedItems));
   }, [checkedItems]);
 
   const toggleItem = (itemId: string) => {
@@ -2473,7 +2473,7 @@ const CooperativaPage = () => {
   };
 
   const resetChecklist = (serviceId: string) => {
-    const service = incoopServices.find(s => s.id === serviceId);
+    const service = cooperativaServices.find(s => s.id === serviceId);
     if (!service) return;
 
     setCheckedItems(prev => {
@@ -2486,31 +2486,31 @@ const CooperativaPage = () => {
   };
 
   const getServiceProgress = (serviceId: string) => {
-    const service = incoopServices.find(s => s.id === serviceId);
+    const service = cooperativaServices.find(s => s.id === serviceId);
     if (!service || service.items.length === 0) return 0;
     const checkedCount = service.items.filter(item => checkedItems[item.id]).length;
     return Math.round((checkedCount / service.items.length) * 100);
   };
 
-  // 2. Roles de Incoop filtrados y localizados
-  const incoopRoleIds = ['directora-centre', 'personal-aula-cuidado', 'area-persones', 'control-gestio-pmo'];
-  const incoopRoles = useMemo(() => {
+  // 2. Roles de la Cooperativa filtrados y localizados
+  const cooperativaRoleIds = ['directora-centre', 'personal-aula-cuidado', 'area-persones', 'control-gestio-pmo'];
+  const cooperativaRoles = useMemo(() => {
     return rolesData
-      .filter(r => incoopRoleIds.includes(r.id))
+      .filter(r => cooperativaRoleIds.includes(r.id))
       .map(r => localizeRole(r, language));
   }, [language]);
 
-  const activeRole = incoopRoles.find(r => r.id === selectedRole);
+  const activeRole = cooperativaRoles.find(r => r.id === selectedRole);
 
-  // 3. Fichas de Incoop filtradas y localizadas
-  const incoopFichaIds = ['ficha-11', 'ficha-12', 'ficha-13'];
-  const incoopFichas = useMemo(() => {
+  // 3. Fichas de la Cooperativa filtradas y localizadas
+  const cooperativaFichaIds = ['ficha-11', 'ficha-12', 'ficha-13'];
+  const cooperativaFichas = useMemo(() => {
     return fichas
-      .filter(f => incoopFichaIds.includes(f.id))
+      .filter(f => cooperativaFichaIds.includes(f.id))
       .map(f => localizeFicha(f, language));
   }, [language]);
 
-  const activeService = incoopServices.find(s => s.id === selectedService);
+  const activeService = cooperativaServices.find(s => s.id === selectedService);
   const serviceProgress = activeService ? getServiceProgress(activeService.id) : 0;
   const serviceName = activeService ? (language === 'ca' ? activeService.nombreCa : activeService.nombre) : '';
   const serviceDesc = activeService ? (language === 'ca' ? activeService.descCa : activeService.desc) : '';
@@ -2532,8 +2532,8 @@ const CooperativaPage = () => {
             <SidebarIcon name="cooperativa" />
           </div>
           <div>
-            <h2 style={{ margin: 0, color: '#34d399' }}>{t('incoop.title')}</h2>
-            <p style={{ margin: '4px 0 0 0', opacity: 0.9 }}>{t('incoop.subtitle')}</p>
+            <h2 style={{ margin: 0, color: '#34d399' }}>{t('cooperativa.title')}</h2>
+            <p style={{ margin: '4px 0 0 0', opacity: 0.9 }}>{t('cooperativa.subtitle')}</p>
           </div>
         </div>
       </header>
@@ -2557,8 +2557,8 @@ const CooperativaPage = () => {
             gap: '8px'
           }}
         >
-          <IncoopIcon name="audit" />
-          <span>{t('incoop.tabs.auditoria')}</span>
+          <CooperativaIcon name="audit" />
+          <span>{t('cooperativa.tabs.auditoria')}</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'roles' ? 'active' : ''}`}
@@ -2577,8 +2577,8 @@ const CooperativaPage = () => {
             gap: '8px'
           }}
         >
-          <IncoopIcon name="roles" />
-          <span>{t('incoop.tabs.roles')}</span>
+          <CooperativaIcon name="roles" />
+          <span>{t('cooperativa.tabs.roles')}</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'fichas' ? 'active' : ''}`}
@@ -2597,8 +2597,8 @@ const CooperativaPage = () => {
             gap: '8px'
           }}
         >
-          <IncoopIcon name="fichas" />
-          <span>{t('incoop.tabs.fichas')}</span>
+          <CooperativaIcon name="fichas" />
+          <span>{t('cooperativa.tabs.fichas')}</span>
         </button>
       </div>
 
@@ -2612,7 +2612,7 @@ const CooperativaPage = () => {
               </div>
 
               <div className="auditoria-sectores-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', display: 'grid', gap: '16px' }}>
-                {incoopServices.map(s => {
+                {cooperativaServices.map(s => {
                   const progress = getServiceProgress(s.id);
                   const nombre = language === 'ca' ? s.nombreCa : s.nombre;
                   const desc = language === 'ca' ? s.descCa : s.desc;
@@ -2638,7 +2638,7 @@ const CooperativaPage = () => {
                     >
                       <div>
                         <div style={{ color: s.color, display: 'block', marginBottom: '8px' }}>
-                          <IncoopIcon name={iconName} size="2rem" />
+                          <CooperativaIcon name={iconName} size="2rem" />
                         </div>
                         <strong style={{ fontSize: '1.1rem', display: 'block', marginBottom: '4px' }}>{nombre}</strong>
                         <p style={{ fontSize: '0.85rem', opacity: 0.8, margin: '0 0 16px 0', lineHeight: '1.4' }}>{desc}</p>
@@ -2681,7 +2681,7 @@ const CooperativaPage = () => {
                 <div>
                   <h3 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
                     <span style={{ color: activeService?.color, display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
-                      <IncoopIcon name={activeService?.id === 'escola-bressol' ? 'bressol' : (activeService?.id === 'lleure' ? 'lleure' : 'gent-gran')} size="1.6rem" />
+                      <CooperativaIcon name={activeService?.id === 'escola-bressol' ? 'bressol' : (activeService?.id === 'lleure' ? 'lleure' : 'gent-gran')} size="1.6rem" />
                     </span>
                     {serviceName}
                   </h3>
@@ -2803,12 +2803,12 @@ const CooperativaPage = () => {
         <div className="fade-in">
           {!selectedRole ? (
             <div className="roles-grid fade-in">
-              {incoopRoles.map(r => (
+              {cooperativaRoles.map(r => (
                 <div
                   key={r.id}
                   className="role-card"
                   onClick={() => setSelectedRole(r.id)}
-                  id={`incoop-role-${r.id}`}
+                  id={`cooperativa-role-${r.id}`}
                   style={{ '--role-accent': r.accentColor, '--role-surface': r.surfaceColor } as React.CSSProperties}
                 >
                   <div className="role-card-top">
@@ -2886,7 +2886,7 @@ const CooperativaPage = () => {
                           <Link key={lf.id} href="/fichas">
                             <a className="role-ficha-card">
                               <span className="ficha-icon-small" style={{ color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <IncoopIcon name={fichaId as any} size="1.4rem" />
+                                <CooperativaIcon name={fichaId as any} size="1.4rem" />
                               </span>
                               <span style={{ flex: 1 }}>{lf.titulo}</span>
                               <span className={`ficha-level-badge ${lf.nivel}`} style={{ position: 'static', margin: 0 }}>
@@ -2909,11 +2909,11 @@ const CooperativaPage = () => {
       {activeTab === 'fichas' && (
         <div className="fade-in">
           <div className="page-header" style={{ marginBottom: '20px', border: 'none', padding: 0, background: 'none' }}>
-            <p>{t('incoop.fichasDesc')}</p>
+            <p>{t('cooperativa.fichasDesc')}</p>
           </div>
           
           <div className="auditoria-sectores-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
-            {incoopFichas.map(lf => (
+            {cooperativaFichas.map(lf => (
               <div 
                 key={lf.id} 
                 className="auditoria-sector-card"
@@ -2930,7 +2930,7 @@ const CooperativaPage = () => {
               >
                 <div>
                   <div style={{ color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24', display: 'block', marginBottom: '8px' }}>
-                    <IncoopIcon name={lf.id as any} size="2.5rem" />
+                    <CooperativaIcon name={lf.id as any} size="2.5rem" />
                   </div>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                     <span className="role-card-badge" style={{ background: lf.nivel === 'avanzado' ? 'rgba(248,113,113,0.15)' : 'rgba(251,191,36,0.15)', color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24' }}>

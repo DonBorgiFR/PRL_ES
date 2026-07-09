@@ -176,7 +176,7 @@ const fichaOverrides: Record<NonSpanishLanguage, Record<string, FichaOverride>> 
     },
     'ficha-13': {
       titulo: 'Prevenció del Burnout i Fatiga per Compassió',
-      colectivo: 'Personal d\'atenció directa, coordinadors i comandaments d\'Incoop',
+      colectivo: 'Personal d\'atenció directa, coordinadors i comandaments de la cooperativa',
       objetivo: 'Identificar i prevenir els factors de risc psicosocial associats a la cura de persones vulnerables i la gestió de la dependència.',
       contenido: [
         'Definició i símptomes de la Síndrome de Burnout i la fatiga per compassió.',
@@ -585,7 +585,7 @@ const roleOverrides: Record<NonSpanishLanguage, Record<string, RoleTextOverride>
     },
     'directora-centre': {
       shortLabel: 'Directora de Centre',
-      label: 'Directora de Centre / Comandament Intermedi (Incoop)',
+      label: 'Directora de Centre / Comandament Intermedi (Cooperativa)',
       description: 'Comandament intermedi responsable del centre (Bressol, Casal o equipament). Assumeix la prefectura d\'emergències (Cap d\'emergència) i la CAE local.',
       obligations: [
         { title: 'Cap d\'emergència i Autoprotecció', description: 'Actuar com a responsable i Cap d\'Emergències del centre, custodiant i implementant el Pla d\'Emergències i simulacres.' },
@@ -600,7 +600,7 @@ const roleOverrides: Record<NonSpanishLanguage, Record<string, RoleTextOverride>
     },
     'personal-aula-cuidado': {
       shortLabel: 'Personal Aula/Cura',
-      label: 'Personal d\'Aula i Cura Directa (Incoop)',
+      label: 'Personal d\'Aula i Cura Directa (Cooperativa)',
       description: 'Educadores, cuidadores i dinamitzadors. Exposats a riscos ergonòmics (mobiliari baix, infants), biològics (fluids), foniàtrics (veu) i estacionalitat.',
       obligations: [
         { title: 'Higiene Postural i Veu', description: 'Mantenir postures ergonòmiques en atendre infants i aplicar la cura de la veu per prevenir nòduls vocals (malaltia professional).' },
@@ -616,11 +616,11 @@ const roleOverrides: Record<NonSpanishLanguage, Record<string, RoleTextOverride>
     },
     'area-persones': {
       shortLabel: 'Àrea de Persones',
-      label: 'Responsable de l\'Àrea de Persones / RH (Incoop)',
+      label: 'Responsable de l\'Àrea de Persones / RH (Cooperativa)',
       description: 'Àrea responsable de la salut laboral de la plantilla, el registre formatiu, el compliment psicosocial en mediadors i el règim de socis.',
       obligations: [
         { title: 'Vigilància de la Salut Específica', description: 'Controlar exàmens mèdics anuals. A Lleure es gestiona l\'examen voluntari per riscos i es garanteixen revisions urològiques i mamografies preventives anticipades.' },
-        { title: 'Règim Disciplinari Cooperatiu', description: 'Gestionar el règim sancionador i disciplinari específic per als socis treballadors d\'acord amb els Estatuts i Reglament de Règim Intern.' },
+        { title: 'Règim Disciplinari Cooperatiu', description: 'Gestionar el règim sancionador i disciplinari específic per als socis treballadors d\'acord amb els Estatuts i Reglament de Régimen Intern.' },
         { title: 'Prevenció Psicosocial d\'Equips', description: 'Avaluar riscos psicosocials (RSP Art. 3) i proveir suport emocional davant del desgast i burnout en mediació comunitària.' }
       ],
       risks: [
@@ -631,7 +631,7 @@ const roleOverrides: Record<NonSpanishLanguage, Record<string, RoleTextOverride>
     },
     'control-gestio-pmo': {
       shortLabel: 'Control de Gestió / PMO',
-      label: 'Control de Gestió, Finances i Licitacions (Incoop)',
+      label: 'Control de Gestió, Finances i Licitacions (Cooperativa)',
       description: 'Supervisió de costos preventius, justificació de PRL en plecs públics segons la LCSP i control de pòlisses preventives.',
       obligations: [
         { title: 'Integració en Licitacions (LCSP)', description: 'Assegurar el desglossament obligatori de costos de PRL i de conveni (Lleure, Acció Social) en els pressupostos d\'ofertes públiques.' },
