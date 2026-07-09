@@ -248,5 +248,145 @@ export const rolesData: RoleObligation[] = [
       'Contratación de personal sin la formación específica previa.',
       'Responsabilidad legal por falta de coordinación con el SPA o contratas.'
     ]
+  },
+  {
+    id: 'directora-centre',
+    shortLabel: 'Directora de Centre',
+    label: 'Directora de Centre / Mando Intermedio (Incoop)',
+    icon: '👩‍💼',
+    accentColor: '#10b981',
+    surfaceColor: 'rgba(16, 185, 129, 0.18)',
+    description: 'Mando intermedio responsable del centro (Bressol, Casal o equipamiento). Asume la jefatura de emergencias (Cap d\'emergència) y la CAE local.',
+    obligations: [
+      {
+        title: 'Cap d\'emergència y Autoprotección',
+        description: 'Actuar como responsable y Jefe de Emergencias del centro, custodiando e implementando el Plan de Emergencias y simulacros.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art20'
+      },
+      {
+        title: 'Coordinación CAE Local',
+        description: 'Coordinar las actividades de personal externo (mantenimiento, obras) en locales municipales para evitar riesgos y aislar a los menores.',
+        leyId: 'cae',
+        articuloId: 'cae-art4'
+      },
+      {
+        title: 'Formación de Personal (Art. 19)',
+        description: 'Garantizar que todo el personal de nueva incorporación (incluidos eventuales por estacionalidad) realice la inducción de seguridad.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art19'
+      }
+    ],
+    fichas: ['ficha-05', 'ficha-07', 'ficha-11'],
+    risks: [
+      'Descoordinación en simulacros o incidentes en instalaciones ajenas de los Ayuntamientos.',
+      'Falta de control en la CAE local con contratas concurrentes.',
+      'Incorporación de personal temporal sin la debida inducción formativa inicial.'
+    ]
+  },
+  {
+    id: 'personal-aula-cuidado',
+    shortLabel: 'Personal Aula/Cura',
+    label: 'Personal de Aula y Cuidado Directo (Incoop)',
+    icon: '🧸',
+    accentColor: '#f59e0b',
+    surfaceColor: 'rgba(245, 158, 11, 0.18)',
+    description: 'Educadoras, cuidadoras y dinamizadores. Expuestos a riesgos ergonómicos (mobiliario bajo, niños), biológicos (fluidos), foniátricos (voz) y estacionalidad.',
+    obligations: [
+      {
+        title: 'Higiene Postural y Voz',
+        description: 'Mantener posturas ergonómicas al atender a niños y aplicar el cuidado de la voz para prevenir nódulos vocales (enfermedad profesional).',
+        leyId: 'lprl',
+        articuloId: 'lprl-art15'
+      },
+      {
+        title: 'Calzado Antideslizante',
+        description: 'Uso obligatorio del calzado técnico y antideslizante entregado por la cooperativa para evitar resbalones y caídas.',
+        leyId: 'rd773',
+        articuloId: 'rd773-art5'
+      },
+      {
+        title: 'Notificación de Incidencias',
+        description: 'Informar de inmediato a la dirección del centro de cualquier riesgo en las instalaciones, pavimentos húmedos o riesgo biológico en aula.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art29'
+      }
+    ],
+    fichas: ['ficha-01', 'ficha-11', 'ficha-12'],
+    risks: [
+      'Lesiones musculoesqueléticas por sobreesfuerzos lumbares en transferencias y cuidado.',
+      'Disfonías crónicas y nódulos en cuerdas vocales por sobreesfuerzo de la voz en aula.',
+      'Contagios biológicos por contacto directo con fluidos infantiles en guarderías.',
+      'Caídas al mismo nivel por falta de orden (juguetes) o pavimentos húmedos.'
+    ]
+  },
+  {
+    id: 'area-persones',
+    shortLabel: 'Àrea de Persones',
+    label: 'Responsable del Àrea de Persones / RH (Incoop)',
+    icon: '👥',
+    accentColor: '#ec4899',
+    surfaceColor: 'rgba(236, 72, 153, 0.18)',
+    description: 'Àrea responsable de la salud laboral de la plantilla, el registro formativo, el cumplimiento psicosocial en mediadores y el régimen de socios.',
+    obligations: [
+      {
+        title: 'Vigilancia de la Salud Específica',
+        description: 'Controlar exámenes médicos anuales. En Lleure se gestiona el examen voluntario por riesgos y se garantizan revisiones urológicas y mamografías preventivas anticipadas.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art22'
+      },
+      {
+        title: 'Régimen Disciplinario Cooperativo',
+        description: 'Gestionar el régimen sancionador y disciplinario específico para los socios trabajadores conforme a los Estatutos y Reglamento de Régimen Interno.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art42'
+      },
+      {
+        title: 'Prevención Psicosocial de Equipos',
+        description: 'Evaluar riesgos psicosociales (RSP Art. 3) y proveer soporte emocional frente al desgaste y burnout en mediación comunitaria.',
+        leyId: 'rsp',
+        articuloId: 'rsp-art3'
+      }
+    ],
+    fichas: ['ficha-05', 'ficha-06', 'ficha-09', 'ficha-13'],
+    risks: [
+      'Falta de archivo o justificación de entrega de EPIs y calzado.',
+      'Caducidad de revisiones médicas en personal con exposición biológica en bressol.',
+      'Casos de Burnout no gestionados en servicios de intervención social y mediación.'
+    ]
+  },
+  {
+    id: 'control-gestio-pmo',
+    shortLabel: 'Control de Gestió / PMO',
+    label: 'Control de Gestió, Finanzas y Licitaciones (Incoop)',
+    icon: '📊',
+    accentColor: '#3b82f6',
+    surfaceColor: 'rgba(59, 130, 246, 0.18)',
+    description: 'Supervisión de costes preventivos, justificación de PRL en pliegos públicos según la LCSP y control de pólizas preventivas.',
+    obligations: [
+      {
+        title: 'Integración en Licitaciones (LCSP)',
+        description: 'Asegurar el desglose obligatorio de costes de PRL y de convenio (Lleure, Acción Social) en los presupuestos de ofertas públicas.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art14'
+      },
+      {
+        title: 'Seguros y Responsabilidad Civil',
+        description: 'Gestionar las pólizas de RC y coberturas correspondientes a socios trabajadores y personal contratado ante incidentes.',
+        leyId: 'lprl',
+        articuloId: 'lprl-art42'
+      },
+      {
+        title: 'Coordinación con SPA y Auditoría',
+        description: 'Supervisar el coste y rendimiento del SPA contratado y verificar la idoneidad del sistema preventivo para justificar pliegos.',
+        leyId: 'rsp',
+        articuloId: 'rsp-art10'
+      }
+    ],
+    fichas: ['ficha-05', 'ficha-07', 'ficha-10'],
+    risks: [
+      'Infradotación presupuestaria en ofertas de licitación pública que impida cumplir los estándares mínimos de PRL.',
+      'Ausencia de cobertura económica o desajustes en seguros de RC ante incidentes graves en centros municipales.'
+    ]
   }
 ];

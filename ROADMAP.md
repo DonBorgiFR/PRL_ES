@@ -106,6 +106,28 @@ Estado: 24 de marzo de 2026. Última actualización: 23:10.
 - [x] Blindaje Normativo: visualización del volumen de datos (artículos x fichas).
 - [x] Traducción completa (ES, CA, EU, GL) del nuevo sistema de comunicación.
 
+### Bloque 8 — Módulo Cooperativo (Incoop)
+- [x] Crear e integrar las Fitxes de Cura específicas en catalán/castellano (Ergonomía, Voz y Riesgos Biológicos, Movilización dependientes, Burnout).
+- [x] Registrar e integrar los 4 perfiles y obligaciones en el mapa de roles (Directora, Cuidado, Àrea de Persones, PMO).
+- [x] Crear el enrutado a `/cooperativa` y enlazado en la sección principal del sidebar con iconografía unificada lineal SVG.
+- [x] Diseñar el selector de servicios de auditoría (Bressol, Lleure, Gent Gran) con persistencia reactiva en localStorage, enlaces a artículos de ley, barra de cumplimiento y botón de reinicio.
+
+### Bloque 9 — Informes PDF para Licitaciones Públicas (Fase 5)
+- [ ] Incorporar membrete formal y logotipo simulado de Incoop.
+- [ ] Integrar los sellos de calidad **ISO 9001:2015** y **Balanç Social de la XES** (Xarxa d'Economia Solidària) como ventaja competitiva en licitaciones.
+- [ ] Exportación en formato tabular discriminando ítems verificados y pendientes, colorimetría según estado.
+- [ ] Soporte de firma de responsabilidad corporativa y marcas de validación.
+
+### Bloque 10 — Innovación y Participación: Buzón "EspaiTRES" (Fase 6)
+- [ ] Crear la pestaña de Participación en el Módulo Cooperativo.
+- [ ] Diseñar el formulario interactivo para que los trabajadores reporten riesgos/alertas rápidas (mobiliario roto, psicosocial, etc.) con guardado local.
+- [ ] Integrar la filosofía participativa y co-diseño colaborativo de soluciones del EspaiTRES.
+
+### Bloque 11 — Auditoría Societaria y Cláusula de Equiparación (Fase 7)
+- [ ] Añadir un micro-checklist de "Auditoría Societaria (RRI)" para el rol de Àrea de Persones (RH).
+- [ ] Diseñar las 4 preguntas de control que verifiquen que el Reglamento de Régimen Interno no vulnere los derechos indisponibles de prevención de riesgos.
+- [ ] Verificar el cumplimiento de la "cláusula de equiparación" para garantizar condiciones laborales equivalentes a las del convenio de sector.
+
 ---
 
 ## Convenciones de este archivo

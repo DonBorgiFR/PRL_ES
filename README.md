@@ -72,6 +72,13 @@ Guías de obligaciones para: Técnico PRL, Mando Intermedio, Trabajador, RRHH, A
 
 Escribe tu consulta y el sistema busca en la base normativa interna devolviendo los artículos y fichas más relevantes. Botón copiar, historial persistente y presets por categoría. Sin necesidad de IA externa.
 
+### 🤝 Módulo Cooperativo (Espai Incoop)
+
+Una sección dedicada exclusivamente a la operativa y blindaje preventivo de la cooperativa **Incoop, SCCL**:
+- **Auditorías por Servicio:** Checklists interactivos de cumplimiento específicos para *Escoles Bressol*, *Lleure Educatiu* y *Gent Gran / Dependència*, cruzando normativas de Reales Decretos y Convenios Colectivos del sector con persistencia local (`localStorage`) y barra de progreso.
+- **Rols de Cooperativa:** Mapas de obligaciones, riesgos y fichas recomendadas específicos para perfiles como *Directora de Centre* (Cap d'emergència), *Personal d'Aula i Cura Directa*, *Àrea de Persones (RH)* y *Control de Gestió / PMO*.
+- **Fitxes de Cura:** Fichas formativas adaptadas a las particularidades de la cooperativa: prevención foniátrica en aula, ergonomía infantil, movilización de dependientes y prevención psicosocial/burnout.
+
 ---
 
 ## 🖥️ Uso local (técnicos con perfil técnico)
@@ -115,13 +122,14 @@ PRL-Espana/
 │       ├── cae.ts           ← RD 171/2004
 │       ├── construccion.ts  ← RD 1627/1997
 │       ├── rd486.ts         ← RD 486/1997
-│       ├── rd614.ts         ← RD 614/2001 ✨ nuevo
-│       ├── rd1215.ts        ← RD 1215/1997 ✨ nuevo
-│       ├── rd773.ts         ← RD 773/1997 ✨ nuevo
-│       ├── fichas.ts        ← 10 fichas de capacitación
+│       ├── rd614.ts         ← RD 614/2001
+│       ├── rd1215.ts        ← RD 1215/1997
+│       ├── rd773.ts         ← RD 773/1997
+│       ├── fichas.ts        ← 13 fichas de capacitación (incl. 3 cooperativas)
 │       ├── referencias.ts   ← 23 referencias cruzadas
-│       ├── rolesData.ts     ← mapas por rol profesional
-│       └── documentosData.ts
+│       ├── rolesData.ts     ← mapas por rol profesional (incl. 4 cooperativos)
+│       ├── documentosData.ts
+│       └── incoopData.ts    ← checklists específicos de cooperativa 🆕
 ├── .agent/
 │   └── workflows/
 │       ├── add_ficha.md     ← cómo añadir una ficha nueva
@@ -131,7 +139,11 @@ PRL-Espana/
 │   └── workflows/
 │       └── deploy.yml       ← CI/CD → GitHub Pages
 ├── docs/
-│   └── prl-industria/       ← documentación operativa (flujos, plantillas)
+│   ├── prl-industria/       ← documentación operativa (flujos, plantillas)
+│   ├── contexto_incoop_prl.md ← contexto para adaptación cooperativa
+│   ├── llm_integration.md   ← guía de integración LLM / Ollama
+│   ├── potencial_explotaciones.md ← notas sobre futuros desarrollos
+│   └── PENDIENTES_NORMATIVA.txt ← notas de normativa pendiente
 └── ROADMAP.md               ← estado del proyecto por bloques
 ```
 
@@ -160,6 +172,12 @@ Sin frameworks CSS externos. Sin base de datos. Sin backend obligatorio.
 
 ---
 
+## 📓 Integración con NotebookLM (Experto Normativo)
+
+Este proyecto soporta el uso integrado de un cuaderno de **NotebookLM** ("Gestión de Riesgos Laborales y Convenio del Sector Educativo") como consultor experto. La IA local y el desarrollador interactúan de forma conjunta con las fuentes del convenio del sector educativo y normativa específica de Cataluña (ITC, ICSSL) cargadas en NotebookLM para resolver dudas de manera precisa sobre la aplicación práctica del marco legal en la cooperativa.
+
+---
+
 ## 🤖 Integración con IA real (opcional)
 
 El Consultor IA funciona en modo vista previa sin ningún backend.
@@ -184,7 +202,7 @@ Código: uso libre para fines formativos y profesionales en entornos PRL.
 
 ---
 
-## 📈 Estado del proyecto (Marzo 2026)
+## 📈 Estado del proyecto (Julio 2026)
 
 | Bloque | Estado |
 | :--- | :--- |
@@ -195,3 +213,5 @@ Código: uso libre para fines formativos y profesionales en entornos PRL.
 | 5 — Ampliación normativa (RD 614, 1215, 773) | ✅ Completado |
 | 6 — Repo espejo + CI/CD | ✅ Completado |
 | 7 — Rediseño Estratégico y Concienciación | ✅ Completado |
+| 8 — Módulo Cooperativo (Fase 1-4: Fichas, Roles y Auditorías Incoop) | ✅ Completado |
+| 9 — Informes PDF para Licitaciones Públicas (Fase 5) | ⏸️ En Pausa |

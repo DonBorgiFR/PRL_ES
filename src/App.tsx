@@ -18,6 +18,7 @@ import {
 } from './data';
 import { LANGUAGE_OPTIONS, useLanguage, type Language } from './i18n';
 import { localizeFicha, localizeReference, localizeRole } from './data/localizedContent';
+import { incoopServices } from './data/incoopData';
 
 const downloadToPDF = async (elementId: string, filename: string) => {
   const element = document.getElementById(elementId);
@@ -318,6 +319,34 @@ const RoleProfileIcon = ({ roleId }: { roleId: string }) => {
           <path d="M12 8.5v4.5M9.75 10.75H14.25" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
         </svg>
       );
+    case 'directora-centre':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 4.75 18.25 7.4v4.55c0 3.12-2.2 5.68-6.25 6.72-4.05-1.04-6.25-3.6-6.25-6.72V7.4L12 4.75Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+          <path d="M12 8.5v5M9.75 11H14.25" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    case 'personal-aula-cuidado':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 18.75s-6-4.5-6-9a4.5 4.5 0 0 1 9 0c0 4.5-6 9-6 9Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 9.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" stroke="currentColor" strokeWidth="1.7" />
+        </svg>
+      );
+    case 'area-persones':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM16 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" strokeWidth="1.7" />
+          <path d="M4.5 18.75a3.5 3.5 0 0 1 7 0M12.5 18.75a3.5 3.5 0 0 1 7 0" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M12 8.5v4.5M9.75 10.75H14.25" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      );
+    case 'control-gestio-pmo':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4.75 18.75h14.5M6.25 15.25v-3.5M10.25 15.25V8.25M14.25 15.25V4.75M18.25 15.25V9.75" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -328,7 +357,7 @@ const RoleProfileIcon = ({ roleId }: { roleId: string }) => {
   }
 };
 
-const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references' | 'training' | 'audit' | 'ai' | 'docs' }) => {
+const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references' | 'training' | 'audit' | 'ai' | 'docs' | 'cooperativa' }) => {
   switch (name) {
     case 'home':
       return (
@@ -388,6 +417,85 @@ const SidebarIcon = ({ name }: { name: 'home' | 'roles' | 'search' | 'references
           <path d="M9.5 13h5M9.5 16h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
       );
+    case 'cooperativa':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M16 11c0 2.2-1.8 4-4 4s-4-1.8-4-4 1.8-4 4-4 4 1.8 4 4Z" stroke="currentColor" strokeWidth="1.8" />
+          <path d="M6 19c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M17.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM21.5 15c0-2-2-3-4-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M6.5 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5ZM2.5 15c0-2 2-3 4-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+  }
+};
+
+const IncoopIcon = ({ name, size = '1.2em' }: { name: 'audit' | 'roles' | 'fichas' | 'bressol' | 'lleure' | 'gent-gran' | 'ficha-11' | 'ficha-12' | 'ficha-13'; size?: string }) => {
+  const style = { width: size, height: size, stroke: 'currentColor' };
+  switch (name) {
+    case 'audit':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <rect x="5" y="4" width="14" height="16" rx="2" />
+          <path d="M9 9h6M9 13h2.5M9.5 17l1.75 1.75L15.5 14.5" />
+        </svg>
+      );
+    case 'roles':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      );
+    case 'fichas':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" />
+          <path d="M6 6h10M6 10h10" />
+        </svg>
+      );
+    case 'bressol':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <circle cx="12" cy="12" r="8" />
+          <path d="M8 11.5c.5.5 1.5.5 2 0M14 11.5c.5.5 1.5.5 2 0M9.5 16a2.5 2.5 0 0 0 5 0" />
+        </svg>
+      );
+    case 'lleure':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="m12 4-8 12h16L12 4ZM4 16v3.5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V16" />
+          <path d="M12 4v12" strokeDasharray="2 2" />
+        </svg>
+      );
+    case 'gent-gran':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M18 5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0ZM14 8.5h2.5V14M16.5 14H19M14 8.5c-1.5 0-3 1-3 3v7.5M11 11.5H8.5V19" />
+        </svg>
+      );
+    case 'ficha-11':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M4 7.5 12 4l8 3.5-8 3.5L4 7.5Z" />
+          <path d="M7 9.75V15c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5V9.75M2 8v5" />
+          <path d="M11 14.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5S11 15.33 11 14.5Z" />
+        </svg>
+      );
+    case 'ficha-12':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M17 20v-4M17 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM7 20v-4M7 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM10 16h4M10 14h4" />
+          <path d="m14 18 2-2-2-2" />
+        </svg>
+      );
+    case 'ficha-13':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style}>
+          <path d="M9.5 9.5a3 3 0 0 1 3-3c1.33 0 2.5 1 2.5 2.5a2 2 0 0 1 2 2 2.5 2.5 0 0 1-2.5 2.5H9.5a3 3 0 0 1 0-6ZM14.5 13.5a3 3 0 0 1-3 3 2.5 2.5 0 0 1-2.5-2.5" />
+          <path d="m13 14-2.5 3h4L12 21" />
+        </svg>
+      );
   }
 };
 
@@ -425,6 +533,10 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         <Link href="/" className={`nav-item ${location === '/' ? 'active' : ''}`} id="link-nav-home" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="home" /></span>
             <span className="nav-item-text">{t('nav.home')}</span>
+        </Link>
+        <Link href="/cooperativa" className={`nav-item ${location === '/cooperativa' ? 'active' : ''}`} id="link-nav-cooperativa" onClick={closeOnMobile}>
+            <span className="nav-icon"><SidebarIcon name="cooperativa" /></span>
+            <span className="nav-item-text">{t('incoop.sidebar')}</span>
         </Link>
         <Link href="/mapa-roles" className={`nav-item ${location === '/mapa-roles' ? 'active' : ''}`} id="link-nav-roles" onClick={closeOnMobile}>
             <span className="nav-icon"><SidebarIcon name="roles" /></span>
@@ -698,6 +810,44 @@ const HomePage = () => {
   );
 };
 
+const RenderFormattedText = ({ text, maxLength }: { text: string; maxLength?: number }) => {
+  if (!text) return null;
+  
+  let displayText = text;
+  if (maxLength && text.length > maxLength) {
+    displayText = text.slice(0, maxLength) + '...';
+  }
+  
+  // Split by literal \n strings (found in data files) or actual newlines
+  const paragraphs = displayText.split(/\\n\\n|\\n|\n\n|\n/);
+  
+  return (
+    <>
+      {paragraphs.map((p, pIdx) => {
+        if (!p.trim()) return null;
+        // Parse markdown-style links: [text](url)
+        const parts = p.split(/(\[[^\]]+\]\([^)]+\))/g);
+        
+        return (
+          <p key={pIdx} className="art-text" style={{ marginTop: pIdx === 0 ? '0' : '0.75rem', fontStyle: 'italic', opacity: 0.9 }}>
+            {parts.map((part, i) => {
+              const match = part.match(/\[([^\]]+)\]\(([^)]+)\)/);
+              if (match) {
+                return (
+                  <a key={i} href={match[2]} target="_blank" rel="noreferrer" className="art-boe-link" style={{ textDecoration: 'underline' }}>
+                    {match[1]}
+                  </a>
+                );
+              }
+              return <span key={i}>{part}</span>;
+            })}
+          </p>
+        );
+      })}
+    </>
+  );
+};
+
 const NormativaPage = ({ params }: { params: { id: string } }) => {
   const ley = getLeyById(params.id);
   const [openCaps, setOpenCaps] = useState<Record<string, boolean>>({ 'lprl-cap1': true, 'lprl-cap3': true });
@@ -915,7 +1065,9 @@ const NormativaPage = ({ params }: { params: { id: string } }) => {
                           <div className="art-legal-box" style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
                             <details className="legal-details">
                               <summary style={{ cursor: 'pointer', color: 'var(--primary)', fontWeight: 600, outline: 'none' }}>Ver articulado íntegro (BOE)</summary>
-                              <p className="art-text" style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{art.textoLegal}</p>
+                              <div style={{ marginTop: '1rem' }}>
+                                <RenderFormattedText text={art.textoLegal} />
+                              </div>
                             </details>
                           </div>
                         )}
@@ -1122,9 +1274,9 @@ const BuscadorPage = () => {
                         <div className="art-legal-box" style={{ padding: '0.75rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
                           <details className="legal-details">
                             <summary style={{ cursor: 'pointer', color: 'var(--primary)', fontWeight: 600, outline: 'none', fontSize: '0.9rem' }}>Ver articulado íntegro (BOE)</summary>
-                            <p className="art-text" style={{ marginTop: '0.75rem', fontStyle: 'italic', opacity: 0.9 }}>
-                              {res.articulo.textoLegal.length > 600 ? res.articulo.textoLegal.slice(0, 600) + '...' : res.articulo.textoLegal}
-                            </p>
+                            <div style={{ marginTop: '0.75rem' }}>
+                              <RenderFormattedText text={res.articulo.textoLegal} maxLength={600} />
+                            </div>
                           </details>
                         </div>
                       )}
@@ -2294,6 +2446,519 @@ const DocumentosPage = () => {
 };
 
 // ============================================================
+// MÓDULO COOPERATIVA INCOOP
+// ============================================================
+
+const CooperativaPage = () => {
+  const [activeTab, setActiveTab] = useState<'auditoria' | 'roles' | 'fichas'>('auditoria');
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const { language, t } = useLanguage();
+
+  // 1. Lógica de Auditorías con Persistencia en LocalStorage
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(() => {
+    const saved = localStorage.getItem('prl_incoop_checked_v1');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem('prl_incoop_checked_v1', JSON.stringify(checkedItems));
+  }, [checkedItems]);
+
+  const toggleItem = (itemId: string) => {
+    setCheckedItems(prev => ({
+      ...prev,
+      [itemId]: !prev[itemId]
+    }));
+  };
+
+  const resetChecklist = (serviceId: string) => {
+    const service = incoopServices.find(s => s.id === serviceId);
+    if (!service) return;
+
+    setCheckedItems(prev => {
+      const next = { ...prev };
+      service.items.forEach(item => {
+        delete next[item.id];
+      });
+      return next;
+    });
+  };
+
+  const getServiceProgress = (serviceId: string) => {
+    const service = incoopServices.find(s => s.id === serviceId);
+    if (!service || service.items.length === 0) return 0;
+    const checkedCount = service.items.filter(item => checkedItems[item.id]).length;
+    return Math.round((checkedCount / service.items.length) * 100);
+  };
+
+  // 2. Roles de Incoop filtrados y localizados
+  const incoopRoleIds = ['directora-centre', 'personal-aula-cuidado', 'area-persones', 'control-gestio-pmo'];
+  const incoopRoles = useMemo(() => {
+    return rolesData
+      .filter(r => incoopRoleIds.includes(r.id))
+      .map(r => localizeRole(r, language));
+  }, [language]);
+
+  const activeRole = incoopRoles.find(r => r.id === selectedRole);
+
+  // 3. Fichas de Incoop filtradas y localizadas
+  const incoopFichaIds = ['ficha-11', 'ficha-12', 'ficha-13'];
+  const incoopFichas = useMemo(() => {
+    return fichas
+      .filter(f => incoopFichaIds.includes(f.id))
+      .map(f => localizeFicha(f, language));
+  }, [language]);
+
+  const activeService = incoopServices.find(s => s.id === selectedService);
+  const serviceProgress = activeService ? getServiceProgress(activeService.id) : 0;
+  const serviceName = activeService ? (language === 'ca' ? activeService.nombreCa : activeService.nombre) : '';
+  const serviceDesc = activeService ? (language === 'ca' ? activeService.descCa : activeService.desc) : '';
+
+  return (
+    <div className="fade-in">
+      <header 
+        className="page-header" 
+        style={{
+          background: 'linear-gradient(135deg, rgba(5, 150, 105, 0.25) 0%, rgba(13, 148, 136, 0.15) 100%)',
+          border: '1px solid rgba(5, 150, 105, 0.2)',
+          borderRadius: '12px',
+          padding: '24px',
+          marginBottom: '24px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ color: '#34d399', width: '2.5rem', height: '2.5rem', display: 'flex', alignItems: 'center' }}>
+            <SidebarIcon name="cooperativa" />
+          </div>
+          <div>
+            <h2 style={{ margin: 0, color: '#34d399' }}>{t('incoop.title')}</h2>
+            <p style={{ margin: '4px 0 0 0', opacity: 0.9 }}>{t('incoop.subtitle')}</p>
+          </div>
+        </div>
+      </header>
+
+      {/* Tabs Navigation (Vanilla CSS Glassmorphism Tabs) */}
+      <div className="tabs-nav-container" style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px' }}>
+        <button
+          className={`tab-btn ${activeTab === 'auditoria' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('auditoria'); setSelectedRole(null); }}
+          style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            background: activeTab === 'auditoria' ? 'rgba(5, 150, 105, 0.2)' : 'transparent',
+            border: activeTab === 'auditoria' ? '1px solid rgba(5, 150, 105, 0.4)' : '1px solid transparent',
+            color: activeTab === 'auditoria' ? '#34d399' : '#fff',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <IncoopIcon name="audit" />
+          <span>{t('incoop.tabs.auditoria')}</span>
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'roles' ? 'active' : ''}`}
+          onClick={() => setActiveTab('roles')}
+          style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            background: activeTab === 'roles' ? 'rgba(5, 150, 105, 0.2)' : 'transparent',
+            border: activeTab === 'roles' ? '1px solid rgba(5, 150, 105, 0.4)' : '1px solid transparent',
+            color: activeTab === 'roles' ? '#34d399' : '#fff',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <IncoopIcon name="roles" />
+          <span>{t('incoop.tabs.roles')}</span>
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'fichas' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('fichas'); setSelectedRole(null); }}
+          style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            background: activeTab === 'fichas' ? 'rgba(5, 150, 105, 0.2)' : 'transparent',
+            border: activeTab === 'fichas' ? '1px solid rgba(5, 150, 105, 0.4)' : '1px solid transparent',
+            color: activeTab === 'fichas' ? '#34d399' : '#fff',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <IncoopIcon name="fichas" />
+          <span>{t('incoop.tabs.fichas')}</span>
+        </button>
+      </div>
+
+      {/* Tab Content: Auditorías (Selector y Checklists) */}
+      {activeTab === 'auditoria' && (
+        <div>
+          {!selectedService ? (
+            <div className="fade-in">
+              <div className="page-header" style={{ marginBottom: '20px', border: 'none', padding: 0, background: 'none' }}>
+                <p>Selecciona uno de los servicios gestionados por la cooperativa para realizar el control y seguimiento preventivo de riesgos.</p>
+              </div>
+
+              <div className="auditoria-sectores-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', display: 'grid', gap: '16px' }}>
+                {incoopServices.map(s => {
+                  const progress = getServiceProgress(s.id);
+                  const nombre = language === 'ca' ? s.nombreCa : s.nombre;
+                  const desc = language === 'ca' ? s.descCa : s.desc;
+                  const iconName = s.id === 'escola-bressol' ? 'bressol' : (s.id === 'lleure' ? 'lleure' : 'gent-gran');
+                  return (
+                    <div 
+                      key={s.id} 
+                      className="auditoria-sector-card"
+                      onClick={() => setSelectedService(s.id)}
+                      style={{
+                        '--sector-color': s.color,
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        cursor: 'pointer',
+                        padding: '20px',
+                        borderRadius: '12px',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        minHeight: '190px'
+                      } as React.CSSProperties}
+                    >
+                      <div>
+                        <div style={{ color: s.color, display: 'block', marginBottom: '8px' }}>
+                          <IncoopIcon name={iconName} size="2rem" />
+                        </div>
+                        <strong style={{ fontSize: '1.1rem', display: 'block', marginBottom: '4px' }}>{nombre}</strong>
+                        <p style={{ fontSize: '0.85rem', opacity: 0.8, margin: '0 0 16px 0', lineHeight: '1.4' }}>{desc}</p>
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                          <span>Progreso</span>
+                          <span style={{ color: s.color, fontWeight: 'bold' }}>{progress}%</span>
+                        </div>
+                        <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                          <div style={{ width: `${progress}%`, height: '100%', background: s.color, transition: 'width 0.3s ease' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="fade-in" style={{ background: 'rgba(255,255,255,0.02)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <button 
+                className="back-btn" 
+                onClick={() => setSelectedService(null)}
+                style={{ 
+                  marginBottom: '16px', 
+                  background: 'none', 
+                  border: 'none', 
+                  color: '#34d399', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px',
+                  padding: 0
+                }}
+              >
+                ← Volver a servicios
+              </button>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+                <div>
+                  <h3 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+                    <span style={{ color: activeService?.color, display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
+                      <IncoopIcon name={activeService?.id === 'escola-bressol' ? 'bressol' : (activeService?.id === 'lleure' ? 'lleure' : 'gent-gran')} size="1.6rem" />
+                    </span>
+                    {serviceName}
+                  </h3>
+                  <p style={{ margin: '4px 0 0 0', opacity: 0.8, fontSize: '0.9rem' }}>{serviceDesc}</p>
+                </div>
+                
+                <button 
+                  onClick={() => {
+                    if (activeService) {
+                      resetChecklist(activeService.id);
+                    }
+                  }}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    color: '#f87171',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '0.85rem',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  🗑️ Reiniciar Auditoría
+                </button>
+              </div>
+
+              {/* Progress bar */}
+              <div style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', marginBottom: '8px', fontSize: '0.9rem' }}>
+                  <span>Cumplimiento legal verificado</span>
+                  <span style={{ color: activeService?.color }}>{serviceProgress}%</span>
+                </div>
+                <div style={{ height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: `${serviceProgress}%`, height: '100%', background: activeService?.color || '#10b981', transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}></div>
+                </div>
+              </div>
+
+              {/* Items list */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {activeService?.items.map(item => {
+                  const isChecked = !!checkedItems[item.id];
+                  const pregunta = language === 'ca' ? item.preguntaCa : item.pregunta;
+                  const justificacion = language === 'ca' ? item.justificacionCa : item.justificacion;
+                  return (
+                    <div 
+                      key={item.id}
+                      onClick={() => toggleItem(item.id)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '12px',
+                        padding: '16px',
+                        borderRadius: '8px',
+                        background: isChecked ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)',
+                        border: isChecked ? `1px solid rgba(5, 150, 105, 0.2)` : '1px solid rgba(255,255,255,0.04)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <input 
+                        type="checkbox"
+                        checked={isChecked}
+                        readOnly // Se maneja con onClick del contenedor
+                        style={{ 
+                          marginTop: '4px', 
+                          width: '18px', 
+                          height: '18px', 
+                          accentColor: activeService?.color, 
+                          cursor: 'pointer' 
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <span style={{ 
+                          fontSize: '0.95rem', 
+                          lineHeight: '1.5',
+                          display: 'block',
+                          textDecoration: isChecked ? 'line-through' : 'none',
+                          opacity: isChecked ? 0.6 : 1,
+                          transition: 'opacity 0.2s'
+                        }}>
+                          {pregunta}
+                        </span>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginTop: '8px' }}>
+                          <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>
+                            🔍 {justificacion}
+                          </span>
+                          <Link href={`/normativa/${item.leyId}`}>
+                            <a 
+                              className="role-link"
+                              onClick={e => e.stopPropagation()} // Evita marcar el check
+                              style={{
+                                fontSize: '0.75rem',
+                                background: 'rgba(255,255,255,0.06)',
+                                padding: '2px 8px',
+                                borderRadius: '4px',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                color: '#34d399',
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Ver Ley ({item.leyId.toUpperCase()})
+                            </a>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab Content: Roles Cooperativos */}
+      {activeTab === 'roles' && (
+        <div className="fade-in">
+          {!selectedRole ? (
+            <div className="roles-grid fade-in">
+              {incoopRoles.map(r => (
+                <div
+                  key={r.id}
+                  className="role-card"
+                  onClick={() => setSelectedRole(r.id)}
+                  id={`incoop-role-${r.id}`}
+                  style={{ '--role-accent': r.accentColor, '--role-surface': r.surfaceColor } as React.CSSProperties}
+                >
+                  <div className="role-card-top">
+                    <div className="role-icon-shell">
+                      <div className="role-icon">
+                        <RoleProfileIcon roleId={r.id} />
+                      </div>
+                    </div>
+                    <div className="role-card-badges">
+                      <span className="role-card-badge">{r.obligations.length} {t('roles.obligations')}</span>
+                      <span className="role-card-badge subtle">{r.fichas.length} {t('roles.training')}</span>
+                    </div>
+                  </div>
+                  <h3>{r.shortLabel}</h3>
+                  <p>{r.description}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              className="role-dashboard fade-in"
+              style={activeRole ? ({ '--role-accent': activeRole.accentColor, '--role-surface': activeRole.surfaceColor } as React.CSSProperties) : undefined}
+            >
+              <button className="back-btn" onClick={() => setSelectedRole(null)}>← {t('common.backToRoles')}</button>
+              
+              <div className="role-dashboard-header">
+                <div className="role-icon-large">
+                  {activeRole ? <RoleProfileIcon roleId={activeRole.id} /> : null}
+                </div>
+                <div className="role-dashboard-copy">
+                  <h2>{activeRole?.label}</h2>
+                  <p>{activeRole?.description}</p>
+                  <div className="role-dashboard-meta">
+                    <span>{activeRole?.obligations.length} {t('roles.obligations')}</span>
+                    <span>{activeRole?.risks.length} {t('roles.risks')}</span>
+                    <span>{activeRole?.fichas.length} {t('roles.training')}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="role-sections-grid">
+                <div className="role-section left-column">
+                  <h3>{t('roles.obligations')}</h3>
+                  <div className="role-items-list">
+                    {activeRole?.obligations.map((obl, i) => (
+                      <div key={i} className="role-item-card fade-in-delay-1">
+                        <h4>{obl.title}</h4>
+                        <p>{obl.description}</p>
+                        <Link href={`/normativa/${obl.leyId}`}>
+                          <a className="role-link">
+                            {t('roles.viewArticle', { law: obl.leyId.toUpperCase(), article: obl.articuloId.split('-art')[1] || obl.articuloId })}
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="right-column">
+                  <div className="role-section">
+                    <h3>{t('roles.risks')}</h3>
+                    <ul className="role-risks-list fade-in-delay-2">
+                      {activeRole?.risks.map((risk, i) => <li key={i}>{risk}</li>)}
+                    </ul>
+                  </div>
+                  
+                  <div className="role-section">
+                    <h3>{t('roles.training')}</h3>
+                    <div className="role-fichas-list fade-in-delay-3">
+                      {activeRole?.fichas.map(fichaId => {
+                        const f = fichas.find(item => item.id === fichaId);
+                        if (!f) return null;
+                        const lf = localizeFicha(f, language);
+                        return (
+                          <Link key={lf.id} href="/fichas">
+                            <a className="role-ficha-card">
+                              <span className="ficha-icon-small" style={{ color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <IncoopIcon name={fichaId as any} size="1.4rem" />
+                              </span>
+                              <span style={{ flex: 1 }}>{lf.titulo}</span>
+                              <span className={`ficha-level-badge ${lf.nivel}`} style={{ position: 'static', margin: 0 }}>
+                                {getLevelLabel(lf.nivel, t)}
+                              </span>
+                            </a>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab Content: Fichas de Cuidado */}
+      {activeTab === 'fichas' && (
+        <div className="fade-in">
+          <div className="page-header" style={{ marginBottom: '20px', border: 'none', padding: 0, background: 'none' }}>
+            <p>{t('incoop.fichasDesc')}</p>
+          </div>
+          
+          <div className="auditoria-sectores-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+            {incoopFichas.map(lf => (
+              <div 
+                key={lf.id} 
+                className="auditoria-sector-card"
+                style={{ 
+                  '--sector-color': lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  cursor: 'default',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '220px'
+                } as React.CSSProperties}
+              >
+                <div>
+                  <div style={{ color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24', display: 'block', marginBottom: '8px' }}>
+                    <IncoopIcon name={lf.id as any} size="2.5rem" />
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                    <span className="role-card-badge" style={{ background: lf.nivel === 'avanzado' ? 'rgba(248,113,113,0.15)' : 'rgba(251,191,36,0.15)', color: lf.nivel === 'avanzado' ? '#f87171' : '#fbbf24' }}>
+                      {getLevelLabel(lf.nivel, t)}
+                    </span>
+                    <span className="role-card-badge subtle">{lf.duracion}</span>
+                  </div>
+                  <strong style={{ fontSize: '1.1rem', display: 'block', marginBottom: '8px' }}>{lf.titulo}</strong>
+                  <span className="auditoria-sector-desc" style={{ fontSize: '0.85rem' }}>{lf.objetivo}</span>
+                </div>
+                
+                <div style={{ marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
+                  <Link href="/fichas">
+                    <button className="hero-primary-btn" style={{ width: '100%', padding: '8px', fontSize: '0.85rem' }}>
+                      📖 Iniciar Micro-curso
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
 // MAIN APP
 // ============================================================
 
@@ -2325,6 +2990,7 @@ const App = () => {
         </div>
         <Switch>
           <Route path="/" component={HomePage} />
+          <Route path="/cooperativa" component={CooperativaPage} />
           <Route path="/mapa-roles" component={RolesPage} />
           <Route path="/normativa/:id" component={NormativaPage} />
           <Route path="/buscador" component={BuscadorPage} />

@@ -39,6 +39,18 @@ const translations: Record<Language, TranslationTree> = {
       selector: 'Idioma',
       aria: 'Selector de idioma',
     },
+    incoop: {
+      sidebar: 'Cooperativa Incoop',
+      title: 'Panel Operativo Incoop',
+      subtitle: 'Gestión preventiva para servicios a personas y tercer sector',
+      tabs: {
+        auditoria: 'Auditoría',
+        roles: 'Roles de Cooperativa',
+        fichas: 'Fichas de Cuidado',
+      },
+      rolesDesc: 'Visualiza las responsabilidades y riesgos específicos de la estructura organizativa de Incoop.',
+      fichasDesc: 'Fichas de capacitación enfocadas al cuidado social, ergonomía y bienestar emocional.'
+    },
     nav: {
       main: 'Principal',
       normative: 'Normativa',
@@ -294,6 +306,18 @@ const translations: Record<Language, TranslationTree> = {
   ca: {
     app: { title: 'PRL Espanya', subtitle: 'Prevenció · Compliment · Operació' },
     language: { selector: 'Idioma', aria: 'Selector d\'idioma' },
+    incoop: {
+      sidebar: 'Espai Incoop',
+      title: 'Tauler Operatiu Incoop',
+      subtitle: 'Gestió preventiva per a serveis a persones i tercer sector',
+      tabs: {
+        auditoria: 'Auditoria',
+        roles: 'Rols de Cooperativa',
+        fichas: 'Fitxes de Cura',
+      },
+      rolesDesc: 'Visualitza les responsabilitats i riscos específics de l\'estructura organitzativa d\'Incoop.',
+      fichasDesc: 'Fitxes de capacitació enfocades a la cura social, ergonomia i benestar emocional.'
+    },
     nav: { main: 'Principal', normative: 'Normativa', resources: 'Recursos', home: 'Inici', roles: 'Mapes per Rol', search: 'Cercador Intel·ligent', references: 'Referències Creuades', training: 'Fitxes de Formació', audit: 'Auditoria Interactiva', ai: 'Consultor IA Local', docs: 'Generador de Documents' },
     common: { back: 'Tornar', backToRoles: 'Tornar als rols', backToTemplates: 'Tornar a les plantilles', editData: 'Editar dades', newDocument: 'Document nou', all: 'Tot', allFeminine: 'Totes', notFoundPage: 'Pàgina no trobada', notFoundNormative: 'Normativa no trobada', downloadPdf: 'Descarregar PDF', viewInBoe: 'Veure al BOE ↗', createDocument: 'Crear document →', generateDocument: '📄 Generar document', printPdf: '🖨️ Imprimir / PDF', selectOption: '— Selecciona una opció —', searchStart: 'Escriu alguna cosa per començar a cercar...', noResults: 'No s\'han trobat resultats per a "{{query}}"', checked: 'Verificats', pending: 'Pendents', articles: 'articles', sheets: 'fitxes', pageAbbr: 'Pàg.', requirements: 'Requisits totals', regulations: 'Normatives', completedAudit: 'Auditoria completada', completedAuditText: 'Tots els requisits normatius han estat verificats per al sector {{sector}}.', closeMenu: 'Tancar menú', openMenu: 'Obrir menú', loadingAi: 'Analitzant…', consult: 'Consultar', clearHistory: 'Esborrar historial de conversa' },
     badges: { tecnico: 'Perfil tècnic', divulgativo: 'Divulgatiu', ambos: 'General' },

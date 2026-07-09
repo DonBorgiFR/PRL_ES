@@ -150,6 +150,42 @@ const fichaOverrides: Record<NonSpanishLanguage, Record<string, FichaOverride>> 
         'Relació amb ISO 45001 i cicle PDCA en gestió de SST',
       ],
     },
+    'ficha-11': {
+      titulo: 'Ergonomia, Veu i Riscos Biològics a Escoles Bressol',
+      colectivo: 'Educadores infantils, personal de neteja i menjador',
+      objetivo: 'Conèixer les postures ergonòmiques, el cura de la veu davant de riscos foniàtrics i els protocols de prevenció biològica (fluids i bolquers) en l\'educació infantil de 0 a 3 anys.',
+      contenido: [
+        'Postures ergonòmiques en mobiliari infantil baix (taules i cadires reduïdes).',
+        'Tècnica segura de càrrega i aixecament d\'infants, bressols i canviadors.',
+        'Prevenció del risc foniàtric: tècniques de cura i ús correcte de la veu.',
+        'Protocol davant d\'agents biològics i fluids (canvi de bolquers, desinfecció).',
+        'Protecció especial a la maternitat i lactància de les educadores (Art. 26 LPRL).',
+      ],
+    },
+    'ficha-12': {
+      titulo: 'Mobilització Segura de Persones Dependents',
+      colectivo: 'Auxiliars de geriatria, coordinadors i dinamitzadors de Casals',
+      objetivo: 'Adquirir les tècniques bàsiques de mobilització d\'usuaris amb mobilitat reduïda a Casals i Centres de Dia per prevenir lesions lumbars.',
+      contenido: [
+        'Principis de l\'ergonomia en la mobilització de persones.',
+        'Tècniques de transferència segura (llit-cadira, bipedestació).',
+        'Ús correcte de suports i ajuts mecànics (agafadors, grues).',
+        'Actuació segura davant caigudes d\'usuaris reduint el sobreesforç.',
+        'Estiraments i escalfaments preventius per a la musculatura del cuidador.',
+      ],
+    },
+    'ficha-13': {
+      titulo: 'Prevenció del Burnout i Fatiga per Compassió',
+      colectivo: 'Personal d\'atenció directa, coordinadors i comandaments d\'Incoop',
+      objetivo: 'Identificar i prevenir els factors de risc psicosocial associats a la cura de persones vulnerables i la gestió de la dependència.',
+      contenido: [
+        'Definició i símptomes de la Síndrome de Burnout i la fatiga per compassió.',
+        'Identificació d\'estressors psicosocials al tercer sector (dol, dependència).',
+        'Estratègies de regulació emocional i establiment de límits professionals.',
+        'Mesures organitzatives preventives (suport entre iguals, supervisió).',
+        'Obligacions empresarials sobre avaluació de riscos psicosocials (RSP).',
+      ],
+    },
   },
   eu: {
     'ficha-01': {
@@ -546,6 +582,66 @@ const roleOverrides: Record<NonSpanishLanguage, Record<string, RoleTextOverride>
         'Contractació de personal sense formació específica prèvia.',
         'Responsabilitat legal per manca de coordinació amb l\'SPA o contractes.',
       ],
+    },
+    'directora-centre': {
+      shortLabel: 'Directora de Centre',
+      label: 'Directora de Centre / Comandament Intermedi (Incoop)',
+      description: 'Comandament intermedi responsable del centre (Bressol, Casal o equipament). Assumeix la prefectura d\'emergències (Cap d\'emergència) i la CAE local.',
+      obligations: [
+        { title: 'Cap d\'emergència i Autoprotecció', description: 'Actuar com a responsable i Cap d\'Emergències del centre, custodiant i implementant el Pla d\'Emergències i simulacres.' },
+        { title: 'Coordinació CAE Local', description: 'Coordinar les activitats del personal extern (manteniment, obres) en locals municipals per evitar riscos i aïllar els menors.' },
+        { title: 'Formació de Personal (Art. 19)', description: 'Garantir que tot el personal de nova incorporació (inclosos eventuals per estacionalitat) realitzi la inducció de seguretat.' }
+      ],
+      risks: [
+        'Descoordinació en simulacres o incidents en instal·lacions alienes dels Ajuntaments.',
+        'Manca de control en la CAE local amb contractes concurrents.',
+        'Incorporació de personal temporal sense la deguda inducció formativa inicial.'
+      ]
+    },
+    'personal-aula-cuidado': {
+      shortLabel: 'Personal Aula/Cura',
+      label: 'Personal d\'Aula i Cura Directa (Incoop)',
+      description: 'Educadores, cuidadores i dinamitzadors. Exposats a riscos ergonòmics (mobiliari baix, infants), biològics (fluids), foniàtrics (veu) i estacionalitat.',
+      obligations: [
+        { title: 'Higiene Postural i Veu', description: 'Mantenir postures ergonòmiques en atendre infants i aplicar la cura de la veu per prevenir nòduls vocals (malaltia professional).' },
+        { title: 'Calçat Antideslisant', description: 'Ús obligatori del calçat tècnic i antideslisant lliurat per la cooperativa per evitar relliscades i caigudes.' },
+        { title: 'Notificació d\'Incidències', description: 'Informar immediatament la direcció del centre de qualsevol risc a les instal·lacions, paviments humits o risc biològic a l\'aula.' }
+      ],
+      risks: [
+        'Lesions musculoesquelètiques per sobreesforços lumbars en transferències i cura.',
+        'Disfonies cròniques i nòduls a les cordes vocals per sobreesforç de la veu a l\'aula.',
+        'Contagis biològics per contacte directe amb fluids infantils a escoles bressol.',
+        'Caigudes al mateix nivell per manca d\'ordre (joguines) o paviments humits.'
+      ]
+    },
+    'area-persones': {
+      shortLabel: 'Àrea de Persones',
+      label: 'Responsable de l\'Àrea de Persones / RH (Incoop)',
+      description: 'Àrea responsable de la salut laboral de la plantilla, el registre formatiu, el compliment psicosocial en mediadors i el règim de socis.',
+      obligations: [
+        { title: 'Vigilància de la Salut Específica', description: 'Controlar exàmens mèdics anuals. A Lleure es gestiona l\'examen voluntari per riscos i es garanteixen revisions urològiques i mamografies preventives anticipades.' },
+        { title: 'Règim Disciplinari Cooperatiu', description: 'Gestionar el règim sancionador i disciplinari específic per als socis treballadors d\'acord amb els Estatuts i Reglament de Règim Intern.' },
+        { title: 'Prevenció Psicosocial d\'Equips', description: 'Avaluar riscos psicosocials (RSP Art. 3) i proveir suport emocional davant del desgast i burnout en mediació comunitària.' }
+      ],
+      risks: [
+        'Manca d\'arxiu o justificació de lliurament d\'EPIs i calçat.',
+        'Caducitat de revisions mèdiques en personal amb exposició biològica a escoles bressol.',
+        'Casos de Burnout no gestionats en serveis d\'intervenció social i mediació.'
+      ]
+    },
+    'control-gestio-pmo': {
+      shortLabel: 'Control de Gestió / PMO',
+      label: 'Control de Gestió, Finances i Licitacions (Incoop)',
+      description: 'Supervisió de costos preventius, justificació de PRL en plecs públics segons la LCSP i control de pòlisses preventives.',
+      obligations: [
+        { title: 'Integració en Licitacions (LCSP)', description: 'Assegurar el desglossament obligatori de costos de PRL i de conveni (Lleure, Acció Social) en els pressupostos d\'ofertes públiques.' },
+        { title: 'Assegurances i Responsabilitat Civil', description: 'Gestionar les pòlisses de RC i cobertures corresponents a socis treballadors i personal contractat davant d\'incidents.' },
+        { title: 'Coordinació amb SPA i Auditoria', description: 'Supervisar el cost i rendiment de l\'SPA contractat i verificar la idoneïtat del sistema preventiu per justificar plecs.' }
+      ],
+      risks: [
+        'Infradotació pressupostària en ofertes de licitació pública que impedeixi complir els estàndards mínims de PRL.',
+        'Manca de cobertura econòmica o desajustos en assegurances de RC davant d\'incidents greus en centres municipals.'
+      ]
     },
   },
   eu: {

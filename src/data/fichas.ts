@@ -754,5 +754,217 @@ export const fichas: FichaCapacitacion[] = [
         articleRef: 'Reglamento (RD 39/1997) · Art. 31'
       }
     ]
+  },
+  {
+    id: 'ficha-11',
+    titulo: 'Ergonomía, Voz y Riesgos Biológicos en Escoles Bressol',
+    nivel: 'intermedio',
+    duracion: '5-10 min',
+    colectivo: 'Educadoras infantiles, personal de limpieza y comedor',
+    icono: '👶',
+    objetivo: 'Conocer las posturas ergonómicas, el cuidado de la voz frente a riesgos foniátricos y los protocolos de prevención biológica (fluidos y pañales) en educación infantil de 0 a 3 años.',
+    contenido: [
+      'Posturas ergonómicas en mobiliario infantil bajo (mesas y sillas reducidas).',
+      'Técnica segura de carga y levantamiento de infantes, cunas y cambiadores.',
+      'Prevención del riesgo foniátrico: técnicas de cuidado y uso correcto de la voz.',
+      'Protocolo ante agentes biológicos y fluidos (cambio de pañales, desinfección).',
+      'Protección especial a la maternidad y lactancia de las educadoras (Art. 26 LPRL).',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. Carga Física y Mobiliario Infantil',
+        texto: 'Trabajar en entornos diseñados para niños de 0 a 3 años impone una severa exigencia ergonómica. Permanecer sentado en sillas muy bajas y realizar flexiones continuas de columna para atender a los infantes multiplica el riesgo de lumbalgias. Es fundamental emplear cambiadores y cunas regulables en altura y realizar estiramientos periódicos durante la jornada.'
+      },
+      {
+        titulo: '2. El Cuidado de la Voz (Riesgo Foniátrico)',
+        texto: 'La voz es la herramienta de trabajo principal de las educadoras. La exposición continuada al ruido en el aula a menudo provoca que fuercen la voz, lo cual deriva en afecciones foniátricas como nódulos en las cuerdas vocales (reconocidos como Enfermedad Profesional en educación). Se debe evitar gritar, beber agua regularmente para mantener la hidratación laríngea y realizar respiraciones diafragmáticas.'
+      },
+      {
+        titulo: '3. Control de Agentes Biológicos y Fluidos',
+        texto: 'El contacto estrecho con menores y fluidos corporales (orina, heces, saliva) facilita la exposición a agentes biológicos. El cambio de pañales debe acompañarse siempre de guantes desechables y lavado sistemático de manos. La desinfección regular de juguetes compartidos y la ventilación cruzada de las aulas son barreras preventivas esenciales.'
+      },
+      {
+        titulo: '4. Protección a la Maternidad (Art. 26 LPRL)',
+        texto: 'Dada la naturaleza biológica y de carga física de las escuelas infantiles, la protección a las educadoras gestantes es crítica. El Art. 26 de la LPRL obliga a evaluar los riesgos del puesto y adaptarlo o, si no es posible, facilitar el cambio a una vacante compatible o tramitar la suspensión del contrato por riesgo durante el embarazo.'
+      }
+    ],
+    normativaRelacionada: ['LPRL Art. 15', 'LPRL Art. 26', 'RD 486/1997'],
+    quiz: [
+      {
+        question: '¿Qué obliga a hacer la empresa según el Art. 26 de la LPRL si se detectan riesgos biológicos o de carga física para una educadora gestante?',
+        options: [
+          'Dejarla continuar en el puesto bajo su propia responsabilidad.',
+          'Adaptar las condiciones de trabajo o tiempo de exposición, o proceder a su reubicación temporal si es necesario.',
+          'Darle de baja forzosa sin sueldo.',
+          'Exigir que ella aporte sus propios equipos de protección individual.'
+        ],
+        correctIndex: 1,
+        explanation: 'El Art. 26 de la LPRL impone el deber de adaptar las condiciones o tiempo de trabajo, y si esto no fuera factible, reubicar a la trabajadora a un puesto compatible con su estado.',
+        articleRef: 'Ley 31/1995 · Art. 26'
+      },
+      {
+        question: '¿Qué patología derivada de un sobreesfuerzo de la voz está catalogada oficialmente como Enfermedad Profesional en el sector educativo?',
+        options: [
+          'La afonía temporal por enfriamiento.',
+          'Los nódulos en las cuerdas vocales debidos a los esfuerzos sostenidos de la voz por motivos laborales.',
+          'La faringitis vírica común transmitida por los alumnos.',
+          'La fatiga auditiva por ruido en el recreo.'
+        ],
+        correctIndex: 1,
+        explanation: 'Los nódulos en las cuerdas vocales a causa de esfuerzos de la voz por motivos profesionales están reconocidos como Enfermedad Profesional en la legislación española de Seguridad Social.',
+        articleRef: 'RD 1299/2006 · Enfermedades Profesionales'
+      },
+      {
+        question: '¿Cuál es la medida preventiva de higiene más eficaz en guarderías para atajar contagios por agentes biológicos y fluidos?',
+        options: [
+          'Usar mascarilla industrial FFP3 durante toda la jornada.',
+          'Hacer lavados de manos sistemáticos (especialmente tras cambiar pañales y tocar fluidos) y ventilación regular.',
+          'Evitar todo contacto físico con los alumnos.',
+          'Utilizar lejía pura sin diluir en todo el material de juego.'
+        ],
+        correctIndex: 1,
+        explanation: 'El lavado sistemático de manos tras el contacto con fluidos y la correcta ventilación son las medidas higiénicas primarias más eficaces y viables en entornos educativos infantiles para atajar la transmisión vírica.',
+        articleRef: 'LPRL · Art. 15 · Principios Preventivos'
+      }
+    ]
+  },
+  {
+    id: 'ficha-12',
+    titulo: 'Movilización Segura de Personas Dependientes',
+    nivel: 'intermedio',
+    duracion: '5-10 min',
+    colectivo: 'Auxiliares de geriatría, coordinadores y dinamizadores de Casals',
+    icono: '👵',
+    objetivo: 'Adquirir las técnicas básicas de movilización de usuarios con movilidad reducida en Casals y Centros de Día para prevenir lesiones lumbares.',
+    contenido: [
+      'Principios de la ergonomía en la movilización de personas.',
+      'Técnicas de transferencia segura (cama-silla, bipedestación).',
+      'Uso correcto de soportes y ayudas mecánicas (asideros, grúas).',
+      'Actuación segura ante caídas de usuarios reduciendo el sobreesfuerzo.',
+      'Estiramientos y calentamientos preventivos para la musculatura del cuidador.',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. La Columna del Cuidador',
+        texto: 'La movilización de personas dependientes es uno de los mayores factores de riesgo lumbar. Tratar de levantar a un usuario a pulso sin técnica adecuada sobrecarga la columna. Es imperativo empujar con las piernas, mantener el abdomen contraído y utilizar el peso del propio cuerpo como contrapeso para transferir cargas.'
+      },
+      {
+        titulo: '2. Técnicas de Transferencia',
+        texto: 'Al realizar la transferencia de un usuario (de silla a bipedestación o a camilla), se debe explicar la acción previamente al usuario para lograr su colaboración (si es posible), bloquear los frenos de la silla de ruedas, colocar el calzado antideslizante al usuario y sujetarlo firmemente por los hombros o cinturón, nunca de los brazos.'
+      },
+      {
+        titulo: '3. Elementos de Apoyo y Pavimento',
+        texto: 'El entorno físico es una herramienta preventiva de primer orden. Zonas de aseos con barras de apoyo sólidas y pavimentos antideslizantes reducen las caídas de los usuarios y evitan que el personal deba realizar esfuerzos súbitos para sostenerlos durante un resbalón.'
+      }
+    ],
+    normativaRelacionada: ['LPRL Art. 15', 'RD 486/1997', 'LPRL Art. 29'],
+    quiz: [
+      {
+        question: 'Al realizar una movilización o transferencia de un usuario con movilidad reducida, ¿dónde debe situarse principalmente el esfuerzo del cuidador?',
+        options: [
+          'En los brazos y la columna lumbar.',
+          'En las piernas, manteniendo la espalda recta y el abdomen contraído.',
+          'En los hombros, arqueando el tronco hacia atrás.',
+          'En el cuello, inclinando la cabeza lateralmente.'
+        ],
+        correctIndex: 1,
+        explanation: 'Para prevenir lesiones lumbares, la técnica de movilización obliga a flexionar y empujar con las piernas (musculatura de cuadríceps y glúteos), estabilizando la columna en su posición neutra.',
+        articleRef: 'LPRL · Art. 15 · Principios Preventivos'
+      },
+      {
+        question: '¿Qué paso previo es indispensable antes de sentar o levantar a un usuario de una silla de ruedas?',
+        options: [
+          'Retirar los reposabrazos con fuerza.',
+          'Girar la silla rápidamente para orientarla.',
+          'Asegurarse de que las ruedas de la silla están firmemente bloqueadas.',
+          'Indicarle al usuario que salte levemente.'
+        ],
+        correctIndex: 2,
+        explanation: 'Por seguridad del usuario y del cuidador, antes de cualquier movilización la silla debe estar frenada para evitar desplazamientos accidentales que provoquen caídas o esfuerzos bruscos.',
+        articleRef: 'LPRL · Art. 29 · Obligaciones Trabajadores'
+      },
+      {
+        question: 'En caso de caída inminente de un usuario, ¿cuál debe ser la prioridad del cuidador?',
+        options: [
+          'Sostenerlo a pulso a toda costa para evitar el impacto.',
+          'Guiar y amortiguar la caída del usuario protegiendo su cabeza, adoptando una postura ergonómica para no lesionarse la espalda.',
+          'Soltarlo bruscamente y alejarse del lugar.',
+          'Tratar de colocar una silla debajo del usuario mientras cae.'
+        ],
+        correctIndex: 1,
+        explanation: 'Intentar frenar una caída libre a pulso suele lesionar gravemente la espalda del cuidador. La práctica segura es guiar suavemente el cuerpo del usuario al suelo, protegiendo su cabeza y flectando las rodillas.',
+        articleRef: 'Guía Técnica · Ergonomía en Servicios'
+      }
+    ]
+  },
+  {
+    id: 'ficha-13',
+    titulo: 'Prevención del Burnout y Fatiga por Compasión',
+    nivel: 'avanzado',
+    duracion: '5-10 min',
+    colectivo: 'Personal de atención directa, coordinadores y mandos de Incoop',
+    icono: '🧠',
+    objetivo: 'Identificar y prevenir los factores de riesgo psicosocial asociados al cuidado de personas vulnerables y la gestión de la dependencia.',
+    contenido: [
+      'Definición y síntomas del Síndrome de Burnout y la fatiga por compasión.',
+      'Identificación de estresores psicosociales en el tercer sector (duelo, dependencia).',
+      'Estrategias de regulación emocional y establecimiento de límites profesionales.',
+      'Medidas organizativas preventivas (soporte entre pares, supervisión).',
+      'Obligaciones empresariales sobre evaluación de riesgos psicosociales (RSP).',
+    ],
+    modulosLectura: [
+      {
+        titulo: '1. Desgaste en el Cuidado',
+        texto: 'La exposición continuada al sufrimiento ajeno, la dependencia severa y las altas demandas de colectivos vulnerables pueden generar Síndrome de Burnout (desgaste profesional) y Fatiga por Compasión. Se manifiesta en síntomas físicos (agotamiento), conductuales (apatía) y cognitivos (despersonalización).'
+      },
+      {
+        titulo: '2. Medidas de Protección Psicosocial',
+        texto: 'La prevención del desgaste no depende únicamente del autocuidado individual. La cooperativa debe implementar medidas organizativas como: reuniones periódicas de equipo para supervisión de casos, rotación de tareas de alta carga emocional, y protocolos claros para canalizar e informar sobre agresiones o tensiones externas.'
+      },
+      {
+        titulo: '3. El Deber de Evaluar (RSP Art. 3)',
+        texto: 'El Reglamento de los Servicios de Prevención (RSP) establece la obligación de evaluar todas las condiciones de trabajo, incluyendo expresamente los factores de naturaleza psicosocial. Una evaluación psicosocial periódica y participativa es la única vía legal y técnica para estructurar un plan de mejora del clima laboral.'
+      }
+    ],
+    normativaRelacionada: ['LPRL Art. 14', 'RSP Art. 3', 'LPRL Art. 15'],
+    quiz: [
+      {
+        question: '¿Qué es el Síndrome de Burnout o desgaste profesional?',
+        options: [
+          'Una lesión física producida por exposición a fuego directo en el trabajo.',
+          'Una respuesta de estrés crónico en el ámbito laboral caracterizada por agotamiento emocional, despersonalización y baja realización personal.',
+          'Un tipo de absentismo justificado por motivos festivos.',
+          'Una sanción que impone la Inspección de Trabajo al empleado.'
+        ],
+        correctIndex: 1,
+        explanation: 'El burnout es un trastorno psicosocial derivado de una situación de estrés crónico de carácter laboral, especialmente frecuente en profesiones de ayuda y cuidado directo.',
+        articleRef: 'RSP · Art. 3 · Evaluación Psicosocial'
+      },
+      {
+        question: '¿Es obligatorio para las empresas y cooperativas evaluar los riesgos psicosociales (como la carga mental o el estrés)?',
+        options: [
+          'No, solo se evalúan los riesgos físicos, químicos o mecánicos.',
+          'Sí, es una obligación legal del empresario contemplada dentro de la evaluación de riesgos generales del RSP.',
+          'Solo si la empresa tiene más de 1.000 trabajadores.',
+          'Es de carácter voluntario según decida la dirección de RRHH.'
+        ],
+        correctIndex: 1,
+        explanation: 'El Art. 3 del RSP determina que la evaluación debe extenderse a todos los factores de riesgo de las condiciones de trabajo, incluyendo los de naturaleza psicosocial.',
+        articleRef: 'Reglamento (RD 39/1997) · Art. 3'
+      },
+      {
+        question: '¿Cuál de las siguientes es una medida organizativa eficaz para prevenir la fatiga por compasión y el desgaste laboral?',
+        options: [
+          'Aumentar la jornada laboral para terminar antes las tareas.',
+          'Implementar espacios regulares de supervisión técnica del equipo y soporte mutuo para desahogo emocional.',
+          'Evitar hablar de los problemas y concentrarse únicamente en el rendimiento técnico.',
+          'Sancionar al trabajador que muestre síntomas de cansancio emocional.'
+        ],
+        correctIndex: 1,
+        explanation: 'Las reuniones de supervisión de casos de atención directa y los grupos de apoyo mutuo en el equipo facilitan la asimilación emocional y reducen drásticamente el desgaste por compasión.',
+        articleRef: 'LPRL · Art. 15 · Principios Preventivos'
+      }
+    ]
   }
 ];
+
